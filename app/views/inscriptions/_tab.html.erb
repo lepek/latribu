@@ -1,0 +1,14 @@
+<% datatable "inscriptions-table", ["Clase", "Anotados", "Estado","Anotado", ""], :class => "selectable" do -%>
+    <% shifts.each do |shift| -%>
+        <tr>
+          <td><%= l(shift.next_fixed_shift, :format => '%A, %e de %B %H:%M hs.') %></td>
+          <td><%= shift.next_fixed_shift_users.count %></td>
+          <td><%= shift.status.capitalize %></td>
+          <td><%= l(shift.user_inscription(current_user).created_at, :format => '%A, %e de %B %H:%M hs.') if shift.user_inscription(current_user) %></td>
+          <td>
+            <% if shift.available_for_enroll?(current_user) %><%= button_to "Anotarse", inscription_shift_path(shift), :method => :get %><% end %>
+            <% if shift.available_for_cancel?(current_user) %><%= button_to "Liberar", cancel_inscription_shift_path(shift), :method => :get %><% end %>
+          </td>
+        </tr>
+    <% end -%>
+<% end -%>

@@ -1,0 +1,14 @@
+<% datatable "users-table", ["Nombre", "E-mail", "Rol",""], :class => "selectable" do -%>
+    <% users.each do |user| -%>
+        <tr>
+          <td><%= user.full_name %></td>
+          <td><%= user.email %></td>
+          <td><%= user.role.name %></td>
+          <td>
+            <% unless current_user == user %>
+                <%= button_to "Borrar", {:action=>"destroy", :controller=>"users", :id => user}, data: { confirm: "¿Está seguro que desea eliminar \nel usuario #{user.full_name.upcase}?" }, :method => :delete %>
+            <% end %>
+          </td>
+        </tr>
+    <% end -%>
+<% end -%>

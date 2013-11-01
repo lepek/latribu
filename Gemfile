@@ -20,6 +20,7 @@ gem 'coffee-rails', '~> 4.0.0'
 
 # Use jquery as the JavaScript library
 gem 'jquery-rails'
+#gem 'jquery-ui-rails'
 
 # Turbolinks makes following links in your web application faster. Read more: https://github.com/rails/turbolinks
 gem 'turbolinks'
@@ -45,5 +46,21 @@ end
 # gem 'debugger', group: [:development, :test]
 
 gem 'rails_12factor', group: :production
+gem 'devise', '3.1.1'
+gem 'cancan', '1.6.10'
+
+group :development, :test do
+  gem 'rspec-rails', '~> 2.0'
+  gem 'cucumber-rails', :require => false
+  gem 'database_cleaner'
+end
+
+# Support for Rails 4 added in 3.10
+gem 'simple-navigation', '3.11.0'
+
+# date/time parser
+gem 'chronic'
+
+gem 'rails-i18n', '~> 4.0.0'
 
 ruby "2.0.0"

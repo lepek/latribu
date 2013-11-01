@@ -1,0 +1,17 @@
+<fieldset class="gray">
+  <%= button_to "Agregar un nuevo Pago", new_payment_path, :method => "get" %>
+</fieldset>
+<% datatable "payments-table", ["Cliente", "Fecha", "Monto", "Crédito",""], :class => "selectable" do -%>
+    <% payments.each do |payment| -%>
+        <tr>
+          <td><%= payment.user.full_name %></td>
+          <td><%= payment.created_at %></td>
+          <td><%= payment.amount %></td>
+          <td><%= payment.credit %></td>
+          <td>
+            <%= button_to "Editar", edit_payment_path(payment), :method => :get %>
+            <%= button_to "Borrar", {:action=>"destroy", :controller=>"payments", :id => payment}, data: { confirm: "¿Está seguro que desea eliminar \nel pago de #{payment.user.full_name.upcase}?" }, :method => :delete %>
+          </td>
+        </tr>
+    <% end -%>
+<% end -%>

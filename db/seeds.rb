@@ -5,3 +5,26 @@
 #
 #   cities = City.create([{ name: 'Chicago' }, { name: 'Copenhagen' }])
 #   Mayor.create(name: 'Emanuel', city: cities.first)
+
+Role.create(:name => 'Admin') unless Role.where(:name => 'Admin').count > 0
+Role.create(:name => 'Cliente') unless Role.where(:name => 'Client').count > 0
+
+User.create(
+    :first_name => 'Federico',
+    :last_name => 'Adell',
+    :email => 'fedex6_@hotmail.com',
+    :password => 'federico',
+    :role_id => 1
+) unless User.where(:email => 'fedex6_@hotmail.com').count > 0
+
+Instructor.create(
+    :first_name => 'Federico',
+    :last_name => 'Adell'
+)
+
+Instructor.create(
+    :first_name => 'Andres',
+    :last_name => 'Torrens'
+)
+
+Discipline.create(:name => 'Crossfit')

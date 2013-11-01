@@ -1,0 +1,38 @@
+<% content_for :stylesheets do %>
+    <%= stylesheet_link_tag :datatables %>
+<% end %>
+
+<% content_for :javascripts do %>
+    <%= javascript_include_tag :datatables, :admin_index %>
+<% end %>
+
+<!-- The master panel with admin grid -->
+<div id="content-inner">
+  <h1>Administraci&oacute;n</h1>
+  <div id="tabs" style="width: 100%">
+    <ul>
+      <% if can? :manage, Shift %><li><a href="#shifts">Clases</a></li><% end %>
+      <% if can? :manage, User %><li><a href="#users">Clientes</a></li><% end %>
+      <% if can? :manage, Payment %><li><a href="#payments">Pagos</a></li><% end %>
+    </ul>
+
+    <% if can? :manage, Shift -%>
+        <div id="shifts">
+          <%= render "shifts/tab", :shifts => @shifts %>
+        </div>
+    <% end -%>
+
+    <% if can? :manage, User -%>
+        <div id="users">
+          <%= render "users/tab", :users => @users %>
+        </div>
+    <% end -%>
+
+    <% if can? :manage, Payment -%>
+        <div id="payments">
+          <%= render "payments/tab", :payments => @payments %>
+        </div>
+    <% end -%>
+
+  </div>
+</div>
