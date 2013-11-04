@@ -12,6 +12,8 @@ class Shift < ActiveRecord::Base
   DEFAULT_SHIFT_DURATION = 1
   before_validation :set_end_time
 
+  validates_presence_of :day, :start_time, :max_attendants, :open_inscription, :close_inscription, :instructor, :discipline
+
   def self.days
     DAYS
   end
@@ -59,7 +61,7 @@ class Shift < ActiveRecord::Base
   end
 
   def set_end_time
-    self.end_time ||= self.start_time + DEFAULT_SHIFT_DURATION.hours
+    self.end_time ||= self.start_time + DEFAULT_SHIFT_DURATION.hours unless self.start_time.blank?
   end
 
   def day_and_time

@@ -45,16 +45,26 @@ es:
               blank: 'El E-mail no puede estar en blanco'
               taken: 'El E-mail ingresado ya existe'
               invalid: 'El E-mail ingresado no es válido'
+            phone:
+              blank: 'El Teléfono no puede estar en blanco'
             password:
               blank: 'La Contraseña no puede estar en blanco'
               confirmation: 'Las contraseñas no coinciden'
             password_confirmation:
               confirmation: 'Las contraseñas no coinciden'
-  devise:
-    failure:
-      invalid: 'Usuario o contraseña no válidos.'
-      not_found_in_database: 'Usuario o contraseña no válidos.'
-      unauthenticated: 'Es necesario ingresar antes de continuar.'
+        shift:
+          attributes:
+            day:
+              blank: 'El Día no puede estar en blanco'
+            start_time:
+              blank: 'La Hora de comienzo no puede estar en blanco'
+            max_attendants:
+              blank: 'El Cupo no puede estar en blanco'
+            open_inscription:
+              blank: 'Las horas para abrir la inscripción no puede estar en blanco'
+            close_inscription:
+              blank: 'Las horas para cerrar la inscripción no puede estar en blanco'
+
   date:
     abbr_day_names:
     - dom
@@ -151,41 +161,7 @@ es:
       month: Mes
       second: Segundos
       year: Año
-  errors: &errors
-    format: ! '%{attribute} %{message}'
-    messages:
-      accepted: debe ser aceptado
-      blank: no puede estar en blanco
-      confirmation: no coincide con la confirmación
-      empty: no puede estar vacío
-      equal_to: debe ser igual a %{count}
-      even: debe ser un número par
-      exclusion: está reservado
-      greater_than: debe ser mayor que %{count}
-      greater_than_or_equal_to: debe ser mayor o igual que %{count}
-      inclusion: no está incluído en la lista
-      invalid: es inválido
-      less_than: debe ser menor que %{count}
-      less_than_or_equal_to: debe ser menor o igual que %{count}
-      not_a_number: no es un número
-      not_an_integer: debe ser un entero
-      odd: debe ser un número non
-      record_invalid: ! 'La validación falló: %{errors}'
-      taken: ya ha sido tomado
-      too_long:
-        one: es demasiado largo (máximo 1 caracter)
-        other: es demasiado largo (máximo %{count} caracteres)
-      too_short:
-        one: es demasiado corto (mínimo 1 caracter)
-        other: es demasiado corto (mínimo %{count} caracteres)
-      wrong_length:
-        one: longitud errónea (debe ser de 1 caracter)
-        other: longitud errónea (debe ser de %{count} caracteres)
-    template:
-      body: ! 'Revise que los siguientes campos sean válidos:'
-      header:
-        one: ! '%{model} no pudo guardarse debido a 1 error'
-        other: ! '%{model} no pudo guardarse debido a %{count} errores'
+
   helpers:
     select:
       prompt: Por favor selecciona

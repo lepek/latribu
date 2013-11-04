@@ -18,3 +18,16 @@ Then /^I should be registered$/ do
   user.role == 'Cliente'
   user.email.should_not be_empty
 end
+
+Given /^I fill all the registration form without the "(.*?)"$/ do |field|
+  fill_in "user_first_name", :with => 'Martin' unless "user_first_name" == "user_#{field}"
+  fill_in "user_last_name", :with => 'Luis' unless "user_last_name" == "user_#{field}"
+  fill_in "user_phone", :with => '341-3456789' unless "user_phone" == "user_#{field}"
+  fill_in "user_email", :with => 'martin@gmail.com' unless "user_email" == "user_#{field}"
+  fill_in "user_password", :with => 'contraseña' unless "user_password" == "user_#{field}"
+  fill_in "user_password_confirmation", :with => 'contraseña' unless "user_password_confirmation" == "user_#{field}"
+end
+
+Then /^I should not be registered$/ do
+  User.where(:email => 'martin@gmail.com').count.should == 0
+end
