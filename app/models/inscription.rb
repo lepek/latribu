@@ -15,4 +15,10 @@ class Inscription < ActiveRecord::Base
     self.user.credit -= 1
     self.user.save
   end
+
+  ## For calendar
+  def start_time
+    self.shift_date
+  end
+
 end

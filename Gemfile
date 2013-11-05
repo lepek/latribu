@@ -64,4 +64,6 @@ gem 'chronic'
 
 gem 'rails-i18n', '~> 4.0.0'
 
+gem "simple_calendar", "~> 0.1.9"
+
 ruby "2.0.0"

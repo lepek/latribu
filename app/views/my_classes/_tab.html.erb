@@ -1,0 +1,6 @@
+<%= calendar events do |event| %>
+    <div>
+        <b><%= event.shift.discipline.name %></b><br />
+        <b><%= "#{event.shift.start_time.strftime('%H:%M')} hs." %></b>
+    </div>
+<% end %>

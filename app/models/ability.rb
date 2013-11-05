@@ -24,6 +24,7 @@ class Ability
     can :read, [Shift, Instructor, Discipline]
     can :read, Payment, :user_id => @user.id
     can [:inscription, :cancel_inscription], Shift
+    can :access, :client
   end
 
   def set_permissions_for_admin

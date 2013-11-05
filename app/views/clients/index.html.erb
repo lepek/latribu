@@ -12,11 +12,18 @@
   <div id="tabs" style="width: 100%">
     <ul>
       <% if can? :manage, Inscription %><li><a href="#inscriptions">Pr&oacute;ximas clases</a></li><% end %>
+      <% if can? :manage, Inscription %><li><a href="#events">Mis clases</a></li><% end %>
     </ul>
 
     <% if can? :manage, Inscription -%>
         <div id="inscriptions">
           <%= render "inscriptions/tab", :shifts => @shifts %>
+        </div>
+    <% end -%>
+
+    <% if can? :manage, Inscription -%>
+        <div id="events">
+          <%= render "my_classes/tab", :events => @events %>
         </div>
     <% end -%>
 
