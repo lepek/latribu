@@ -22,6 +22,8 @@ class User < ActiveRecord::Base
   CLIENT_ROLE = 'Cliente'
   ADMIN_ROLE = 'Admin'
 
+  scope :clients, -> { where(:role_id => Role.find_by_name(CLIENT_ROLE).id) }
+
   def full_name
     "#{self.first_name} #{self.last_name}"
   end
