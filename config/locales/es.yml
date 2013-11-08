@@ -33,6 +33,8 @@ es:
         amount: 'Monto'
         credit: 'Crédito'
         created_at: 'Fecha'
+        month: 'Mes'
+        user_id: 'Cliente'
     errors:
       models:
         user:
@@ -64,6 +66,16 @@ es:
               blank: 'Las horas para abrir la inscripción no puede estar en blanco'
             close_inscription:
               blank: 'Las horas para cerrar la inscripción no puede estar en blanco'
+        payment:
+          attributes:
+            month:
+              blank: 'El Mes no puede estar en blanco'
+            amount:
+              blank: 'El Monto no puede estar en blanco'
+            credit:
+              blank: 'El Crédito no puede estar en blanco'
+            user_id:
+              blank: 'El Cliente no puede estar en blanco'
 
   date:
     abbr_day_names:

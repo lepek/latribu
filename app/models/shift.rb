@@ -10,6 +10,7 @@ class Shift < ActiveRecord::Base
   STATUS = {:open => 'abierta', :close => 'cerrada', :full => 'completa'}
 
   DEFAULT_SHIFT_DURATION = 1
+
   before_validation :set_end_time
 
   validates_presence_of :day, :start_time, :max_attendants, :open_inscription, :close_inscription, :instructor, :discipline

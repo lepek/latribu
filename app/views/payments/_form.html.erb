@@ -21,6 +21,13 @@
       </div>
 
       <div class="clearfix">
+        <%= f.label :month %>
+        <div class="input">
+          <%= f.select :month, options_for_select(Payment.months.invert, Chronic.parse("now").strftime('%B').downcase ), {}, :style => "text-transform:capitalize" %>
+        </div>
+      </div>
+
+      <div class="clearfix">
         <%= f.label :amount %>
         <div class="input">
           <%= f.text_field :amount %>
