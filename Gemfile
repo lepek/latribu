@@ -54,6 +54,7 @@ group :development, :test do
   gem 'cucumber-rails', :require => false
   gem 'database_cleaner'
   gem 'factory_girl_rails'
+  gem 'timecop'
 end
 
 # Support for Rails 4 added in 3.10
