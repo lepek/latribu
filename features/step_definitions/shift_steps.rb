@@ -45,3 +45,12 @@ Then /^The class is full$/ do
   @class.next_fixed_shift_users.count.should == @class.max_attendants
   @class.status.should == Shift::STATUS[:full]
 end
+
+Then /^I enroll into the class$/ do
+  credit_before = @user.credit
+  find('li#credit').should have_content(credit_before)
+  click_on "Anotarse"
+  find('li#credit').should have_content(credit_before.to_i - 1)
+  find('table#inscriptions-table > tbody > tr:first-child > td:nth-child(5)').should have_css('input[value="Liberar"]')
+  find('table#inscriptions-table > tbody > tr:first-child > td:nth-child(2)').should have_content('1')
+end

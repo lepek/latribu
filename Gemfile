@@ -48,6 +48,7 @@ end
 gem 'rails_12factor', group: :production
 gem 'devise', '3.1.1'
 gem 'cancan', '1.6.10'
+gem 'jquery-rails'
 
 group :development, :test do
   gem 'rspec-rails', '~> 2.0'
@@ -56,6 +57,9 @@ group :development, :test do
   gem 'factory_girl_rails'
   gem 'timecop'
 end
+
+# jQuery based replacement for select boxes
+gem "select2-rails"
 
 # Support for Rails 4 added in 3.10
 gem 'simple-navigation', '3.11.0'

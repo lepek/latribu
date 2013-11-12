@@ -53,4 +53,9 @@ Feature: Client inscriptions
     Then I should see the class as "Completa"
     Then I should not be able to enroll
 
+  Scenario: I can enroll myself into a class and my credit is updated
+    Given Today is "Nov 18 2013, 10:00"
+    And I have "1" credits
+    And I am in the inscriptions page
+    Then I enroll into the class
 

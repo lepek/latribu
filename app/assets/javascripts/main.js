@@ -389,16 +389,7 @@ $(document).ready(function() {
   $('.hint').fieldHint();
   
   $('.form-errors').not('.static').delay(10000).fadeOut(500);
-  
-  // Superfish setup
-  $('.sf-menu').superfish({
-    delay: 200,
-    speed: 'fast',
-    autoArrows: false,
-    dropShadows: false,
-    disableHI: true
-  });
-  
+
   $.ajaxSetup({error: redirectToLoginOn401Error});
   
   /*

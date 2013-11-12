@@ -3,3 +3,6 @@
   <%= render 'form' %>
   <%= link_to 'Volver', root_path(:anchor => 'payments') %>
 </div>
+<script>
+    $(document).ready(function() { $("#payment_user_id").select2(); });
+</script>
