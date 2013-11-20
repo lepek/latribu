@@ -56,6 +56,7 @@ group :development, :test do
   gem 'database_cleaner'
   gem 'factory_girl_rails'
   gem 'timecop'
+  gem 'sqlite3'
 end
 
 # jQuery based replacement for select boxes

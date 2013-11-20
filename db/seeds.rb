@@ -12,8 +12,10 @@ Role.create(:name => 'Cliente') unless Role.where(:name => 'Client').count > 0
 User.create(
     :first_name => 'Federico',
     :last_name => 'Adell',
+    :phone => '123234345',
     :email => 'fedex6_@hotmail.com',
     :password => 'federico',
+    :password_confirmation => 'federico',
     :role_id => 1
 ) unless User.where(:email => 'fedex6_@hotmail.com').count > 0
 
