@@ -16,7 +16,7 @@
       <div class="clearfix">
         <%= f.label :user_id %>
         <div class="input">
-          <%= f.collection_select(:user_id, User.where("role_id = 2").order("last_name").all, :id, :full_name)  %>
+          <%= f.collection_select(:user_id, User.where("role_id = 2").order("last_name"), :id, :full_name)  %>
         </div>
       </div>
 

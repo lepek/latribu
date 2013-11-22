@@ -6,3 +6,7 @@ Given /^I am in the inscriptions page$/ do
   visit clients_path
   click_on "Próximas clases"
 end
+
+Given /^I am in the payment page$/ do
+  visit new_payment_path
+end

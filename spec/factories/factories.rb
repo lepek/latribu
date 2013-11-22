@@ -20,6 +20,9 @@ FactoryGirl.define do
     email { generate(:email) }
     password "12345678"
     credit 0
+    factory :admin do
+      role_id 1
+    end
   end
 
   factory :shift do

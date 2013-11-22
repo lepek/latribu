@@ -1,4 +1,9 @@
 class AdminsController < ApplicationController
+
+  rescue_from CanCan::AccessDenied do |exception|
+    redirect_to clients_url
+  end
+
   def index
     authorize! :access, :admin
 
@@ -7,5 +12,7 @@ class AdminsController < ApplicationController
     @payments = Payment.accessible_by(current_ability).where(:created_at =>
       Payment.accessible_by(current_ability).select(:user_id, 'MAX(created_at) as created_at').group(:user_id).map(&:created_at)
     ).order("created_at DESC")
+
   end
+
 end

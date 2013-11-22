@@ -5,7 +5,7 @@ Feature: Client inscriptions
   I want to sign up to an open class
 
   Background:
-    Given I am logged as a client
+    Given I am logged as a "client"
     And the following shifts exist
       | day    | start_time | max_attendants | open_inscription | close_inscription |
       | monday | 21:00      | 2              | 12               | 3                 |
@@ -58,4 +58,15 @@ Feature: Client inscriptions
     And I have "1" credits
     And I am in the inscriptions page
     Then I enroll into the class
+
+  Scenario: I loose my credits in the following month
+    Given Today is "Nov 18 2013, 10:00"
+    And I have "5" credits
+    And I logoff from the app
+    When Today is "Dec 13 2013, 12:00"
+    And I am logged as a "client"
+    Then I should have "0" credits
+
+
+
 

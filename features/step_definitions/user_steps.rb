@@ -31,3 +31,12 @@ end
 Then /^I should not be registered$/ do
   User.where(:email => 'martin@gmail.com').count.should == 0
 end
+
+Given /^the following clients exist$/ do |table|
+  @users = []
+  table.hashes.each do |hash|
+    user = FactoryGirl.build(:user, hash)
+    user.save
+    @users << user
+  end
+end

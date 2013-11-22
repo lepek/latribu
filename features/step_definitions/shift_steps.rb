@@ -24,8 +24,10 @@ Then /^I should see the class as "(.*?)"$/ do |status|
 end
 
 Given /^I have "(.*?)" credits$/ do |credit|
-  @user.credit = credit.to_i
+  @user.credit = 0
   @user.save!
+  Payment.create(:user_id => @user.id, :month => Chronic.parse("now").strftime('%B').downcase, :amount => 200, :credit => credit)
+  @user.reload
 end
 
 Then /^I should not be able to enroll$/ do
@@ -53,4 +55,8 @@ Then /^I enroll into the class$/ do
   find('li#credit').should have_content(credit_before.to_i - 1)
   find('table#inscriptions-table > tbody > tr:first-child > td:nth-child(5)').should have_css('input[value="Liberar"]')
   find('table#inscriptions-table > tbody > tr:first-child > td:nth-child(2)').should have_content('1')
+end
+
+Then /^I should have "(.*?)" credits$/ do |credit|
+  find('li#credit').should have_content(credit)
 end
