@@ -26,11 +26,27 @@ class Shift < ActiveRecord::Base
     get_next_shift
   end
 
+  def current_fixed_shift
+    get_next_shift(self.end_time.strftime('%H:%M'))
+  end
+
+  def self.get_next_class
+    @shift = Shift.where(
+        'day = ? AND end_time > ?',
+        Chronic.parse("now").strftime('%A').downcase,
+        Chronic.parse("now").strftime('%H:%M')
+    ).order("end_time ASC").first
+  end
+
   ##
   # @return Inscriptions for this Shift
   #
   def next_fixed_shift_users
-    self.inscriptions.where('shift_date = ?', get_next_shift)
+    self.inscriptions.where('shift_date = ?', next_fixed_shift)
+  end
+
+  def current_fixed_shift_users
+    self.inscriptions.where('shift_date = ?', current_fixed_shift)
   end
 
   def enroll_next_shift(user)
@@ -92,14 +108,13 @@ class Shift < ActiveRecord::Base
 
   private
 
-    def get_next_shift
-      return @fixed_shift unless @fixed_shift.nil?
-      shift_time = self.start_time.strftime('%H:%M')
-      if Chronic.parse("#{self.day.to_s} #{shift_time}", :now => Chronic.parse("now") - 1.day) > Chronic.parse("now")
-        @fixed_shift = Chronic.parse("#{self.day.to_s} #{self.start_time.strftime('%H:%M')}", :now => Chronic.parse("now") - 1.day)
-      else
-        @fixed_shift = Chronic.parse("#{self.day.to_s} #{self.start_time.strftime('%H:%M')}")
-      end
-      @fixed_shift
+  def get_next_shift(shift_time = self.start_time.strftime('%H:%M'))
+    if Chronic.parse("#{self.day.to_s} #{shift_time}", :now => Chronic.parse("now") - 1.day) > Chronic.parse("now")
+      @fixed_shift = Chronic.parse("#{self.day.to_s} #{self.start_time.strftime('%H:%M')}", :now => Chronic.parse("now") - 1.day)
+    else
+      @fixed_shift = Chronic.parse("#{self.day.to_s} #{self.start_time.strftime('%H:%M')}")
     end
+    @fixed_shift
+  end
+
 end

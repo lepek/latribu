@@ -36,3 +36,7 @@ When /^I logoff from the app$/ do
   find('li#sign_out a').click
   page.current_path.should == new_user_session_path
 end
+
+When /^I confirm the popup$/ do
+  page.driver.browser.accept_js_confirms
+end

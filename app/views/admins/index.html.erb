@@ -11,7 +11,10 @@
   <h1>Administraci&oacute;n</h1>
   <div id="tabs" style="width: 100%">
     <ul>
-      <% if can? :manage, Shift %><li><a href="#shifts">Clases</a></li><% end %>
+      <% if can? :manage, Shift %>
+          <li><a href="#next_shift">Pr&oacute;xima clase de hoy</a></li>
+          <li><a href="#shifts">Clases</a></li>
+      <% end %>
       <% if can? :manage, User %><li><a href="#users">Clientes</a></li><% end %>
       <% if can? :manage, Payment %><li><a href="#payments">Pagos</a></li><% end %>
     </ul>
@@ -19,6 +22,9 @@
     <% if can? :manage, Shift -%>
         <div id="shifts">
           <%= render "shifts/tab", :shifts => @shifts %>
+        </div>
+        <div id="next_shift">
+          <%= render "shifts/show", :shift => @shift %>
         </div>
     <% end -%>
 

@@ -10,3 +10,8 @@ end
 Given /^I am in the payment page$/ do
   visit new_payment_path
 end
+
+Given /^I am in the clients page$/ do
+  visit admins_path
+  click_on "Clientes"
+end

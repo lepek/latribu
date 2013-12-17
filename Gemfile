@@ -72,4 +72,6 @@ gem 'rails-i18n', '~> 4.0.0'
 
 gem "simple_calendar", "~> 0.1.9"
 
+gem 'paranoia', '~> 2.0'
+
 ruby "2.0.0"

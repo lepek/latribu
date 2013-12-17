@@ -19,6 +19,8 @@ class User < ActiveRecord::Base
 
   before_create :set_credit
 
+  acts_as_paranoid
+
   CLIENT_ROLE = 'Cliente'
   ADMIN_ROLE = 'Admin'
 
