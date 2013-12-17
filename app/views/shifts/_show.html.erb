@@ -1,0 +1,52 @@
+<div id="content-inner" xmlns="http://www.w3.org/1999/html">
+  <% if shift.nil? %>
+    <h1>No hay más clases para el día de hoy</h1>
+  <% else %>
+    <h1><%= l(shift.current_fixed_shift, :format => '%A, %e de %B %H:%M hs.') %></h1>
+
+    <p>
+      <b>Cupo:</b>
+      <%= shift.max_attendants %>
+    </p>
+
+    <p>
+      <b>Anotados:</b>
+      <%= shift.current_fixed_shift_users.count %>
+    </p>
+
+    <p>
+      La inscripci&oacute;n est&aacute; <b><%= shift.status %></b>
+    </p>
+
+    <p>
+      La inscripci&oacute;n abre <b><%= shift.open_inscription %> horas</b> antes
+    </p>
+
+    <p>
+      La inscripci&oacute;n cierra <b><%= shift.close_inscription %> horas</b> antes
+    </p>
+
+    <p>
+      <b>Instructor:</b>
+      <%= shift.instructor.full_name %>
+    </p>
+
+    <p>
+      <b>Disciplina:</b>
+      <%= shift.discipline.name %>
+    </p>
+
+    <% if shift.current_fixed_shift_users.count > 0 %>
+    <p>
+      <b>Inscriptos</b>
+      <ul>
+      <% @shift.current_fixed_shift_users.each do |inscription| -%>
+        <li><%= inscription.user.full_name %> | <%= inscription.user.phone %> | <%= inscription.user.email %></li>
+      <% end -%>
+      </ul>
+    </p>
+    <% end %>
+  <% end %>
+
+  <%= link_to 'Volver', root_path(:anchor => 'shifts') %>
+</div>
