@@ -69,13 +69,15 @@ $(document).ready(function () {
 
     $.fn.shiftsTable = function () {
         var tableOptions = {
+            aaSorting: [[ 6, "asc" ]],
             aoColumns:[
-                nameColumn, // Dia y Hora
+                $.extend({}, nameColumn, {bSortable:false}), // Dia y Hora
                 countColumn, // Cupo
-                nameColumn, // Proxima
+                $.extend({}, nameColumn, {iDataSort: 6}), // Proxima
                 countColumn, // Anotados
                 countColumn, // Estado
-                actionColumn // Action buttons
+                actionColumn, // Action buttons
+                hiddenColumn
             ]
         };
         return this.selectableTable(tableOptions);

@@ -55,12 +55,14 @@ $(document).ready(function () {
 
     $.fn.inscriptionsTable = function () {
         var tableOptions = {
+            aaSorting: [[ 5, "asc" ]],
             aoColumns:[
-                nameColumn, // Shift
+                $.extend({}, nameColumn, {iDataSort: 5}), // Shift
                 countColumn, // Attendants
                 nameColumn, // Status
                 nameColumn, // enrolled?
-                actionColumn // Action buttons
+                actionColumn, // Action buttons
+                hiddenColumn
             ]
         };
         return this.selectableTable(tableOptions);
