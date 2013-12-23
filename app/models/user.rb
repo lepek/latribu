@@ -15,11 +15,11 @@ class User < ActiveRecord::Base
   validates_presence_of :phone
   validates_presence_of :role
 
-  before_validation :set_role
-
-  before_create :set_credit
-
   acts_as_paranoid
+
+  before_validation :set_role
+  before_create :set_credit
+  before_destroy :remove_payments
 
   CLIENT_ROLE = 'Cliente'
   ADMIN_ROLE = 'Admin'
@@ -35,6 +35,11 @@ class User < ActiveRecord::Base
   end
 
   private
+
+    def remove_payments
+      self.inscriptions.destroy_all
+      self.payments.destroy_all
+    end
 
     def set_role
       self.role ||= Role.find_by_name(CLIENT_ROLE)

@@ -6,6 +6,8 @@ class Payment < ActiveRecord::Base
 
   validates_presence_of :month, :amount, :credit, :user
 
+  acts_as_paranoid
+
   MONTHS = {
       :january => 'enero',
       :february => 'febrero',
