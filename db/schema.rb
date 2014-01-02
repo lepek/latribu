@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20131223191426) do
+ActiveRecord::Schema.define(version: 20140102034717) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -48,6 +48,7 @@ ActiveRecord::Schema.define(version: 20131223191426) do
     t.integer  "user_id"
     t.string   "month"
     t.datetime "deleted_at"
+    t.integer  "year",       default: 2014
   end
 
   add_index "payments", ["user_id"], name: "index_payments_on_user_id", using: :btree
@@ -73,12 +74,12 @@ ActiveRecord::Schema.define(version: 20131223191426) do
   add_index "shifts", ["instructor_id"], name: "index_shifts_on_instructor_id", using: :btree
 
   create_table "users", force: true do |t|
-    t.string   "email",                  default: "", null: false
-    t.string   "encrypted_password",     default: "", null: false
+    t.string   "email",                  default: "",   null: false
+    t.string   "encrypted_password",     default: "",   null: false
     t.string   "reset_password_token"
     t.datetime "reset_password_sent_at"
     t.datetime "remember_created_at"
-    t.integer  "sign_in_count",          default: 0,  null: false
+    t.integer  "sign_in_count",          default: 0,    null: false
     t.datetime "current_sign_in_at"
     t.datetime "last_sign_in_at"
     t.string   "current_sign_in_ip"
@@ -91,6 +92,7 @@ ActiveRecord::Schema.define(version: 20131223191426) do
     t.integer  "role_id"
     t.integer  "credit"
     t.datetime "deleted_at"
+    t.boolean  "reset_credit",           default: true
   end
 
   add_index "users", ["email"], name: "index_users_on_email", unique: true, using: :btree

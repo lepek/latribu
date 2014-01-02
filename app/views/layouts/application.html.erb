@@ -17,6 +17,9 @@
 <body>
 <%= render :partial => 'layouts/topbar' %>
 <div class="main container">
+  <div id="flash-messages">
+    <%= flash_messages %>
+  </div>
   <section id="content">
     <%= yield %>
   </section>

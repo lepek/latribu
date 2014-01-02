@@ -26,7 +26,7 @@ $(document).ready(function () {
     var actionColumn = {
         bSearchable:false,
         bSortable:false,
-        sWidth:"65px"
+        sWidth:"95px"
     };
 
     var nameColumn = {
@@ -39,7 +39,7 @@ $(document).ready(function () {
 
     var countColumn = {
         bSearchable:false,
-        sWidth:"50px"
+        sWidth:"30px"
     };
 
     $.fn.selectableTable = function (tableOptions) {
@@ -71,7 +71,7 @@ $(document).ready(function () {
         var tableOptions = {
             aaSorting: [[ 6, "asc" ]],
             aoColumns:[
-                $.extend({}, nameColumn, {bSortable:false}), // Dia y Hora
+                $.extend({}, shortNameColumn, {bSortable:false}), // Dia y Hora
                 countColumn, // Cupo
                 $.extend({}, nameColumn, {iDataSort: 6}), // Proxima
                 countColumn, // Anotados

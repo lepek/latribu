@@ -12,6 +12,7 @@ class Shift < ActiveRecord::Base
   DEFAULT_SHIFT_DURATION = 1
 
   before_validation :set_end_time
+  before_destroy :remove_inscriptions
 
   validates_presence_of :day, :start_time, :max_attendants, :open_inscription, :close_inscription, :instructor, :discipline
 
@@ -83,6 +84,13 @@ class Shift < ActiveRecord::Base
 
   def day_and_time
     return "#{DAYS[self.day.to_sym].capitalize} #{self.start_time.strftime('%H:%M')} hs."
+  end
+
+  ##
+  # When removing a shift we remove the inscriptions to that shift and refund the credits
+  #
+  def remove_inscriptions
+    self.inscriptions.destroy_all
   end
 
   # current_time = 10:00

@@ -8,8 +8,8 @@ class ApplicationController < ActionController::Base
 
   before_filter :set_time_zone
   before_filter :authenticate_user!, :unless => :devise_controller?
-  before_filter :configure_permitted_parameters, if: :devise_controller?
-  #before_filter :clear_credits
+  before_filter :configure_permitted_parameters, :if => :devise_controller?
+  before_filter :messages
 
   # Fix to make Cancan work with Rails 4 and string paramters
   # https://github.com/ryanb/cancan/issues/835#issuecomment-18663815
@@ -27,23 +27,27 @@ class ApplicationController < ActionController::Base
     end
   end
 
-  protected
+protected
 
-    def set_time_zone
-      Chronic.time_class = Time.zone
-    end
-
-    def configure_permitted_parameters
-      devise_parameter_sanitizer.for(:sign_up) << [:first_name, :last_name, :phone]
-    end
-
-    def clear_credits
-      unless current_user.nil?
-        if current_user.role.name == 'Cliente' && current_user.credit > 0 && current_user.payments.any? && current_user.payments.last.try(:month) != Chronic.parse("now").strftime('%B').downcase
-          current_user.credit = 0
-          current_user.save!
+  def messages
+    unless current_user.nil?
+      unless current_user.admin?
+        if current_user.credit == 0
+          flash[:warning] = "No podrás incribirte a ningún turno por no tener créditos. Comunicate con Nahual para poder volver a entrenar."
+        end
+        if current_user.credit > 0 && (Chronic.parse("8th this month").to_date - Chronic.parse("now").to_date).to_i < 9
+          flash[:info] = "A partir del <b>#{I18n.localize(Chronic.parse("8th this month"), :format => '%A,%e de %B')}</b> no podrán usarse los créditos del mes anterior."
         end
       end
     end
+  end
+
+  def set_time_zone
+    Chronic.time_class = Time.zone
+  end
+
+  def configure_permitted_parameters
+    devise_parameter_sanitizer.for(:sign_up) << [:first_name, :last_name, :phone]
+  end
 
 end

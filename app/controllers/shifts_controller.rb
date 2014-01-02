@@ -16,7 +16,6 @@ class ShiftsController < ApplicationController
   # POST /shifts.json
   def create
     @shift = Shift.new(shift_params)
-
     respond_to do |format|
       if @shift.save
         format.html { redirect_to root_url, notice: 'Nueva Clase creada.' }
@@ -35,7 +34,27 @@ class ShiftsController < ApplicationController
 
     respond_to do |format|
       format.html # show.html.erb
-      format.json { render json: @type }
+      format.json { render json: @shift }
+    end
+  end
+
+  # GET /shifts/1/edit
+  def edit
+    @shift = Shift.find(params[:id])
+  end
+
+  # PUT /shifts/1
+  # PUT /shifts/1.json
+  def update
+    @shift = Shift.find(params[:id])
+    respond_to do |format|
+      if @shift.update_attributes(shift_params)
+        format.html { redirect_to root_url, notice: 'Clase actualizada.' }
+        format.json { head :ok }
+      else
+        format.html { render action: "edit" }
+        format.json { render json: @shift.errors, status: :unprocessable_entity }
+      end
     end
   end
 

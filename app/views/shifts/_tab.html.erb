@@ -11,6 +11,7 @@
           <td><%= shift.status.capitalize %></td>
           <td>
             <%= button_to "Ver", shift_path(shift), :method => :get %>
+            <%= button_to "Editar", edit_shift_path(shift), :method => :get %>
             <%= button_to "Borrar", {:action=>"destroy", :controller=>"shifts", :id => shift}, data: { confirm: "¿Está seguro que desea eliminar \nla clase del #{shift.day_and_time}?" }, :method => :delete %>
           </td>
           <td><%= shift.next_fixed_shift %></td>
