@@ -16,7 +16,7 @@
       <div class="clearfix">
         <%= f.label :day %>
         <div class="input">
-          <%= f.select :day, options_for_select(Shift.days.invert), {}, :style => "text-transform:capitalize" %>
+          <%= f.select :day, options_for_select(Shift.days.invert, @shift.day), {}, :style => "text-transform:capitalize" %>
         </div>
       </div>
 
