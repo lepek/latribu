@@ -24,7 +24,7 @@ class User < ActiveRecord::Base
   CLIENT_ROLE = 'Cliente'
   ADMIN_ROLE = 'Admin'
 
-  CREDITS_RESET_DAY = "8th"
+  CREDITS_RESET_DAY = "5th"
 
   scope :clients, -> { where(:role_id => Role.find_by_name(CLIENT_ROLE).id) }
 
