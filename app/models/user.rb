@@ -24,7 +24,11 @@ class User < ActiveRecord::Base
   CLIENT_ROLE = 'Cliente'
   ADMIN_ROLE = 'Admin'
 
-  CREDITS_RESET_DAY = "9th"
+  CREDITS_RESET_DAY = "8"
+  CREDITS_RESET_TIME = "23:59:59"
+
+  LAST_CREDIT_RESET_DAY = "8"
+  LAST_CREDIT_RESET_TIME = "23:59:59"
 
   scope :clients, -> { where(:role_id => Role.find_by_name(CLIENT_ROLE).id) }
 
@@ -33,7 +37,7 @@ class User < ActiveRecord::Base
   end
 
   def last_month_credits_used
-    self.inscriptions.where(:created_at => Chronic.parse("#{CREDITS_RESET_DAY} #{last_month}")..Chronic.parse("#{CREDITS_RESET_DAY}")).count
+    self.inscriptions.where(:created_at => Chronic.parse("#{LAST_CREDIT_RESET_DAY} #{last_month} at #{LAST_CREDIT_RESET_TIME}")..Chronic.parse("#{CREDITS_RESET_DAY} #{current_month} at #{CREDITS_RESET_TIME}")).count
   end
 
   def full_name
@@ -48,6 +52,10 @@ private
 
   def last_month
     Chronic.parse("last month").strftime('%B %Y').downcase
+  end
+
+  def current_month
+    Chronic.parse("now").strftime('%B %Y').downcase
   end
 
   def remove_payments

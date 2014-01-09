@@ -8,7 +8,7 @@ task :reset_credits => :environment do
   User.clients.each do |user|
     if user.credit > 0 && user.reset_credit
       credits_unused = user.last_month_credits - user.last_month_credits_used
-      if credits_unused > 0
+      if credits_unused > 0 && user.credit - credits_unused < 0
         logger.info user.id.to_s + " - " + user.full_name
         logger.info "Creditos del ultimo mes: #{user.last_month_credits}"
         logger.info "Creditos usados #{user.last_month_credits_used}"
@@ -17,7 +17,7 @@ task :reset_credits => :environment do
         logger.info "Credito modificado: #{user.credit - credits_unused}"
         logger.info "====================================================="
         user.credit -= credits_unused
-        user.save!
+        #user.save!
       end
     end
   end
