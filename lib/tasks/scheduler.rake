@@ -1,7 +1,7 @@
 desc "This task is called by the Heroku scheduler add-on"
 task :reset_credits => :environment do
   Chronic.time_class = Time.zone
-  logger = Logger.new("#{Rails.root}/log/reset_credits.log")
+  logger = Rails.logger
   User.clients.each do |user|
     if user.credit > 0 && user.reset_credit
       credits_unused = user.last_month_credits - user.last_month_credits_used
