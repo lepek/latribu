@@ -17,7 +17,7 @@ task :reset_credits => :environment do
         logger.info "Credito modificado: #{user.credit - credits_unused}"
         logger.info "====================================================="
         user.credit -= credits_unused
-        #user.save!
+        user.save!
       end
     end
   end
