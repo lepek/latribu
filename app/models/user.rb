@@ -24,7 +24,7 @@ class User < ActiveRecord::Base
   CLIENT_ROLE = 'Cliente'
   ADMIN_ROLE = 'Admin'
 
-  CREDITS_RESET_DAY = "5"
+  CREDITS_RESET_DAY = "8"
   CREDITS_RESET_TIME = "23:59:59"
 
   LAST_CREDIT_RESET_DAY = "8"
