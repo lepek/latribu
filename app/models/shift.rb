@@ -15,6 +15,7 @@ class Shift < ActiveRecord::Base
   before_destroy :remove_inscriptions
 
   validates_presence_of :day, :start_time, :max_attendants, :open_inscription, :close_inscription, :instructor, :discipline
+  validates_uniqueness_of :start_time, :scope => [:day, :discipline_id]
 
   def self.days
     DAYS
