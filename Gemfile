@@ -49,7 +49,6 @@ end
 gem 'rails_12factor', group: :production
 gem 'devise', '3.1.1'
 gem 'cancan', '1.6.10'
-gem 'jquery-rails'
 
 group :development, :test do
   gem 'rspec-rails', '~> 2.0'

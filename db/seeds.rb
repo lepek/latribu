@@ -22,11 +22,21 @@ User.create(
 Instructor.create(
     :first_name => 'Federico',
     :last_name => 'Adell'
-)
+) unless Instructor.where(:first_name => 'Federico', :last_name => 'Adell').count > 0
 
 Instructor.create(
     :first_name => 'Andres',
     :last_name => 'Torrens'
-)
+) unless Instructor.where(:first_name => 'Andres', :last_name => 'Torrens').count > 0
 
-Discipline.create(:name => 'Crossfit')
+Instructor.create(
+    :first_name => 'Pablo',
+    :last_name => 'Fabucci'
+) unless Instructor.where(:first_name => 'Pablo', :last_name => 'Fabucci').count > 0
+
+Instructor.create(
+    :first_name => 'Magdalena',
+    :last_name => 'del Pazo'
+) unless Instructor.where(:first_name => 'Magdalena', :last_name => 'del Pazo').count > 0
+
+Discipline.create(:name => 'Crossfit') unless Discipline.where(:name => 'Crossfit').count > 0
