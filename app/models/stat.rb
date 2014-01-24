@@ -1,11 +1,12 @@
 class Stat < ActiveRecord::Base
 
   def self.credit_and_inscriptions
-    credits = self.credit_stats
-    inscriptions = self.inscription_stats
+    credits = self.credit_stats || {}
+    inscriptions = self.inscription_stats || {}
     stat = {}
+    time = inscriptions.first.first.strftime('%H:%M:%S') || '00:00:00'
     credits.each do |credit|
-      month = Chronic.parse("1 #{credit.month} #{credit.year} 00:00:00")
+      month = Chronic.parse("1 #{credit.month} #{credit.year} #{time}")
       stat[month] = { :credits => credit.total_credit, :inscriptions => inscriptions[month] }
     end
     stat
