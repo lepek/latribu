@@ -17,6 +17,7 @@
       <% end %>
       <% if can? :manage, User %><li><a href="#users">Clientes</a></li><% end %>
       <% if can? :manage, Payment %><li><a href="#payments">Pagos</a></li><% end %>
+      <% if can? :manage, Stat %><li><a href="#stats">Estad&iacute;sticas</a></li><% end %>
     </ul>
 
     <% if can? :manage, Shift -%>
@@ -37,6 +38,12 @@
     <% if can? :manage, Payment -%>
         <div id="payments">
           <%= render "payments/tab", :payments => @payments %>
+        </div>
+    <% end -%>
+
+    <% if can? :manage, Stat -%>
+        <div id="stats">
+          <%= render "stats/tab", :stats => @stats %>
         </div>
     <% end -%>
 

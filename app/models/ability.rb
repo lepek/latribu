@@ -28,7 +28,7 @@ class Ability
   end
 
   def set_permissions_for_admin
-    can :manage, [User, Shift, Instructor, Discipline, Payment]
+    can :manage, [User, Shift, Instructor, Discipline, Payment, Stat]
     can :access, :admin
   end
 

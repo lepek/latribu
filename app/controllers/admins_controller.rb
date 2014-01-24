@@ -13,6 +13,7 @@ class AdminsController < ApplicationController
       Payment.accessible_by(current_ability).select(:user_id, 'MAX(created_at) as created_at').group(:user_id).map(&:created_at)
     ).order("created_at DESC")
     @shift = Shift.accessible_by(current_ability).get_next_class
+    @stats = Stat.accessible_by(current_ability).credit_and_inscriptions
 
   end
 

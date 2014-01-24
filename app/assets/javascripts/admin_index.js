@@ -3,6 +3,7 @@ $(document).ready(function () {
     $("#users-table").usersTable();
     $("#shifts-table").shiftsTable();
     $("#payments-table").paymentsTable();
+    $("#stats-table").statsTable();
 });
 
 (function ($) {
@@ -91,6 +92,19 @@ $(document).ready(function () {
                 countColumn, // Monto
                 countColumn, // Credito
                 actionColumn // Action buttons
+            ]
+        };
+        return this.selectableTable(tableOptions);
+    };
+
+    $.fn.statsTable = function () {
+        var tableOptions = {
+            aaSorting: [[ 3, "desc" ]],
+            aoColumns:[
+                $.extend({}, nameColumn, {iDataSort: 3}), // Mes
+                countColumn, // Creditos
+                countColumn, // Inscriptiones
+                hiddenColumn
             ]
         };
         return this.selectableTable(tableOptions);
