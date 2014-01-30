@@ -154,6 +154,10 @@ class Shift < ActiveRecord::Base
 
   end
 
+  def close?
+    status == STATUS[:close]
+  end
+
 private
 
   def get_next_shift(shift_time = self.start_time.strftime('%H:%M'))

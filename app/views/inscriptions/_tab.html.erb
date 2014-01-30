@@ -3,7 +3,7 @@
         <tr>
           <td><%= l(shift.next_fixed_shift, :format => '%A, %e de %B %H:%M hs.') %></td>
           <td><%= shift.instructor.full_name %></td>
-          <td><%= shift.available_for_enroll?(current_user) ? shift.next_fixed_shift_count : 0 %></td>
+          <td><%= shift.close? ? 0 : shift.next_fixed_shift_count %></td>
           <td><%= shift.status.capitalize %></td>
           <td><%= l(shift.user_inscription(current_user).created_at, :format => '%A, %e de %B %H:%M hs.') if shift.user_inscription(current_user) %></td>
           <td>
