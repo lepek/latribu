@@ -56,6 +56,10 @@ class Shift < ActiveRecord::Base
     self.next_fixed_shift_users.count + self.next_fixed_shift_rookies.count
   end
 
+  def current_fixed_shift_count
+    self.current_fixed_shift_users.count + self.current_fixed_shift_rookies.count
+  end
+
   def current_fixed_shift_users
     self.inscriptions.where(:shift_date => current_fixed_shift)
   end
