@@ -14,6 +14,7 @@ class AdminsController < ApplicationController
     ).order("created_at DESC")
     @shift = Shift.accessible_by(current_ability).get_next_class
     @stats = Stat.accessible_by(current_ability).credit_and_inscriptions
+    @rookies = Rooky.accessible_by(current_ability).pending
 
   end
 

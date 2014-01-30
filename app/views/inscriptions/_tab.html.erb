@@ -1,8 +1,9 @@
-<% datatable "inscriptions-table", ["Clase", "Anotados", "Estado","Anotado", "", ""], :class => "selectable" do -%>
+<% datatable "inscriptions-table", ["Clase", "Instructor", "Anotados", "Estado","Anotado", "", ""], :class => "selectable" do -%>
     <% shifts.each do |shift| -%>
         <tr>
           <td><%= l(shift.next_fixed_shift, :format => '%A, %e de %B %H:%M hs.') %></td>
-          <td><%= shift.next_fixed_shift_users.count %></td>
+          <td><%= shift.instructor.full_name %></td>
+          <td><%= shift.next_fixed_shift_count %></td>
           <td><%= shift.status.capitalize %></td>
           <td><%= l(shift.user_inscription(current_user).created_at, :format => '%A, %e de %B %H:%M hs.') if shift.user_inscription(current_user) %></td>
           <td>

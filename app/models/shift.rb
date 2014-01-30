@@ -3,6 +3,7 @@ class Shift < ActiveRecord::Base
   belongs_to :discipline
   has_many :inscriptions
   has_many :users, through: :inscriptions
+  has_many :rookies
 
   DAYS = {:monday => 'lunes', :tuesday => 'martes', :wednesday => 'miércoles', :thursday => 'jueves', :friday => 'viernes', :saturday => 'sábado', :sunday => 'domingo'}
 
@@ -41,14 +42,26 @@ class Shift < ActiveRecord::Base
   end
 
   ##
-  # @return Inscriptions for this Shift
+  # @return [ActiveRecord::Relation] inscriptions for this Shift
   #
   def next_fixed_shift_users
-    self.inscriptions.where('shift_date = ?', next_fixed_shift)
+    self.inscriptions.where(:shift_date => next_fixed_shift)
+  end
+
+  def next_fixed_shift_rookies
+    self.rookies.where(:shift_date => next_fixed_shift)
+  end
+
+  def next_fixed_shift_count
+    self.next_fixed_shift_users.count + self.next_fixed_shift_rookies.count
   end
 
   def current_fixed_shift_users
-    self.inscriptions.where('shift_date = ?', current_fixed_shift)
+    self.inscriptions.where(:shift_date => current_fixed_shift)
+  end
+
+  def current_fixed_shift_rookies
+    self.rookies.where(:shift_date => current_fixed_shift)
   end
 
   def enroll_next_shift(user)
@@ -67,8 +80,29 @@ class Shift < ActiveRecord::Base
     end
   end
 
+  def enroll_next_shift_rooky(rooky)
+    if self.available_for_try?
+      rooky.shift_date ||= get_next_shift
+      rooky.shift_id ||= self.id
+      rooky.save
+    else
+      self.errors[:base] << "No es posible anotarse a la Clase, ya está anotado, está cerrada o completa"
+    end
+  end
+
+  ##
+  # @param user [User] the user we would like to enroll
+  # @return [Boolean] if the shift is available to enroll a user or not
+  #
   def available_for_enroll?(user)
-    status == STATUS[:open] && !user_inscription(user) && user.credit > 0
+    status == STATUS[:open] && !user_inscription(user) && (user.credit > 0 || user.admin?)
+  end
+
+  ##
+  # @return [Boolean] if the shift is available to enroll an anonymous user for a free class or not
+  #
+  def available_for_try?
+    status == STATUS[:open]
   end
 
   def available_for_cancel?(user)
@@ -76,7 +110,7 @@ class Shift < ActiveRecord::Base
   end
 
   def user_inscription(user)
-    self.inscriptions.where('user_id = ? AND shift_date = ?', user.id, get_next_shift).first
+    self.inscriptions.where(:user_id => user.id, :shift_date => get_next_shift).first
   end
 
   def set_end_time
@@ -102,7 +136,7 @@ class Shift < ActiveRecord::Base
   # 12:00 - 10 = 2:00 < 7:00 => abierta (and the cerrada is not met)
   # start_time - open_inscription < current_time => abierta
   def status
-    return STATUS[:full] if next_fixed_shift_users.count >= self.max_attendants
+    return STATUS[:full] if self.next_fixed_shift_count >= self.max_attendants
 
     next_shift = get_next_shift
 
@@ -115,7 +149,7 @@ class Shift < ActiveRecord::Base
 
   end
 
-  private
+private
 
   def get_next_shift(shift_time = self.start_time.strftime('%H:%M'))
     if Chronic.parse("#{self.day.to_s} #{shift_time}", :now => Chronic.parse("now") - 1.day) > Chronic.parse("now")

@@ -1,0 +1,14 @@
+<% datatable "rookies-table", ["Clase", "Nombre", "Teléfono", "E-mail", "", ""], :class => "selectable" do -%>
+    <% rookies.each do |rooky| -%>
+        <tr>
+          <td><%= l(rooky.shift_date, :format => '%A, %e de %B %H:%M hs.') %></td>
+          <td><%= rooky.full_name %></td>
+          <td><%= rooky.phone %></td>
+          <td><%= rooky.email %></td>
+          <td>
+            <%= button_to "Borrar", {:action=>"destroy", :controller=>"rookies", :id => rooky}, data: { confirm: "¿Está seguro que desea eliminar \nla inscripción de #{rooky.full_name}?" }, :method => :delete %>
+          </td>
+          <td><%= rooky.shift_date %></td>
+        </tr>
+    <% end -%>
+<% end -%>

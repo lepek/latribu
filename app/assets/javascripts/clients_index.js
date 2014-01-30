@@ -58,8 +58,9 @@ $(document).ready(function () {
             aaSorting: [[ 5, "asc" ]],
             aoColumns:[
                 $.extend({}, nameColumn, {iDataSort: 5}), // Shift
+                shortNameColumn, // Instructor
                 countColumn, // Attendants
-                nameColumn, // Status
+                shortNameColumn, // Status
                 nameColumn, // enrolled?
                 actionColumn, // Action buttons
                 hiddenColumn

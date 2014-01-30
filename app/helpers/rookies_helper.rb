@@ -1,0 +1,2 @@
+module RookiesHelper
+end

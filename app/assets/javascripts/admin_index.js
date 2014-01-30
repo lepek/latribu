@@ -4,6 +4,7 @@ $(document).ready(function () {
     $("#shifts-table").shiftsTable();
     $("#payments-table").paymentsTable();
     $("#stats-table").statsTable();
+    $("#rookies-table").rookiesTable();
 });
 
 (function ($) {
@@ -27,7 +28,7 @@ $(document).ready(function () {
     var actionColumn = {
         bSearchable:false,
         bSortable:false,
-        sWidth:"95px"
+        sWidth:"160px"
     };
 
     var nameColumn = {
@@ -42,6 +43,11 @@ $(document).ready(function () {
         bSearchable:false,
         sWidth:"30px"
     };
+
+    var shortCountColumn = {
+        bSearchable:false,
+        sWidth:"20px"
+    }
 
     $.fn.selectableTable = function (tableOptions) {
         // Set the options that all of them share
@@ -73,9 +79,9 @@ $(document).ready(function () {
             aaSorting: [[ 6, "asc" ]],
             aoColumns:[
                 $.extend({}, shortNameColumn, {bSortable:false}), // Dia y Hora
-                countColumn, // Cupo
+                shortCountColumn, // Cupo
                 $.extend({}, nameColumn, {iDataSort: 6}), // Proxima
-                countColumn, // Anotados
+                shortCountColumn, // Anotados
                 countColumn, // Estado
                 actionColumn, // Action buttons
                 hiddenColumn
@@ -105,6 +111,21 @@ $(document).ready(function () {
                 countColumn, // Creditos
                 countColumn, // Inscriptiones
                 hiddenColumn
+            ]
+        };
+        return this.selectableTable(tableOptions);
+    };
+
+    $.fn.rookiesTable = function () {
+        var tableOptions = {
+            aaSorting: [[ 5, "desc" ]],
+            aoColumns:[
+                $.extend({}, nameColumn, {iDataSort: 5}), // Clase
+                nameColumn, // Nombre
+                nameColumn, // Telefono
+                nameColumn, // Email
+                actionColumn, // Action buttons
+                hiddenColumn // Clase para ordenar
             ]
         };
         return this.selectableTable(tableOptions);

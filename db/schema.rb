@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20140121192330) do
+ActiveRecord::Schema.define(version: 20140130150239) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -30,6 +30,7 @@ ActiveRecord::Schema.define(version: 20140121192330) do
     t.integer  "shift_id"
   end
 
+  add_index "inscriptions", ["shift_date"], name: "index_inscriptions_on_shift_date", using: :btree
   add_index "inscriptions", ["shift_id"], name: "index_inscriptions_on_shift_id", using: :btree
   add_index "inscriptions", ["user_id"], name: "index_inscriptions_on_user_id", using: :btree
 
@@ -56,6 +57,20 @@ ActiveRecord::Schema.define(version: 20140121192330) do
   create_table "roles", force: true do |t|
     t.string "name"
   end
+
+  create_table "rookies", force: true do |t|
+    t.datetime "shift_date"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+    t.string   "full_name"
+    t.string   "phone"
+    t.string   "email"
+    t.string   "notes"
+    t.integer  "shift_id"
+  end
+
+  add_index "rookies", ["shift_date"], name: "index_rookies_on_shift_date", using: :btree
+  add_index "rookies", ["shift_id"], name: "index_rookies_on_shift_id", using: :btree
 
   create_table "shifts", force: true do |t|
     t.string   "day"
