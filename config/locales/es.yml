@@ -35,7 +35,7 @@ es:
         created_at: 'Fecha'
         month: 'Mes'
         user_id: 'Cliente'
-      rookie:
+      rooky:
         full_name: 'Nombre'
         phone: 'Teléfono'
         email: 'E-mail'
@@ -81,7 +81,7 @@ es:
               blank: 'El Crédito no puede estar en blanco'
             user_id:
               blank: 'El Cliente no puede estar en blanco'
-        rookie:
+        rooky:
           attributes:
             full_name:
               blank: 'El Nombre no puede estar en blanco'

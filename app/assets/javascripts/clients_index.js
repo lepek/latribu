@@ -55,9 +55,9 @@ $(document).ready(function () {
 
     $.fn.inscriptionsTable = function () {
         var tableOptions = {
-            aaSorting: [[ 5, "asc" ]],
+            aaSorting: [[ 6, "asc" ]],
             aoColumns:[
-                $.extend({}, nameColumn, {iDataSort: 5}), // Shift
+                $.extend({}, nameColumn, {iDataSort: 6}), // Shift
                 shortNameColumn, // Instructor
                 countColumn, // Attendants
                 shortNameColumn, // Status

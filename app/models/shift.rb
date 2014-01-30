@@ -95,14 +95,15 @@ class Shift < ActiveRecord::Base
   # @return [Boolean] if the shift is available to enroll a user or not
   #
   def available_for_enroll?(user)
-    status == STATUS[:open] && !user_inscription(user) && (user.credit > 0 || user.admin?)
+    @available_for_enroll ||= ( status == STATUS[:open] && !user_inscription(user) && user.credit > 0 )
+    @available_for_enroll
   end
 
   ##
   # @return [Boolean] if the shift is available to enroll an anonymous user for a free class or not
   #
   def available_for_try?
-    status == STATUS[:open]
+    status != STATUS[:full]
   end
 
   def available_for_cancel?(user)
