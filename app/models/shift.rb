@@ -11,6 +11,8 @@ class Shift < ActiveRecord::Base
   STATUS = {:open => 'abierta', :close => 'cerrada', :full => 'completa'}
 
   DEFAULT_SHIFT_DURATION = 1
+  MARTIN_BIANCULLI_ID = 2
+  MARCELO_PERRETTA_ID =  41
 
   before_validation :set_end_time
   before_destroy :remove_inscriptions
@@ -99,8 +101,17 @@ class Shift < ActiveRecord::Base
   # @return [Boolean] if the shift is available to enroll a user or not
   #
   def available_for_enroll?(user)
+    @available_for_enroll ||= exceptions(user)
     @available_for_enroll ||= ( status == STATUS[:open] && !user_inscription(user) && user.credit > 0 )
     @available_for_enroll
+  end
+
+  def exceptions(user)
+    if [MARTIN_BIANCULLI_ID, MARCELO_PERRETTA_ID].include?(user.id) && status != STATUS[:full] && !user_inscription(user) && user.credit > 0
+      true
+    else
+      nil
+    end
   end
 
   ##
@@ -111,11 +122,11 @@ class Shift < ActiveRecord::Base
   end
 
   def available_for_cancel?(user)
-    user_inscription(user) && status != STATUS[:close]
+    user_inscription(user) && (status != STATUS[:close] || [MARTIN_BIANCULLI_ID, MARCELO_PERRETTA_ID].include?(user.id) )
   end
 
   def user_inscription(user)
-    self.inscriptions.where(:user_id => user.id, :shift_date => get_next_shift).first
+    @inscriptoin ||= self.inscriptions.where(:user_id => user.id, :shift_date => get_next_shift).first
   end
 
   def set_end_time

@@ -74,4 +74,6 @@ gem "simple_calendar", "~> 0.1.9"
 
 gem 'paranoia', '~> 2.0'
 
+gem 'sentry-raven'
+
 ruby "2.0.0"
