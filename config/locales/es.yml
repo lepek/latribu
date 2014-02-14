@@ -23,6 +23,7 @@ es:
         password: 'Contraseña'
         password_confirmation: 'Confirmar contraseña'
         phone: 'Teléfono'
+        current_password: 'Contraseña actual'
       shift:
         day: 'Día'
         start_time: 'Hora de comienzo'

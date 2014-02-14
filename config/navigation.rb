@@ -6,7 +6,7 @@ SimpleNavigation::Configuration.run do |navigation|
 
     # I have to evalute it here because current_user may not exist, the x.item :if it's just to control the render
     if user_signed_in?
-      top.item :profile, '<img src="/assets/nav_icons/user-icon.png" />' + [current_user.first_name, current_user.last_name].compact.join(' ') , main_app.edit_user_registration_path(current_user)
+      top.item :profile, '<img src="/assets/nav_icons/user-icon.png" />' + [current_user.first_name, current_user.last_name].compact.join(' ') , main_app.edit_user_registration_path
       top.item :credit, '<img src="/assets/nav_icons/money-icon.png" /> ' + current_user.credit.to_s, main_app.edit_user_registration_path(current_user)
     end
 
