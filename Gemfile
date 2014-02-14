@@ -74,9 +74,9 @@ gem "simple_calendar", "~> 0.1.9"
 
 gem 'paranoia', '~> 2.0'
 
-gem 'sentry-raven'
+#gem 'sentry-raven'
 
-gem 'newrelic_rpm'
+#gem 'newrelic_rpm'
 
 gem 'unicorn'
 
