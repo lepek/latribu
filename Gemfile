@@ -76,4 +76,6 @@ gem 'paranoia', '~> 2.0'
 
 gem 'sentry-raven'
 
+gem 'unicorn'
+
 ruby "2.0.0"
