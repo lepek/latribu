@@ -32,6 +32,13 @@ class User < ActiveRecord::Base
 
   scope :clients, -> { where(:role_id => Role.find_by_name(CLIENT_ROLE).id) }
 
+  ##
+  # @return All the inscriptions for classes in the future for this user
+  #
+  def next_inscriptions
+    @next_inscriptions ||= self.inscriptions.where('shift_date >= ?', Chronic.parse("now") )
+  end
+
   def last_month_credits
     self.payments.where(:month => Chronic.parse("last month").strftime('%B').downcase).map(&:credit).sum
   end

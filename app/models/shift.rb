@@ -102,12 +102,12 @@ class Shift < ActiveRecord::Base
   #
   def available_for_enroll?(user)
     @available_for_enroll ||= exceptions(user)
-    @available_for_enroll ||= ( status == STATUS[:open] && !user_inscription(user) && user.credit > 0 )
+    @available_for_enroll ||= ( status == STATUS[:open] && user_inscription(user).nil? && user.credit > 0 )
     @available_for_enroll
   end
 
   def exceptions(user)
-    if [MARTIN_BIANCULLI_ID, MARCELO_PERRETTA_ID].include?(user.id) && status != STATUS[:full] && !user_inscription(user) && user.credit > 0
+    if [MARTIN_BIANCULLI_ID, MARCELO_PERRETTA_ID].include?(user.id) && status != STATUS[:full] && user_inscription(user).nil? && user.credit > 0
       true
     else
       nil
@@ -125,8 +125,11 @@ class Shift < ActiveRecord::Base
     user_inscription(user) && (status != STATUS[:close] || [MARTIN_BIANCULLI_ID, MARCELO_PERRETTA_ID].include?(user.id) )
   end
 
+  ##
+  # @return nil or the inscription record of the user
+  #
   def user_inscription(user)
-    @inscriptoin ||= self.inscriptions.where(:user_id => user.id, :shift_date => get_next_shift).first
+    user.next_inscriptions.find { |i| i.shift_date == get_next_shift }
   end
 
   def set_end_time
