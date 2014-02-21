@@ -19,7 +19,9 @@ FactoryGirl.define do
     phone "3413456789"
     email { generate(:email) }
     password "12345678"
-    credit 0
+    factory :user_with_credit do
+      credit 1
+    end
     factory :admin do
       role_id 1
     end

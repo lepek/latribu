@@ -20,7 +20,7 @@ Then /^I should not see the next class on "(.*?)"$/ do |next_class|
 end
 
 Then /^I should see the class as "(.*?)"$/ do |status|
-  find('table#inscriptions-table > tbody > tr:first-child > td:nth-child(3)').should have_content(status)
+  find('table#inscriptions-table > tbody > tr:first-child > td:nth-child(4)').should have_content(status)
 end
 
 Given /^I have "(.*?)" credits$/ do |credit|
@@ -31,11 +31,11 @@ Given /^I have "(.*?)" credits$/ do |credit|
 end
 
 Then /^I should not be able to enroll$/ do
-  find('table#inscriptions-table > tbody > tr:first-child > td:nth-child(5)').should_not have_css('input[value="Anotarse"]')
+  find('table#inscriptions-table > tbody > tr:first-child > td:nth-child(6)').should_not have_css('input[value="Anotarse"]')
 end
 
 Then /^I should be able to enroll$/ do
-  find('table#inscriptions-table > tbody > tr:first-child > td:nth-child(5)').should have_css('input[value="Anotarse"]')
+  find('table#inscriptions-table > tbody > tr:first-child > td:nth-child(6)').should have_css('input[value="Anotarse"]')
 end
 
 Then /^The class is full$/ do
@@ -53,8 +53,8 @@ Then /^I enroll into the class$/ do
   find('li#credit').should have_content(credit_before)
   click_on "Anotarse"
   find('li#credit').should have_content(credit_before.to_i - 1)
-  find('table#inscriptions-table > tbody > tr:first-child > td:nth-child(5)').should have_css('input[value="Liberar"]')
-  find('table#inscriptions-table > tbody > tr:first-child > td:nth-child(2)').should have_content('1')
+  find('table#inscriptions-table > tbody > tr:first-child > td:nth-child(6)').should have_css('input[value="Liberar"]')
+  find('table#inscriptions-table > tbody > tr:first-child > td:nth-child(3)').should have_content('1')
 end
 
 Then /^I should have "(.*?)" credits$/ do |credit|

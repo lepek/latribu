@@ -48,17 +48,17 @@ development:
 # re-generated from your development database when you run "rake".
 # Do not set this db to the same as development or production.
 test: &test
-  #adapter: postgresql
-  #encoding: unicode
-  #database: nahual_test
-  #host: localhost  
-  #pool: 5
-  #username: nahual
-  #password: nahual
-  adapter: sqlite3
-  database: db/test.sqlite3
+  adapter: postgresql
+  encoding: unicode
+  database: nahual_test
+  host: localhost
   pool: 5
-  timeout: 5000
+  username: postgres
+  password: nahual
+  #adapter: sqlite3
+  #database: db/test.sqlite3
+  pool: 5
+  #timeout: 5000
 
 production:
   adapter: postgresql

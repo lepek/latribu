@@ -92,12 +92,14 @@ $(document).ready(function () {
 
     $.fn.paymentsTable = function () {
         var tableOptions = {
+            aaSorting: [[ 5, "asc" ]],
             aoColumns:[
                 nameColumn, // Client
-                nameColumn, // Fecha
+                $.extend({}, nameColumn, {iDataSort: 5}), // Fecha
                 countColumn, // Monto
                 countColumn, // Credito
-                actionColumn // Action buttons
+                actionColumn, // Action buttons
+                hiddenColumn
             ]
         };
         return this.selectableTable(tableOptions);

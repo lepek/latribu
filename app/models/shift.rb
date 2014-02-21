@@ -29,12 +29,10 @@ class Shift < ActiveRecord::Base
   #
   def next_fixed_shift
     @next_fixed_shift ||= get_next_shift
-    @next_fixed_shift
   end
 
   def current_fixed_shift
-    @current_fixed_shift = get_next_shift(self.end_time.strftime('%H:%M'))
-    @current_fixed_shift
+    @current_fixed_shift ||= get_next_shift(self.end_time.strftime('%H:%M'))
   end
 
   def self.get_next_class
@@ -114,17 +112,12 @@ class Shift < ActiveRecord::Base
   # @return [Boolean] if the shift is available to enroll a user or not
   #
   def available_for_enroll?(user)
-    @available_for_enroll ||= exceptions(user)
-    @available_for_enroll ||= ( status == STATUS[:open] && user_inscription(user).nil? && user.credit > 0 )
-    @available_for_enroll
+    #@available_for_enroll ||= exceptions?(user)
+    @available_for_enroll ||= ( status == STATUS[:open] && user_inscription(user).nil? && user.credit > 0 && another_today_inscription?(user).nil? )
   end
 
-  def exceptions(user)
-    if [MARTIN_BIANCULLI_ID, MARCELO_PERRETTA_ID].include?(user.id) && status != STATUS[:full] && user_inscription(user).nil? && user.credit > 0
-      true
-    else
-      nil
-    end
+  def exceptions?(user)
+    [MARTIN_BIANCULLI_ID, MARCELO_PERRETTA_ID].include?(user.id) && self.status != STATUS[:full] && self.user_inscription(user).nil? && user.credit > 0
   end
 
   ##
@@ -142,7 +135,11 @@ class Shift < ActiveRecord::Base
   # @return nil or the inscription record of the user
   #
   def user_inscription(user)
-    user.next_inscriptions.find { |i| i.shift_date == get_next_shift }
+    user.next_inscriptions.find { |i| i.shift_date == self.next_fixed_shift }
+  end
+
+  def another_today_inscription?(user)
+    user.next_inscriptions.find { |i| i.shift_date.strftime('%D') == self.next_fixed_shift.strftime('%D') }
   end
 
   def set_end_time
@@ -150,7 +147,7 @@ class Shift < ActiveRecord::Base
   end
 
   def day_and_time
-    return "#{DAYS[self.day.to_sym].capitalize} #{self.start_time.strftime('%H:%M')} hs."
+    "#{DAYS[self.day.to_sym].capitalize} #{self.start_time.strftime('%H:%M')} hs."
   end
 
   ##

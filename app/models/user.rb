@@ -27,7 +27,7 @@ class User < ActiveRecord::Base
   CREDITS_RESET_DAY = "5"
   CREDITS_RESET_TIME = "23:59:59"
 
-  LAST_CREDIT_RESET_DAY = "8"
+  LAST_CREDIT_RESET_DAY = "5"
   LAST_CREDIT_RESET_TIME = "23:59:59"
 
   scope :clients, -> { where(:role_id => Role.find_by_name(CLIENT_ROLE).id) }
@@ -53,6 +53,13 @@ class User < ActiveRecord::Base
 
   def admin?
     self.role.name == ADMIN_ROLE
+  end
+
+  ##
+  # @return [Boolean] If the user is a pretty new user without credits or inscriptions
+  #
+  def is_new?
+    self.admin? || self.credit > 0 || self.inscriptions.any?
   end
 
 private

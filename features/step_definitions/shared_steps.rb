@@ -17,6 +17,8 @@ Given /^I am logged as a[n]* "(.*?)"$/ do |role|
       @user = FactoryGirl.create(:admin)
     elsif role.downcase == 'client'
       @user = FactoryGirl.create(:user)
+    elsif role.downcase == 'client with credit'
+      @user = FactoryGirl.create(:user_with_credit)
     end
   end
 
