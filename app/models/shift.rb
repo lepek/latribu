@@ -112,7 +112,7 @@ class Shift < ActiveRecord::Base
   # @return [Boolean] if the shift is available to enroll a user or not
   #
   def available_for_enroll?(user)
-    #@available_for_enroll ||= exceptions?(user)
+    @available_for_enroll ||= exceptions?(user)
     @available_for_enroll ||= ( status == STATUS[:open] && user_inscription(user).nil? && user.credit > 0 && another_today_inscription?(user).nil? )
   end
 
