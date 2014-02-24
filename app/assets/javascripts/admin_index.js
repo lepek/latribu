@@ -35,6 +35,10 @@ $(document).ready(function () {
         sWidth:"150px"
     };
 
+    var longNameColumn = {
+        sWidth:"250px"
+    };
+
     var shortNameColumn = {
         sWidth:"70px"
     };
@@ -92,10 +96,11 @@ $(document).ready(function () {
 
     $.fn.paymentsTable = function () {
         var tableOptions = {
-            aaSorting: [[ 5, "asc" ]],
+            aaSorting: [[ 6, "asc" ]],
             aoColumns:[
                 nameColumn, // Client
-                $.extend({}, nameColumn, {iDataSort: 5}), // Fecha
+                nameColumn, // Email
+                $.extend({}, longNameColumn, {iDataSort: 6}), // Fecha
                 countColumn, // Monto
                 countColumn, // Credito
                 actionColumn, // Action buttons

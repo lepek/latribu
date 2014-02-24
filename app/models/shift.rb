@@ -58,7 +58,7 @@ class Shift < ActiveRecord::Base
   # @return Number of inscriptions for the next shift
   #
   def next_fixed_shift_count
-    key = self.next_fixed_shift.to_s.gsub(/\s/, '_')
+    key = redis_key
     $redis.nil? ? count = nil : count = $redis.get(key)
     count = update_enrolled if count.nil?
     count.to_i
@@ -101,7 +101,8 @@ class Shift < ActiveRecord::Base
     if self.available_for_try?
       rooky.shift_date ||= get_next_shift
       rooky.shift_id ||= self.id
-      rooky.save
+      rooky.save!
+      update_enrolled unless $redis.nil?
     else
       self.errors[:base] << "No es posible anotarse a la Clase, ya está anotado, está cerrada o completa"
     end
@@ -112,8 +113,8 @@ class Shift < ActiveRecord::Base
   # @return [Boolean] if the shift is available to enroll a user or not
   #
   def available_for_enroll?(user)
-    @available_for_enroll ||= exceptions?(user)
-    @available_for_enroll ||= ( status == STATUS[:open] && user_inscription(user).nil? && user.credit > 0 && another_today_inscription?(user).nil? )
+    @available_for_enroll ||= self.exceptions?(user)
+    @available_for_enroll ||= ( self.status == STATUS[:open] && self.user_inscription(user).nil? && user.credit > 0 && self.another_today_inscription?(user).nil? )
   end
 
   def exceptions?(user)
@@ -167,9 +168,7 @@ class Shift < ActiveRecord::Base
   def status
     return STATUS[:full] if self.next_fixed_shift_count >= self.max_attendants
 
-    next_shift = get_next_shift
-
-    hours_diff = (next_shift - Chronic.parse("now")) / 3600
+    hours_diff = (self.next_fixed_shift - Chronic.parse("now")) / 3600
     if hours_diff > self.close_inscription && hours_diff < self.open_inscription
       STATUS[:open]
     else
@@ -194,13 +193,17 @@ private
   end
 
   def update_enrolled
-    key = self.next_fixed_shift.to_s.gsub(/\s/, '_')
+    key = redis_key
     count = self.next_fixed_shift_users.count + self.next_fixed_shift_rookies.count
     unless $redis.nil?
       $redis.set(key, count)
       $redis.expire(key, 3600)
     end
     count.to_i
+  end
+
+  def redis_key
+    "#{self.next_fixed_shift.to_s.gsub(/\s/, '_')} #{self.id}"
   end
 
 end

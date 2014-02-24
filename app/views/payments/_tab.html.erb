@@ -1,10 +1,11 @@
 <fieldset class="gray">
   <%= button_to "Agregar un nuevo Pago", new_payment_path, :method => "get" %>
 </fieldset>
-<% datatable "payments-table", ["Cliente", "Fecha último pago", "Monto", "Crédito","", ""], :class => "selectable" do -%>
+<% datatable "payments-table", ["Cliente","Email", "Fecha último pago", "Monto", "Crédito","", ""], :class => "selectable" do -%>
     <% payments.each do |payment| -%>
         <tr>
           <td><%= payment.user.full_name %></td>
+          <td><%= payment.user.email %></td>
           <td><%= l(payment.created_at, :format => '%A, %e de %B %H:%M hs.') %></td>
           <td><%= payment.amount %></td>
           <td><%= payment.credit %></td>

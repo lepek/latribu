@@ -51,6 +51,10 @@ class User < ActiveRecord::Base
     "#{self.first_name} #{self.last_name}"
   end
 
+  def full_name_email
+    "#{self.first_name} #{self.last_name} (#{self.email})"
+  end
+
   def admin?
     self.role.name == ADMIN_ROLE
   end
