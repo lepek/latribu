@@ -1,12 +1,23 @@
-<h2>Forgot your password?</h2>
+<div id="content-inner">
+    <h2>Recuperar contraseña</h2>
 
-<%= form_for(resource, :as => resource_name, :url => password_path(resource_name), :html => { :method => :post }) do |f| %>
-  <%= devise_error_messages! %>
+    <%= form_for(resource, :as => resource_name, :url => password_path(resource_name), :html => { :method => :post }) do |f| %>
+      <%= devise_error_messages! %>
 
-  <div><%= f.label :email %><br />
-  <%= f.email_field :email, :autofocus => true %></div>
+      <fieldset class="gray">
+        <div class="clearfix">
+          <%= f.label :email %>
+          <div class="input">
+            <%= f.email_field :email, :autofocus => true %>
+          </div>
+        </div>
 
-  <div><%= f.submit "Send me reset password instructions" %></div>
-<% end %>
+        <div class="actions">
+          <%= f.submit 'Enviar instrucciones', :class => "btn primary" %>
+        </div>
+      </fieldset>
 
-<%= render "devise/shared/links" %>
+
+
+    <% end %>
+</div>

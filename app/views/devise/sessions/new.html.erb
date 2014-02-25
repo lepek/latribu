@@ -1,9 +1,9 @@
 <div id="content-inner" class="session">
   <div id="login-wrapper">
+    <% if flash[:alert] %>
+        <div class="error"><%= flash[:alert] %></div>
+    <% end %>
     <%= form_for(resource, :as => resource_name, :url => session_path(resource_name)) do |f| %>
-        <% if flash[:alert] %>
-            <div class="error"><%= flash[:alert] %></div>
-        <% end %>
         <fieldset>
           <div class="clearfix">
             <%= f.label :email, :autofocus => true %>
@@ -16,13 +16,15 @@
             <div class="input">
               <%= f.password_field :password %>
             </div>
-            <div class="input">
-              <%= f.submit "Ingresar", {:class => "btn primary"} %>
-            </div>
           </div>
-          <% if devise_mapping.rememberable? -%>
-              <div><%= f.check_box :remember_me %> <%= f.label :remember_me %></div>
-          <% end -%>
+          <div class="clearfix" style="text-align: center">
+              <%= f.submit "Ingresar", {:class => "btn primary"} %>
+          </div>
+          <div class="clearfix">
+            <%- if devise_mapping.recoverable? && controller_name != 'passwords' && controller_name != 'registrations' %>
+                <%= link_to "Olvide mi contraseña", new_password_path(resource_name) %><br />
+            <% end -%>
+          </div>
         </fieldset>
     <% end %>
   </div>
