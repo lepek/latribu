@@ -40,7 +40,7 @@ $(document).ready(function () {
     };
 
     var shortNameColumn = {
-        sWidth:"70px"
+        sWidth:"80px"
     };
 
     var countColumn = {
