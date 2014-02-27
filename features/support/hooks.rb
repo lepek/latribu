@@ -1,4 +1,4 @@
 After do |s|
   Timecop.return
-  $redis.flushdb unless $redis.nil?
+  $redis.flushdb if $redis.connected?
 end

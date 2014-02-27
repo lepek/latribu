@@ -18,7 +18,7 @@ class ShiftsController < ApplicationController
     @shift = Shift.new(shift_params)
     respond_to do |format|
       if @shift.save
-        format.html { redirect_to root_url, notice: 'Nueva Clase creada.' }
+        format.html { redirect_to root_url, success: 'Nueva Clase creada.' }
         format.json { render json: @shift, status: :created, location: @shift }
       else
         format.html { render action: "new" }
@@ -49,7 +49,7 @@ class ShiftsController < ApplicationController
     @shift = Shift.find(params[:id])
     respond_to do |format|
       if @shift.update_attributes(shift_params)
-        format.html { redirect_to root_url, notice: 'Clase actualizada.' }
+        format.html { redirect_to root_url, success: 'Clase actualizada.' }
         format.json { head :ok }
       else
         format.html { render action: "edit" }
@@ -77,10 +77,10 @@ class ShiftsController < ApplicationController
     @shift = Shift.find(params[:id])
     respond_to do |format|
       if @shift.enroll_next_shift(current_user)
-        format.html { redirect_to clients_path, notice: 'Anotado a la clase.' }
+        format.html { redirect_to clients_path, success: "Te anotaste a la clase del #{format_date_for_alerts}" }
         format.json { render json: @shift, status: :created, location: @shift }
       else
-        format.html { redirect_to clients_path }
+        format.html { redirect_to clients_path, error: @shift.errors.full_messages.to_sentence }
         format.json { render json: @shift.errors, status: :unprocessable_entity }
       end
     end
@@ -90,16 +90,20 @@ class ShiftsController < ApplicationController
     @shift = Shift.find(params[:id])
     respond_to do |format|
       if @shift.cancel_next_shift(current_user)
-        format.html { redirect_to clients_path, notice: 'Clase liberada.' }
+        format.html { redirect_to clients_path, success: "Liberaste la clase del #{format_date_for_alerts}" }
         format.json { render json: @shift, status: :created, location: @shift }
       else
-        format.html { redirect_to clients_path }
+        format.html { redirect_to clients_path, error: @shift.errors.full_messages.to_sentence }
         format.json { render json: @shift.errors, status: :unprocessable_entity }
       end
     end
   end
 
   private
+
+    def format_date_for_alerts
+      "<b>#{I18n.l(@shift.next_fixed_shift, :format => '%A, %e de %B %H:%M hs.')}</b>"
+    end
 
     def shift_params
       params.require(:shift).permit(:day, :start_time, :max_attendants, :open_inscription, :close_inscription, :instructor_id, :discipline_id)

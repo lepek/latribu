@@ -1,3 +1,5 @@
+require "redis_cache.rb"
+
 begin
   if ENV["REDISCLOUD_URL"]
     uri = URI.parse(ENV["REDISCLOUD_URL"])
@@ -7,6 +9,7 @@ begin
   end
   $redis.ping
   $redis.flushdb
+  $redis.connected = true
 rescue
-  $redis = nil
+  $redis.connected = false
 end
