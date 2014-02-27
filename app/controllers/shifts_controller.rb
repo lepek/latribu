@@ -30,7 +30,7 @@ class ShiftsController < ApplicationController
   # GET /shifts/1
   # GET /shifts/1.json
   def show
-    @shift = Shift.find(params[:id])
+    @shift = Shift.eager_load(:instructor, :discipline).find(params[:id])
 
     respond_to do |format|
       format.html # show.html.erb

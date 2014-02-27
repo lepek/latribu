@@ -1,6 +1,14 @@
 class PaymentsController < ApplicationController
   load_and_authorize_resource
 
+  def user_payments
+    @payments = Payment.select('id, amount, credit, created_at, NULL AS created_at_formatted').where(:user_id => params[:user_id]).to_a.map(&:serializable_hash)
+    @payments.each { |p| p['created_at_formatted'] = I18n.l(p['created_at'], :format => '%A, %e de %B %H:%M hs.') }
+    respond_to do |format|
+      format.json { render json: "{\"aaData\": #{@payments.to_json}}" }
+    end
+  end
+
   # GET /payments/new
   # GET /payments/new.json
   def new

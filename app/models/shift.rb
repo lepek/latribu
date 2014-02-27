@@ -32,7 +32,7 @@ class Shift < ActiveRecord::Base
         'day = ? AND end_time > ?',
         Chronic.parse("now").strftime('%A').downcase,
         Chronic.parse("now").strftime('%H:%M')
-    ).order("end_time ASC").first
+    ).eager_load(:instructor, :discipline).order("end_time ASC").first
   end
 
   ##

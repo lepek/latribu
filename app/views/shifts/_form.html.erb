@@ -51,14 +51,14 @@
       <div class="clearfix">
         <%= f.label :instructor_id %>
         <div class="input">
-          <%= f.collection_select(:instructor_id, Instructor.order("last_name").all, :id, :full_name)  %>
+          <%= f.collection_select(:instructor_id, Instructor.order("last_name"), :id, :full_name)  %>
         </div>
       </div>
 
       <div class="clearfix">
         <%= f.label :discipline_id %>
         <div class="input">
-          <%= f.collection_select(:discipline_id, Discipline.order("name").all, :id, :name)  %>
+          <%= f.collection_select(:discipline_id, Discipline.order("name"), :id, :name)  %>
         </div>
       </div>
 

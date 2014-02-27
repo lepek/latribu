@@ -3,6 +3,7 @@ $(document).ready(function () {
     $("#users-table").usersTable();
     $("#shifts-table").shiftsTable();
     $("#payments-table").paymentsTable();
+    $("#user-payments-table").userPaymentsTable();
     $("#stats-table").statsTable();
     $("#rookies-table").rookiesTable();
 });
@@ -31,12 +32,18 @@ $(document).ready(function () {
         sWidth:"160px"
     };
 
+    var shortActionColumn = {
+        bSearchable:false,
+        bSortable:false,
+        sWidth:"100px"
+    };
+
     var nameColumn = {
         sWidth:"150px"
     };
 
     var longNameColumn = {
-        sWidth:"250px"
+        sWidth:"200px"
     };
 
     var shortNameColumn = {
@@ -95,6 +102,26 @@ $(document).ready(function () {
         return this.selectableTable(tableOptions);
     };
 
+    $.fn.userPaymentsTable = function () {
+        var tableOptions = {
+            aaSorting: [[ 3, "asc" ]],
+            aoColumns: [
+                $.extend({}, longNameColumn, {iDataSort: 3, mData: "created_at_formatted"}), // Fecha
+                $.extend({}, countColumn, {mData: "amount"}), // Monto
+                $.extend({}, countColumn, {mData: "credit"}), // Credito
+                $.extend({}, hiddenColumn, {mData: "created_at"}) // Fecha sin formato
+            ],
+            bProcessing: true,
+            fnRowCallback: function(nRow, aData, iDisplayIndex, iDisplayIndexFull) {
+                if (aData.credit == "1") {
+                    $('td', nRow).each(function() { $(this).attr('class', 'conditionalRowColor'); })
+                }
+                return nRow;
+            }
+        };
+        return this.selectableTable(tableOptions);
+    };
+
     $.fn.paymentsTable = function () {
         var tableOptions = {
             aaSorting: [[ 6, "asc" ]],
@@ -104,7 +131,7 @@ $(document).ready(function () {
                 $.extend({}, longNameColumn, {iDataSort: 6}), // Fecha
                 countColumn, // Monto
                 countColumn, // Credito
-                actionColumn, // Action buttons
+                shortActionColumn, // Action buttons
                 hiddenColumn
             ]
         };

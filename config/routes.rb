@@ -20,7 +20,11 @@ Nahual::Application.routes.draw do
     end
   end
 
-  resources :payments
+  resources :payments do
+    collection do
+      get 'user_payments/:user_id', to: 'payments#user_payments', as: 'user_payments'
+    end
+  end
 
   resources :rookies do
     collection do

@@ -6,6 +6,10 @@
  * selector.
  */
 
+.conditionalRowColor {
+    background-color: yellow !important;
+}
+
 /* jQuery UI-specific styling */
 table.dataTable thead th {
     padding: 5px 5px 5px 8px;

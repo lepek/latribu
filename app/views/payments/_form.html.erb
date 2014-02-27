@@ -16,7 +16,7 @@
       <div class="clearfix">
         <%= f.label :user_id %>
         <div class="input">
-          <%= f.collection_select(:user_id, User.where("role_id = 2").order("last_name"), :id, :full_name_email)  %>
+          <%= f.collection_select(:user_id, User.clients.order("last_name"), :id, :full_name_email, prompt: true)  %>
         </div>
       </div>
 
@@ -40,9 +40,16 @@
           <%= f.text_field :credit %>
         </div>
       </div>
+    </fieldset>
+
+    <div class="clearfix"><%= f.label 'Pagos anteriores' %></div>
+      <div class="clearfix">
+            <% datatable "user-payments-table", ["Fecha", "Monto", "Crédito", ""], :class => "selectable" do -%>
+            <% end -%>
+      </div>
 
       <div class="actions">
         <%= f.submit 'Guardar', :class => "btn primary" %>
       </div>
-    </fieldset>
+
 <% end %>
