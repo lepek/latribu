@@ -104,9 +104,10 @@ $(document).ready(function () {
 
     $.fn.userPaymentsTable = function () {
         var tableOptions = {
-            aaSorting: [[ 3, "asc" ]],
+            aaSorting: [[ 4, "desc" ]],
             aoColumns: [
-                $.extend({}, longNameColumn, {iDataSort: 3, mData: "created_at_formatted"}), // Fecha
+                $.extend({}, longNameColumn, {iDataSort: 4, mData: "created_at_formatted"}), // Fecha
+                $.extend({}, nameColumn, {mData: "month"}), // Mes
                 $.extend({}, countColumn, {mData: "amount"}), // Monto
                 $.extend({}, countColumn, {mData: "credit"}), // Credito
                 $.extend({}, hiddenColumn, {mData: "created_at"}) // Fecha sin formato
