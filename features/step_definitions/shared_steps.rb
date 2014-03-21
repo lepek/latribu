@@ -1,3 +1,12 @@
+Given /^the following users and payments exist$/ do |table|
+  @users = []
+  table.hashes.each do |hash|
+    user = User.where(:email => hash['email']).first || FactoryGirl.create(:user, {'email' => hash['email']} )
+    FactoryGirl.create(:payment, hash.except('email').merge('user_id' => user.id) )
+    @users << user.reload
+  end
+end
+
 Given /^I click on "(.*?)"$/ do |button|
   click_button button
 end

@@ -150,7 +150,7 @@ class Shift < ActiveRecord::Base
   end
 
   def set_end_time
-    self.end_time ||= self.start_time + DEFAULT_SHIFT_DURATION.hours unless self.start_time.blank?
+    self.end_time = self.start_time + DEFAULT_SHIFT_DURATION.hours unless self.start_time.blank?
   end
 
   def day_and_time

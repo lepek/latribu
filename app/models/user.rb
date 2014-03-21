@@ -24,13 +24,36 @@ class User < ActiveRecord::Base
   CLIENT_ROLE = 'Cliente'
   ADMIN_ROLE = 'Admin'
 
-  CREDITS_RESET_DAY = "5"
-  CREDITS_RESET_TIME = "23:59:59"
-
-  LAST_CREDIT_RESET_DAY = "5"
-  LAST_CREDIT_RESET_TIME = "23:59:59"
-
   scope :clients, -> { where(:role_id => Role.find_by_name(CLIENT_ROLE).id) }
+
+
+  def self.reset_credits(mode = :hot)
+    if defined?(Rails) && (Rails.env == 'development')
+      Rails.logger = Logger.new(STDOUT)
+    end
+    logger = Rails.logger
+    User.clients.each do |user|
+      if user.credit > 0 && user.reset_credit?
+        credits_unused = user.last_month_credits - user.last_month_credits_used
+        if credits_unused > 0
+          if user.credit - credits_unused < 0
+            logger.info user.id.to_s + " - " + user.full_name
+            logger.info "Creditos del ultimo mes: #{user.last_month_credits}"
+            logger.info "Creditos usados #{user.last_month_credits_used}"
+            logger.info "Creditos no usado: #{credits_unused}"
+            logger.info "Credito actual: #{user.credit}"
+            logger.info "Credito modificado: #{user.credit - credits_unused}"
+            logger.info "====================================================="
+          else
+            user.credit -= credits_unused
+          end
+        end
+
+      end
+      user.last_reset_date = Chronic.parse("now")
+      user.save! if mode == :hot
+    end
+  end
 
   ##
   # @return All the inscriptions for classes in the future for this user
@@ -44,7 +67,7 @@ class User < ActiveRecord::Base
   end
 
   def last_month_credits_used
-    self.inscriptions.where(:created_at => Chronic.parse("#{LAST_CREDIT_RESET_DAY} #{last_month} at #{LAST_CREDIT_RESET_TIME}")..Chronic.parse("#{CREDITS_RESET_DAY} #{current_month} at #{CREDITS_RESET_TIME}")).count
+    self.inscriptions.where(:created_at => self.last_reset_date..Chronic.parse("now")).count
   end
 
   def full_name
@@ -57,6 +80,10 @@ class User < ActiveRecord::Base
 
   def admin?
     self.role.name == ADMIN_ROLE
+  end
+
+  def reset_credit?
+    self.reset_credit
   end
 
   ##

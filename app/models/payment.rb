@@ -29,11 +29,11 @@ class Payment < ActiveRecord::Base
 
   def add_credit
     self.user.credit += self.credit
-    self.user.save
+    self.user.save!
   end
 
   def remove_credit
     self.user.credit -= self.credit
-    self.user.save
+    self.user.save!
   end
 end

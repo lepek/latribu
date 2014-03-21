@@ -110,7 +110,7 @@ input[type="button"] {
     position: absolute;
     border: 1px solid #2495D9;
     color: white;
-    background: #2AABE2 url('../stylesheets/images/ui-bg_highlight-hard_30_2aabe2_1x100.png') repeat-x 50% 50%;
+    background: #2AABE2 url('/assets/ui-bg_highlight-hard_30_2aabe2_1x100.png') repeat-x 50% 50%;
     top: 10px;
     left: 50%;
     width: 250px;

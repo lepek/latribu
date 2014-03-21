@@ -17,27 +17,31 @@ Feature: Reset credits
       | 1@gmail.com | 4      | january  | 2014 |
 
   Scenario: User use all the credits in the month
-    Given Given Today is "Jan 19 2014, 0:00"
-    And the user 1@gmail.com has used all the credits
-    When I reset the credits
-    Then the user 1@gmail.com should have 0 credits
+    Given Today is "Jan 19 2014, 0:00"
+    And the user "1@gmail.com" has used all the credits
+    When Today is "Feb 19 2014, 0:00"
+    And I reset the credits
+    Then the user "1@gmail.com" should have "0" credits
 
   Scenario: User doesn't use all the credits in the month
-    Given Given Today is "Jan 19 2014, 0:00"
-    And the user 1@gmail.com has not used all the credits
-    When I reset the credits
-    Then the user 1@gmail.com should have 0 credits
+    Given Today is "Jan 19 2014, 0:00"
+    And the user "1@gmail.com" has not used all the credits
+    When Today is "Feb 19 2014, 0:00"
+    And I reset the credits
+    Then the user "1@gmail.com" should have "0" credits
 
   Scenario: User use all the credits in the month and pays a new month
-    Given Given Today is "Jan 19 2014, 0:00"
-    And the user 1@gmail.com has used all the credits
-    And the user pays for 4 credits in february
-    When I reset the credits
-    Then the user 1@gmail.com should have 4 credits
+    Given Today is "Jan 19 2014, 0:00"
+    And the user "1@gmail.com" has used all the credits
+    And the user "1@gmail.com" pays for "4" credits in "february"
+    When Today is "Feb 19 2014, 0:00"
+    And I reset the credits
+    Then the user "1@gmail.com" should have "4" credits
 
   Scenario: User doesn't use all the credits in the month and pays a new month
-    Given Given Today is "Jan 19 2014, 0:00"
-    And the user 1@gmail.com has not used all the credits
-    And the user pays for 4 credits in february
-    When I reset the credits
-    Then the user 1@gmail.com should have 4 credits
+    Given Today is "Jan 19 2014, 0:00"
+    And the user "1@gmail.com" has not used all the credits
+    And the user "1@gmail.com" pays for "4" credits in "february"
+    When Today is "Feb 19 2014, 0:00"
+    And I reset the credits
+    Then the user "1@gmail.com" should have "4" credits

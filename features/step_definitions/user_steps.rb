@@ -40,3 +40,34 @@ Given /^the following clients exist$/ do |table|
     @users << user
   end
 end
+
+Given /^the user "(.*?)" has used all the credits$/ do |email|
+  user = User.where(:email => email).first
+  @classes.each do |shift|
+    shift.enroll_next_shift(user)
+    break if user.reload.credit == 0
+  end
+end
+
+Given /^the user "(.*?)" has not used all the credits$/ do |email|
+  user = User.where(:email => email).first
+  @classes.each do |shift|
+    shift.enroll_next_shift(user)
+    break if user.reload.credit == 1
+  end
+end
+
+When /^I reset the credits$/ do
+  User.reset_credits
+end
+
+Then /^the user "(.*?)" should have "(.*?)" credits$/ do  |email, credit|
+  user = User.where(:email => email).first
+  user.credit.should == credit.to_i
+end
+
+Given /^the user "(.*?)" pays for "(.*?)" credits in "(.*?)"$/ do |email, credits, month|
+  user = User.where(:email => email).first
+  FactoryGirl.create(:payment, {'user_id' => user.id, 'credit' => credits, 'month' => month})
+  user.reload
+end
