@@ -32,6 +32,7 @@ class User < ActiveRecord::Base
       Rails.logger = Logger.new(STDOUT)
     end
     logger = Rails.logger
+    cont = 0
     User.clients.each do |user|
       if user.credit > 0 && user.reset_credit?
         credits_unused = user.last_month_credits - user.last_month_credits_used
@@ -44,15 +45,17 @@ class User < ActiveRecord::Base
             logger.info "Credito actual: #{user.credit}"
             logger.info "Credito modificado: #{user.credit - credits_unused}"
             logger.info "====================================================="
+            user.credit = 0
+            cont += 1
           else
             user.credit -= credits_unused
           end
         end
-
       end
       user.last_reset_date = Chronic.parse("now")
       user.save! if mode == :hot
     end
+    logger.info "CANTIDAD CON PROBLEMAS: #{cont}"
   end
 
   ##

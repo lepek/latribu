@@ -113,7 +113,7 @@ ActiveRecord::Schema.define(version: 20140312211342) do
     t.integer  "credit"
     t.datetime "deleted_at"
     t.boolean  "reset_credit",           default: true
-    t.datetime "last_reset_date",        default: '2014-03-05 23:59:59'
+    t.datetime "last_reset_date",        default: '2014-03-05 02:00:00'
   end
 
   add_index "users", ["email"], name: "index_users_on_email", unique: true, using: :btree
