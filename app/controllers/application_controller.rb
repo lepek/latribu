@@ -42,6 +42,7 @@ protected
         if current_user.credit > 0 && time_gap_to_reset > 0 && time_gap_to_reset < 9
           flash[:info] = "A partir del <b>#{I18n.localize(Chronic.parse("5th this month"), :format => '%A,%e de %B')}</b> no podrán usarse los créditos del mes anterior."
         end
+        flash[:info] = "A partir del lunes 28 de abril, el sistema de turnos se accederá a través de <b>latribu.herokuapp.com<b/>"
       end
     end
   end
