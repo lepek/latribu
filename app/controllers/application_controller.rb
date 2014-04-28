@@ -36,7 +36,7 @@ protected
     unless current_user.nil?
       unless current_user.admin?
         if current_user.credit == 0
-          flash[:warning] = "No podrás incribirte a ningún turno por no tener créditos. Comunicate con Nahual para poder volver a entrenar."
+          flash[:warning] = "No podrás incribirte a ningún turno por no tener créditos. Comunicate con La Tribu para poder volver a entrenar."
         end
         time_gap_to_reset = (Chronic.parse("5th this month").to_date - Chronic.parse("now").to_date).to_i
         if current_user.credit > 0 && time_gap_to_reset > 0 && time_gap_to_reset < 9
