@@ -7,7 +7,7 @@ task :add_credits => :environment do
         :user_id => user.id,
         :amount => 0,
         :credit => credit - user.credit,
-        :month => 'april',
+        :month => 'may',
         :year => '2014'
       )
     end
