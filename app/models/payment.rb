@@ -4,7 +4,7 @@ class Payment < ActiveRecord::Base
   after_create :add_credit
   after_destroy :remove_credit
 
-  validates_presence_of :month, :amount, :credit, :user
+  validates_presence_of :month_year, :amount, :credit, :user
 
   acts_as_paranoid
 
@@ -28,12 +28,10 @@ class Payment < ActiveRecord::Base
   end
 
   def add_credit
-    self.user.credit += self.credit
-    self.user.save!
+    self.user.increment!(:credit, self.credit)
   end
 
   def remove_credit
-    self.user.credit -= self.credit
-    self.user.save!
+    self.user.decrement!(:credit, self.credit)
   end
 end

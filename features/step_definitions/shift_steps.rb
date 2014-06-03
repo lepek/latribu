@@ -41,7 +41,10 @@ end
 Then /^The class is full$/ do
   @class = @classes.first
   (1..@class.max_attendants.to_i).each do |i|
-    @class.enroll_next_shift FactoryGirl.create(:user, credit: 1)
+    user = FactoryGirl.create(:user)
+    FactoryGirl.create(:payment, {'user_id' => user.id, 'month_year' => Chronic.parse("now")})
+    user.reload
+    @class.enroll_next_shift user
   end
   @class.errors.count.should == 0
   @class.next_fixed_shift_users.count.should == @class.max_attendants

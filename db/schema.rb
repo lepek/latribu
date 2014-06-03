@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20140312211342) do
+ActiveRecord::Schema.define(version: 20140525231622) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -49,7 +49,10 @@ ActiveRecord::Schema.define(version: 20140312211342) do
     t.integer  "user_id"
     t.string   "month"
     t.datetime "deleted_at"
-    t.integer  "year",       default: 2014
+    t.integer  "year",        default: 2014
+    t.integer  "used_credit", default: 0
+    t.datetime "reset_date"
+    t.date     "month_year"
   end
 
   add_index "payments", ["user_id"], name: "index_payments_on_user_id", using: :btree

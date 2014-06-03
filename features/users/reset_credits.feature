@@ -13,10 +13,10 @@ Feature: Reset credits
       | thursday  | 12:00      |
       | friday    | 12:00      |
     And the following users and payments exist
-      | email       | credit | month    | year |
-      | 1@gmail.com | 4      | january  | 2014 |
-      | 2@gmail.com | 2      | january  | 2014 |
-      | 2@gmail.com | 3      | february | 2014 |
+      | email       | credit | month_year   |
+      | 1@gmail.com | 4      | 2014-01-01   |
+      | 2@gmail.com | 2      | 2014-01-01   |
+      | 2@gmail.com | 3      | 2014-02-01   |
 
   Scenario: User use all the credits in the month
     Given Today is "Jan 19 2014, 0:00"
@@ -35,7 +35,7 @@ Feature: Reset credits
   Scenario: User use all the credits in the month and pays a new month
     Given Today is "Jan 19 2014, 0:00"
     And the user "1@gmail.com" has used all the credits
-    And the user "1@gmail.com" pays for "4" credits in "february"
+    And the user "1@gmail.com" pays for "4" credits in "2014-02-01"
     When Today is "Feb 19 2014, 0:00"
     And I reset the credits
     Then the user "1@gmail.com" should have "4" credits
@@ -43,7 +43,7 @@ Feature: Reset credits
   Scenario: User doesn't use all the credits in the month and pays a new month
     Given Today is "Jan 19 2014, 0:00"
     And the user "1@gmail.com" has not used all the credits
-    And the user "1@gmail.com" pays for "4" credits in "february"
+    And the user "1@gmail.com" pays for "4" credits in "2014-02-01"
     When Today is "Feb 19 2014, 0:00"
     And I reset the credits
     Then the user "1@gmail.com" should have "4" credits

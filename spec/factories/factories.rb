@@ -21,7 +21,9 @@ FactoryGirl.define do
     password "12345678"
     last_reset_date '2014-01-01 23:59:59'
     factory :user_with_credit do
-      credit 1
+      after(:create) do |user, evaluator|
+        create_list(:payment, 1, :user => user)
+      end
     end
     factory :admin do
       role_id 1
@@ -30,8 +32,7 @@ FactoryGirl.define do
 
   factory :payment do
     credit 1
-    month "march"
-    year 2014
+    month_year { Chronic.parse("now") }
     amount 200
     user
   end

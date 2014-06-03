@@ -2,10 +2,10 @@ class PaymentsController < ApplicationController
   load_and_authorize_resource
 
   def user_payments
-    @payments = Payment.select('id, amount, month, credit, created_at, NULL AS created_at_formatted').where(:user_id => params[:user_id]).to_a.map(&:serializable_hash)
+    @payments = Payment.select('id, amount, month_year, credit, created_at, NULL AS created_at_formatted').where(:user_id => params[:user_id]).to_a.map(&:serializable_hash)
     @payments.each do |p|
       p['created_at_formatted'] = I18n.l(p['created_at'], :format => '%A, %e de %B %H:%M hs.')
-      p['month'] = Payment.months[p['month'].to_sym].capitalize
+      p['month'] = I18n.l(p['month_year'], :format => '%B').capitalize
     end
     respond_to do |format|
       format.json { render json: "{\"aaData\": #{@payments.to_json}}" }
@@ -26,7 +26,11 @@ class PaymentsController < ApplicationController
   # POST /payments
   # POST /payments.json
   def create
-    @payment = Payment.new(payment_params)
+    params = payment_params
+    month = params.delete(:month)
+    year = params.delete(:year)
+    params = params.merge( {:month_year => Chronic.parse("1 #{month} #{year}")} )
+    @payment = Payment.new(params)
 
     respond_to do |format|
       if @payment.save
@@ -55,6 +59,6 @@ class PaymentsController < ApplicationController
   private
 
   def payment_params
-    params.require(:payment).permit(:user_id, :amount, :credit, :month)
+    params.require(:payment).permit(:user_id, :amount, :credit, :month, :year)
   end
 end

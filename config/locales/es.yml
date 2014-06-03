@@ -36,6 +36,7 @@ es:
         created_at: 'Fecha'
         month: 'Mes'
         user_id: 'Cliente'
+        year: 'Año'
       rooky:
         full_name: 'Nombre'
         phone: 'Teléfono'
@@ -74,8 +75,8 @@ es:
               blank: 'Las horas para cerrar la inscripción no puede estar en blanco'
         payment:
           attributes:
-            month:
-              blank: 'El Mes no puede estar en blanco'
+            month_year:
+              blank: 'El Mes y Año de pago no pueden estar en blanco'
             amount:
               blank: 'El Monto no puede estar en blanco'
             credit:

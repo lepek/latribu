@@ -1,6 +1,7 @@
-Given /^I add a payment for "(.*?)" in "(.*?)" for an amount of "(.*?)" and "(.*?)" credits$/ do |user, month, amount, credit|
+Given /^I add a payment for "(.*?)" in "(.*?)" "(.*?)" for an amount of "(.*?)" and "(.*?)" credits$/ do |user, month, year, amount, credit|
   select(user, :from => 'Cliente')
-  select(month, :from => 'Mes')
+  select(month, :from => 'payment_month')
+  select(year, :from => 'payment_year')
   fill_in "Monto", :with => amount
   fill_in "Crédito", :with => credit
 end

@@ -26,36 +26,27 @@ class User < ActiveRecord::Base
 
   scope :clients, -> { where(:role_id => Role.find_by_name(CLIENT_ROLE).id) }
 
-
-  def self.reset_credits(mode = :hot)
+  def self.reset_credits
     if defined?(Rails) && (Rails.env == 'development')
       Rails.logger = Logger.new(STDOUT)
     end
     logger = Rails.logger
-    cont = 0
     User.clients.each do |user|
-      if user.credit > 0 && user.reset_credit?
-        credits_unused = user.last_month_credits - user.last_month_credits_used
-        if credits_unused > 0
-          if user.credit - credits_unused < 0
-            logger.info user.id.to_s + " - " + user.full_name
-            logger.info "Creditos del ultimo mes: #{user.last_month_credits}"
-            logger.info "Creditos usados #{user.last_month_credits_used}"
-            logger.info "Creditos no usado: #{credits_unused}"
-            logger.info "Credito actual: #{user.credit}"
-            logger.info "Credito modificado: #{user.credit - credits_unused}"
-            logger.info "====================================================="
-            user.credit = 0
-            cont += 1
-          else
-            user.credit -= credits_unused
-          end
-        end
+      #user = User.find(154)
+      if user.reset_credit?
+        user.payments.where("reset_date IS NULL AND month_year < '#{Chronic.parse('1 this month')}'").update_all(:reset_date => Chronic.parse("now"))
+        total_credit = user.payments.where('reset_date IS NULL').map(&:credit).sum
+        used_credit = user.payments.where('reset_date IS NULL').map(&:used_credit).sum
+
+        logger.info user.id.to_s + " - " + user.full_name
+        logger.info "Credito actual: #{user.credit}"
+        logger.info "Nuevo credito: #{total_credit - used_credit}"
+
+        user.last_reset_date = Chronic.parse("now")
+        user.credit = total_credit - used_credit
+        user.save!
       end
-      user.last_reset_date = Chronic.parse("now")
-      user.save! if mode == :hot
     end
-    logger.info "CANTIDAD CON PROBLEMAS: #{cont}"
   end
 
   ##
@@ -63,14 +54,6 @@ class User < ActiveRecord::Base
   #
   def next_inscriptions
     @next_inscriptions ||= self.inscriptions.where('shift_date >= ?', Chronic.parse("now") )
-  end
-
-  def last_month_credits
-    self.payments.where(:month => Chronic.parse("last month").strftime('%B').downcase).map(&:credit).sum
-  end
-
-  def last_month_credits_used
-    self.inscriptions.where(:created_at => self.last_reset_date..Chronic.parse("now")).count
   end
 
   def full_name

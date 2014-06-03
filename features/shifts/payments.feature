@@ -13,7 +13,7 @@ Feature: Client payments
   Scenario: Admin makes a payment
     Given Today is "Nov 21 2013, 10:00"
     And I am in the payment page
-    When I add a payment for "Martin Bianculli" in "noviembre" for an amount of "200" and "5" credits
+    When I add a payment for "Martin Bianculli" in "noviembre" "2013" for an amount of "200" and "5" credits
     And I click on "Guardar"
     Then I should see the following in the payments list
       | cliente          | fecha_ultimo_pago                 | monto | credito |

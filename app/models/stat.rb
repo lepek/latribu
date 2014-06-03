@@ -6,7 +6,7 @@ class Stat < ActiveRecord::Base
     stat = {}
     time = inscriptions.empty? ? '00:00:00' : inscriptions.first.first.strftime('%H:%M:%S')
     credits.each do |credit|
-      month = Chronic.parse("1 #{credit.month} #{credit.year} #{time}")
+      month = Chronic.parse("#{credit.month_year} #{time}")
       stat[month] = { :credits => credit.total_credit, :inscriptions => inscriptions[month] }
     end
     stat
@@ -19,7 +19,7 @@ private
   end
 
   def self.credit_stats
-    Payment.where('month IS NOT NULL').select('SUM(credit) as total_credit, month, year').group(:month).group(:year)
+    Payment.where('month_year IS NOT NULL').select('SUM(credit) as total_credit, month_year').group(:month_year)
   end
 
 end

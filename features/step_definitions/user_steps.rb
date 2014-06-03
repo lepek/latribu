@@ -66,8 +66,8 @@ Then /^the user "(.*?)" should have "(.*?)" credits$/ do  |email, credit|
   user.credit.should == credit.to_i
 end
 
-Given /^the user "(.*?)" pays for "(.*?)" credits in "(.*?)"$/ do |email, credits, month|
+Given /^the user "(.*?)" pays for "(.*?)" credits in "(.*?)"$/ do |email, credits, month_year|
   user = User.where(:email => email).first
-  FactoryGirl.create(:payment, {'user_id' => user.id, 'credit' => credits, 'month' => month})
+  FactoryGirl.create(:payment, {'user_id' => user.id, 'credit' => credits, 'month_year' => month_year})
   user.reload
 end

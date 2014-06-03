@@ -21,9 +21,10 @@
       </div>
 
       <div class="clearfix">
-        <%= f.label :month %>
+        <%= f.label :mes_pago, 'Mes de pago' %>
         <div class="input">
           <%= f.select :month, options_for_select(Payment.months.invert, Chronic.parse("now").strftime('%B').downcase ), {}, :style => "text-transform:capitalize" %>
+          <%= f.select :year, (Time.now.year..Time.now.year + 2).to_a, :selected => Time.now.year %>
         </div>
       </div>
 
