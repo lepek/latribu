@@ -4,7 +4,7 @@ source 'https://rubygems.org'
 gem 'rails', '4.0.0'
 
 # Use postgresql as the database for Active Record
-gem 'pg'
+gem 'mysql2'
 gem 'groupdate', '~> 1.0.4'
 
 # Use SCSS for stylesheets
@@ -47,7 +47,6 @@ end
 # Use debugger
 # gem 'debugger', group: [:development, :test]
 
-gem 'rails_12factor', group: :production
 gem 'devise', '3.1.1'
 gem 'cancan', '1.6.10'
 
@@ -59,6 +58,8 @@ group :development, :test do
   gem 'timecop'
   gem 'sqlite3'
   gem 'pry'
+  gem 'capistrano'
+  gem 'capistrano-rails'
 end
 
 # jQuery based replacement for select boxes
