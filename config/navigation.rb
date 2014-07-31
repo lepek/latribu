@@ -2,7 +2,7 @@
 SimpleNavigation::Configuration.run do |navigation|
   navigation.items do |top|
 
-    top.item :register, '<img src="/assets/nav_icons/sign-up-icon.png" /> Registrarse', main_app.new_user_registration_path, :unless => Proc.new { user_signed_in? }
+    top.item :register, '<img src="'+image_url("nav_icons/sign-up-icon.png")+'" /> Registrarse', main_app.new_user_registration_path, :unless => Proc.new { user_signed_in? }
 
     # I have to evalute it here because current_user may not exist, the x.item :if it's just to control the render
     if user_signed_in?
