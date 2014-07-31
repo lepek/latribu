@@ -24,10 +24,10 @@ test: &test
 production:
   adapter: postgresql
   encoding: unicode
-  database: nahual_production
+  database: latribu_production
   pool: 5
-  username: nahual
-  password:
+  username: latribu
+  password: poiAD12s
 
 cucumber:
   <<: *test
