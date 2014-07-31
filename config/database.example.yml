@@ -22,12 +22,14 @@ test: &test
   reconnet: true
 
 production:
-  adapter: postgresql
-  encoding: unicode
+  adapter: mysql2
+  encoding: utf8
   database: latribu_production
-  pool: 5
+  host: localhost
   username: latribu
   password: poiAD12s
+  pool: 10
+  reconnet: true
 
 cucumber:
   <<: *test
