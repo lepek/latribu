@@ -66,6 +66,6 @@ before "deploy:symlink_config", "deploy:setup_config"
 after 'deploy:updating', "deploy:symlink_config"
 after "deploy:symlink_config", 'deploy:write_version'
 before "deploy", "deploy:check_revision"
-end
+
 #hooks
 after 'deploy', 'deploy:cleanup'
