@@ -84,5 +84,3 @@ gem 'redis'
 #gem 'newrelic_rpm'
 
 gem 'unicorn'
-
-ruby "2.0.0"
