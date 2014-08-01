@@ -26,8 +26,8 @@ production:
   encoding: utf8
   database: latribu_production
   host: localhost
-  username: latribu
-  password: poiAD12s
+  username:
+  password:
   pool: 10
   reconnet: true
 

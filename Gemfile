@@ -60,6 +60,7 @@ group :development, :test do
   gem 'pry'
   gem 'capistrano'
   gem 'capistrano-rails'
+  gem 'capistrano-nginx-unicorn'
 end
 
 # jQuery based replacement for select boxes

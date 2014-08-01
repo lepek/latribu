@@ -45,6 +45,8 @@ GEM
     capistrano-bundler (1.1.2)
       capistrano (~> 3.0)
       sshkit (~> 1.2)
+    capistrano-nginx-unicorn (0.1.0)
+      capistrano (~> 3.0)
     capistrano-rails (1.1.1)
       capistrano (~> 3.1)
       capistrano-bundler (~> 1.1)
@@ -220,6 +222,7 @@ PLATFORMS
 DEPENDENCIES
   cancan (= 1.6.10)
   capistrano
+  capistrano-nginx-unicorn
   capistrano-rails
   chronic
   coffee-rails (~> 4.0.0)
