@@ -4,19 +4,23 @@ class Stat < ActiveRecord::Base
     credits = self.credit_stats || {}
     inscriptions = self.inscription_stats
     stat = {}
-    time = inscriptions.empty? ? '00:00:00' : inscriptions.first.first.strftime('%H:%M:%S')
     credits.each do |credit|
-      month = Chronic.parse("#{credit.month_year} #{time}")
-      stat[month] = { :credits => credit.total_credit, :inscriptions => inscriptions[month] }
+      month = Chronic.parse("#{credit.month_year}")
+      stat[month] = { :credits => credit.total_credit, :inscriptions => inscriptions[month.strftime('%Y%m').to_i] }
     end
+
     stat
   end
 
 private
 
+  # Compatible with MySQL only
+  # @return Example: {201311=>7, 201312=>412, 201401=>1140, 201402=>1393, 201403=>1289, 201404=>1560, 201405=>1149, 201406=>875, 201407=>819, 201408=>56}
   def self.inscription_stats
+    Inscription.group("EXTRACT(YEAR_MONTH FROM shift_date)").count
+
+    # With group_date gem, for postgresql. With MySQL the default timezone must be utc and I cannot change it without migrating the times in the DB
     #Inscription.group_by_month(:shift_date).order("month desc").count
-    {}
   end
 
   def self.credit_stats
