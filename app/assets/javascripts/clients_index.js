@@ -49,7 +49,7 @@ $(document).ready(function () {
         tableOptions.bLengthChange = true;
         tableOptions.bStateSave = true;
         tableOptions.sPaginationType = "full_numbers";
-        tableOptions.oLanguage = { sUrl: "/assets/locale/dataTables.spanish.txt" }
+        tableOptions.oLanguage = { sUrl: "/dataTables.spanish.txt" }
 
         return this.dataTable(tableOptions);
     }
