@@ -39,4 +39,9 @@ Instructor.create(
     :last_name => 'del Pazo'
 ) unless Instructor.where(:first_name => 'Mani', :last_name => 'del Pazo').count > 0
 
+Instructor.create(
+    :first_name => 'Antonela',
+    :last_name => 'Tosti'
+) unless Instructor.where(:first_name => 'Antonela', :last_name => 'Tosti').count > 0
+
 Discipline.create(:name => 'Crossfit') unless Discipline.where(:name => 'Crossfit').count > 0

@@ -13,19 +13,18 @@ Nahual::Application.configure do
   config.consider_all_requests_local       = true
   config.action_controller.perform_caching = false
 
-  config.action_mailer.default_url_options = { :host => 'localhost:3000' }
-  # Don't care if the mailer can't send.
   config.action_mailer.raise_delivery_errors = true
+  config.action_mailer.default_url_options = { :host => 'localhost:30000' }
   config.action_mailer.delivery_method = :smtp
   config.action_mailer.perform_deliveries = true
   config.action_mailer.smtp_settings = {
-      :address => "smtp.gmail.com",
+      :address => "smtp.mandrillapp.com",
       :port => 587,
-      :domain => "gmail.com",
+      :domain => "latriburosario.com",
       :authentication => "plain",
       :enable_starttls_auto => true,
-      :user_name => "cf.nahual",
-      :password => "Apache32**",
+      :user_name => "mbianculli@gmail.com",
+      :password => "pVezA_26dNUKkZDeqzktEA",
       :openssl_verify_mode  => 'none'
   }
 
