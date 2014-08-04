@@ -5,7 +5,7 @@ gem 'rails', '4.0.0'
 
 # Use postgresql as the database for Active Record
 gem 'mysql2'
-gem 'groupdate', '~> 1.0.4'
+gem 'groupdate', '~> 2.2.1'
 
 # Use SCSS for stylesheets
 gem 'sass-rails', '~> 4.0.0'
