@@ -15,7 +15,8 @@ class Stat < ActiveRecord::Base
 private
 
   def self.inscription_stats
-    Inscription.group_by_month(:shift_date).order("month desc").count
+    #Inscription.group_by_month(:shift_date).order("month desc").count
+    {}
   end
 
   def self.credit_stats
