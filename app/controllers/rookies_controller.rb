@@ -28,8 +28,9 @@ class RookiesController < ApplicationController
 
   def destroy
     @rooky = Rooky.find(params[:id])
-
+    @shift = @rooky.shift
     if @rooky.destroy
+      @shift.cancel_inscription_rooky
       flash[:success] = "La inscripción de #{@rooky.full_name} fue eliminada correctamente."
     else
       flash[:error] = @rooky.errors.to_a.join("<br />")

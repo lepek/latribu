@@ -7,7 +7,7 @@
           <td><%= shift.day_and_time %></td>
           <td><%= shift.max_attendants %></td>
           <td><%= l(shift.next_fixed_shift, :format => '%A, %e de %B %H:%M hs.') %></td>
-          <td><%= shift.close? ? 0 : shift.next_fixed_shift_count %></td>
+          <td><%= shift.next_fixed_shift_count %></td>
           <td><%= shift.status.capitalize %></td>
           <td>
             <%= button_to "Inscribir", new_in_shift_rookies_path(shift), :method => :get, :disabled => !shift.available_for_try? %>

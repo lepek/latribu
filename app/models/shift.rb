@@ -116,6 +116,10 @@ class Shift < ActiveRecord::Base
     end
   end
 
+  def cancel_inscription_rooky
+    $redis.cache(:key => redis_key, :recalculate => true) { next_fixed_shift_count_db }
+  end
+
   ##
   # @param user [User] the user we would like to enroll
   # @return [Boolean] if the shift is available to enroll a user or not
