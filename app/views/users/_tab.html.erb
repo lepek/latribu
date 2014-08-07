@@ -1,8 +1,9 @@
-<% datatable "users-table", ["Nombre", "E-mail", "Crédito",""], :class => "selectable" do -%>
+<% datatable "users-table", ["Nombre", "E-mail", "Teléfono", "Crédito",""], :class => "selectable" do -%>
     <% users.each do |user| -%>
         <tr>
           <td><%= user.full_name %></td>
           <td><%= user.email %></td>
+          <td><%= user.phone %></td>
           <td><%= user.credit %></td>
           <td>
             <% unless current_user == user %>

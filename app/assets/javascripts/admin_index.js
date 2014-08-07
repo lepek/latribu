@@ -79,6 +79,7 @@ $(document).ready(function () {
             aoColumns:[
                 nameColumn, // Nombre
                 nameColumn, // email
+                nameColumn, // phone
                 shortNameColumn, // rol
                 actionColumn // Action buttons
             ]
