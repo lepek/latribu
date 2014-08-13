@@ -80,8 +80,6 @@ gem 'paranoia', '~> 2.0'
 
 gem 'redis'
 
-#gem 'sentry-raven'
-
-#gem 'newrelic_rpm'
-
 gem 'unicorn'
+
+gem 'newrelic_rpm'
