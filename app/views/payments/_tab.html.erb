@@ -1,18 +1,42 @@
+<h1>Filtrar pagos</h1>
+<form>
 <fieldset class="gray">
-  <%= button_to "Agregar un nuevo Pago", new_payment_path, :method => "get" %>
+  <div class="clearfix">
+    <%= label_tag(:date_from, "Desde:") %>
+    <div class="input">
+      <%= text_field_tag(:date_from, I18n.l(Chronic.parse("1 this month"), :format => '%d/%m/%Y')) %>
+    </div>
+  </div>
+  <div class="clearfix">
+    <%= label_tag(:date_from, "Hasta:") %>
+    <div class="input">
+      <%= text_field_tag(:date_to, I18n.l(Chronic.parse("now"), :format => '%d/%m/%Y') ) %>
+    </div>
+  </div>
+  <div class="actions">
+    <%= button_tag("Buscar", id: "payments-search-button", class: "btn primary", :type => 'button') %>
+  </div>
 </fieldset>
-<% datatable "payments-table", ["Cliente","Email", "Fecha último pago", "Monto", "Crédito","", ""], :class => "selectable" do -%>
-    <% payments.each do |payment| -%>
-        <tr>
-          <td><%= payment.user.full_name %></td>
-          <td><%= payment.user.email %></td>
-          <td><%= l(payment.created_at, :format => '%A, %e de %B %H:%M hs.') %></td>
-          <td><%= payment.amount %></td>
-          <td><%= payment.credit %></td>
-          <td>
-            <%= button_to "Borrar", {:action=>"destroy", :controller=>"payments", :id => payment}, data: { confirm: "¿Está seguro que desea eliminar \nel pago de #{payment.user.full_name.upcase}?" }, :method => :delete %>
-          </td>
-          <td><%= payment.created_at %></td>
-        </tr>
-    <% end -%>
-<% end -%>
+</form>
+<div class="clearfix">
+  <% datatable "payments-table", ["Fecha de pago", "Cliente", "Monto", "Crédito", "Mes acreditado", "", ""], :class => "selectable", :footer => true do -%>
+  <% end -%>
+</div>
+
+<script>
+    $(document).ready(
+        function() {
+            $( "#date_from" ).datepicker($.datepicker.regional[ "es" ]);
+            $( "#date_to" ).datepicker($.datepicker.regional[ "es" ]);
+
+            var oTable = $('#payments-table').DataTable();
+
+            $('#payments-search-button').click(
+                function () {
+                    oTable.ajax.url("/payments/search.json?date_from=" + $('#date_from').val() + "&date_to=" + $('#date_to').val()).load();
+                }
+            );
+
+        }
+    );
+</script>

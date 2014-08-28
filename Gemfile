@@ -1,7 +1,7 @@
 source 'https://rubygems.org'
 
 # Bundle edge Rails instead: gem 'rails', github: 'rails/rails'
-gem 'rails', '4.0.0'
+gem 'rails', '4.1.5'
 
 # Use MySQL as the database for Active Record
 gem 'mysql2'
@@ -21,8 +21,8 @@ gem 'coffee-rails', '~> 4.0.0'
 
 # Use jquery as the JavaScript library
 gem 'jquery-rails'
-gem 'jquery-datatables-rails', git: 'git://github.com/rweng/jquery-datatables-rails.git'
-#gem 'jquery-ui-rails'
+gem 'jquery-datatables-rails', '~> 2.2.2'
+gem 'jquery-ui-rails', '~> 5.0.0'
 
 # Turbolinks makes following links in your web application faster. Read more: https://github.com/rails/turbolinks
 gem 'turbolinks'
@@ -72,7 +72,7 @@ gem 'simple-navigation', '3.11.0'
 # date/time parser
 gem 'chronic'
 
-gem 'rails-i18n', '~> 4.0.0'
+gem 'rails-i18n', "~> 4.0.2"
 
 gem "simple_calendar", "~> 0.1.9"
 

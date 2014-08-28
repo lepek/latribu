@@ -1,4 +1,4 @@
-<%= form_for @payment do |f| %>
+<%= form_for [@user, @payment] do |f| %>
     <% if @payment.errors.any? %>
         <div id="error_explanation">
           <h2><%= t 'errors.header.male', :resource => 'Pago', :count => @payment.errors.count %></h2>

@@ -26,6 +26,10 @@ class User < ActiveRecord::Base
 
   scope :clients, -> { where(:role_id => Role.find_by_name(CLIENT_ROLE).id) }
 
+  attr_accessor :full_name
+  after_initialize :full_name
+
+
   def self.reset_credits
     if defined?(Rails) && (Rails.env == 'development')
       Rails.logger = Logger.new(STDOUT)
@@ -49,6 +53,10 @@ class User < ActiveRecord::Base
     end
   end
 
+  def attributes
+    super.merge({'full_name' => self.full_name})
+  end
+
   ##
   # @return All the inscriptions for classes in the future for this user
   #
@@ -57,7 +65,7 @@ class User < ActiveRecord::Base
   end
 
   def full_name
-    "#{self.first_name} #{self.last_name}"
+    self.full_name = "#{self.first_name} #{self.last_name}" if self.has_attribute?(:first_name) && self.has_attribute?(:last_name)
   end
 
   def full_name_email

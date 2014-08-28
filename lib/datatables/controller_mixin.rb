@@ -144,7 +144,8 @@ module Datatables
           :cellpadding => (options[:cellpadding] or 0)
         }
         table_options[:class] = options[:class] if options[:class]
-        
+        footer = options[:footer].present? ? options.delete(:footer) : nil
+
         table = content_tag :table, table_options do
           thead = content_tag :thead do
             headers = ''
@@ -163,8 +164,17 @@ module Datatables
               raw("<tr></tr>")
             end
           end
-          
-          thead << "\n" << tbody
+
+          tfooter = nil
+          unless footer.nil?
+            tfooter = content_tag :tfoot do
+              headers = ''
+              headers << content_tag(:th, nil, {:colspan => column_headers.count, :style => "text-align:right"}, false) << "\n"
+              raw(content_tag(:tr, headers, nil, false))
+            end
+          end
+
+          thead << "\n" << tbody << "\n" << tfooter
         end
         concat(table)
         nil

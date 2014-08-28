@@ -11,7 +11,9 @@ Nahual::Application.routes.draw do
 
   resources :admins
 
-  resources :users
+  resources :users do
+    resources :payments, :only => [:new, :create]
+  end
 
   resources :shifts do
     member do
@@ -20,10 +22,12 @@ Nahual::Application.routes.draw do
     end
   end
 
-  resources :payments do
+  resources :payments, :only => [:destroy] do
     collection do
       get 'user_payments/:user_id', to: 'payments#user_payments', as: 'user_payments'
+      get 'search', to: 'payments#search', as: 'search_payments'
     end
+
   end
 
   resources :rookies do

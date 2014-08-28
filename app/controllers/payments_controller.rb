@@ -1,26 +1,21 @@
 class PaymentsController < ApplicationController
   load_and_authorize_resource
 
+  def search
+    @payments = Payment.eager_load(:user).where(created_at: Chronic.parse(params[:date_from], :endian_precedence => [:little, :middle])..Chronic.parse(params[:date_to], :endian_precedence => [:little, :middle]))
+    render status: :ok, json: { "aaData" => @payments }, include: :user
+  end
+
   def user_payments
     @payments = Payment.select('id, amount, month_year, credit, created_at, NULL AS created_at_formatted').where(:user_id => params[:user_id]).to_a.map(&:serializable_hash)
-    @payments.each do |p|
-      p['created_at_formatted'] = I18n.l(p['created_at'], :format => '%A, %e de %B %H:%M hs.')
-      p['month'] = I18n.l(p['month_year'], :format => '%B').capitalize
-    end
-    respond_to do |format|
-      format.json { render json: "{\"aaData\": #{@payments.to_json}}" }
-    end
+    render status: :ok, json: { "aaData" => @payments }
   end
 
   # GET /payments/new
   # GET /payments/new.json
   def new
-    @payment = Payment.new
-
-    respond_to do |format|
-      format.html # new.html.erb
-      format.json { render json: @payment }
-    end
+    @user = User.find(params[:user_id])
+    @payment = @user.payments.build
   end
 
   # POST /payments
