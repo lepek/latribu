@@ -1,5 +1,8 @@
 /*
- *= require jquery-ui
+ *= require jquery-ui/button
+ *= require jquery-ui/menu
+ *= require jquery-ui/tabs
+ *= require jquery-ui/datepicker
  *= require 'bootstrap.css'
  *= require 'main.css'
  *= require 'icons.css'
