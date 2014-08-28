@@ -1,5 +1,6 @@
-//= require turbolinks
 //= require jquery
+//= require jquery_ujs
+//= require turbolinks
 //= require 'jquery-cookie/jquery.cookie.js'
 //= require 'main.js'
 //= require select2
