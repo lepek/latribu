@@ -59,7 +59,7 @@ Nahual::Application.configure do
 
   # Precompile additional assets.
   # application.js, application.css, and all non-JS/CSS in app/assets folder are already added.
-  config.assets.precompile =  ['default.js', 'datatables.js', 'admin_index.js', 'clients_index.js', 'session.css.scss.erb', 'default.css', 'datatables.css']
+  config.assets.precompile =  ['default.js', 'datatables.js', 'admin_index.js', 'clients_index.js', 'session.css.erb', 'default.css', 'datatables.css']
 
   # Ignore bad email addresses and do not raise email delivery errors.
   # Set this to true and configure the email server for immediate delivery to raise delivery errors.
