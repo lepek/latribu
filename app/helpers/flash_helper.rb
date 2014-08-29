@@ -10,7 +10,7 @@ module FlashHelper
     flash.each do |level, message|
       # Only display error/info/warning/success messages
       # Other flash messages are displayed by hand, elsewhere
-      if [:error, :info, :warning, :success].include?(level)
+      if [:error, :info, :warning, :success].include?(level.to_sym)
         concat(content_tag(:div, raw(message), :id => level.to_s,
                            :class => "alert-message block-message #{level.to_s}"))
       end
