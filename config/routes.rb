@@ -26,6 +26,7 @@ Nahual::Application.routes.draw do
     collection do
       get 'user_payments/:user_id', to: 'payments#user_payments', as: 'user_payments'
       get 'search', to: 'payments#search', as: 'search_payments'
+      post 'payments/download', to: 'payments#download'
     end
 
   end

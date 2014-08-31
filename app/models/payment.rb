@@ -42,6 +42,10 @@ class Payment < ActiveRecord::Base
     self.user.decrement!(:credit, self.credit)
   end
 
+  def user_full_name
+    self.user.full_name
+  end
+
 private
 
   def add_formatted_fields

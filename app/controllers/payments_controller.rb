@@ -2,7 +2,7 @@ class PaymentsController < ApplicationController
   load_and_authorize_resource
 
   def search
-    @payments = Payment.eager_load(:user).where(created_at: Chronic.parse(params[:date_from], :endian_precedence => [:little, :middle])..Chronic.parse(params[:date_to], :endian_precedence => [:little, :middle]))
+    @payments = filter
     render status: :ok, json: { "aaData" => @payments }, include: :user
   end
 
@@ -51,9 +51,25 @@ class PaymentsController < ApplicationController
     redirect_to root_path(:anchor => 'payment')
   end
 
+  def download
+    @payments = filter
+    send_data @payments.to_xls(
+                  :columns => [:created_at_formatted, :user_full_name, :amount, :credit, :month_year_formatted],
+                  :headers => ['Fecha', 'Cliente', 'Monto', 'Crédito', 'Mes acreditado']
+              )
+    return
+  end
+
   private
 
   def payment_params
     params.require(:payment).permit(:user_id, :amount, :credit, :month, :year)
   end
+
+  def filter
+    from = Chronic.parse("#{params[:date_from]} #{params[:time_from]}", :endian_precedence => [:little, :middle])
+    to = Chronic.parse("#{params[:date_to]} #{params[:time_to]}", :endian_precedence => [:little, :middle])
+    Payment.eager_load(:user).where(created_at: from..to)
+  end
+
 end

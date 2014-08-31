@@ -56,7 +56,6 @@ group :development, :test do
   gem 'database_cleaner'
   gem 'factory_girl_rails'
   gem 'timecop'
-  gem 'sqlite3'
   gem 'pry'
   gem 'capistrano'
   gem 'capistrano-rails'
@@ -82,4 +81,8 @@ gem 'redis'
 
 gem 'unicorn'
 
+gem 'to_xls'
+
 gem 'newrelic_rpm'
+
+
