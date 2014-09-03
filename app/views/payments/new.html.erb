@@ -16,7 +16,7 @@
 
     $(document).ready(function() {
         var oTable = $("#user-payments-table").userPaymentsTable();
-        oTable.ajax.url("/payments/user_payments/<%= @user.id %>.json").load();
+        oTable.ajax.url("/payments/user_payments/<%= @user.id %>.json");
 
         $('#payment_user_id').change( function () {
             user_id = $('#payment_user_id').val()
