@@ -42,8 +42,9 @@ private
   # If all the payments are reset, get the newest reset one with used credit
   #
   def get_oldest_payment_with_credit_to_return
-    self.user.payments.where('reset_date IS NULL AND credit > 0 AND used_credit > 0 AND used_credit <= credit').order('month_year ASC, created_at ASC').first ||
-        self.user.payments.where('credit > 0 AND used_credit > 0 AND used_credit <= credit').order('month_year ASC, created_at ASC').first
+    self.user.payments.where('reset_date IS NULL AND credit > 0 AND used_credit > 0 AND used_credit < credit').order('month_year ASC, created_at ASC').first ||
+      self.user.payments.where('reset_date IS NULL AND credit > 0 AND used_credit > 0 AND used_credit <= credit').order('month_year ASC, created_at ASC').first ||
+      self.user.payments.where('credit > 0 AND used_credit > 0 AND used_credit <= credit').order('month_year ASC, created_at ASC').first
   end
 
 end

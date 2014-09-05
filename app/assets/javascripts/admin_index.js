@@ -149,6 +149,18 @@ $(document).ready(function () {
         return this.selectableTable(tableOptions);
     };
 
+    $.fn.resetCreditsTable = function () {
+        var tableOptions = {
+            columns: [
+                $.extend({}, nameColumn, {data: "full_name"}), // Cliente
+                $.extend({}, countColumn, {data: "current_credit"}), // Credito
+                $.extend({}, countColumn, {data: "future_credit"}), // Credito futuro
+            ],
+            processing: true
+        };
+        return this.selectableTable(tableOptions);
+    };
+
     $.fn.statsTable = function () {
         var tableOptions = {
             aaSorting: [[ 3, "desc" ]],

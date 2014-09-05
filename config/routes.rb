@@ -11,8 +11,13 @@ Nahual::Application.routes.draw do
 
   resources :admins
 
-  resources :users do
+  resources :users, :only => [:destroy, :edit, :update] do
     resources :payments, :only => [:new, :create]
+    collection do
+      get 'credits', to: 'users#credits'
+      post 'reset', to: 'users#reset'
+      get 'reset_search', to: 'users#reset_search'
+    end
   end
 
   resources :shifts do
