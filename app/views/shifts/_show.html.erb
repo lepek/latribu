@@ -39,19 +39,22 @@
     <% if shift.current_fixed_shift_users.count > 0 %>
     <p>
       <b>Inscriptos</b>
-      <ul>
+      <ul class="unstyled">
       <% @shift.current_fixed_shift_users.each do |inscription| -%>
-        <li><%= inscription.user.full_name %> | <%= inscription.user.phone %> | <%= inscription.user.email %></li>
+        <li>
+          <%= check_box_tag "user#{inscription.user.id}" -%>
+          <%= inscription.user.full_name %> | <%= inscription.user.phone %> | <%= inscription.user.email %></li>
       <% end -%>
       </ul>
     </p>
     <% end %>
-    <% if @shift.next_fixed_shift_rookies.count > 0 %>
+    <% if @shift.current_fixed_shift_rookies.count > 0 %>
       <p>
         <b>Pruebas</b>
-      <ul>
-        <% @shift.next_fixed_shift_rookies.each do |rooky| -%>
+      <ul class="unstyled">
+        <% @shift.current_fixed_shift_rookies.each do |rooky| -%>
             <li>
+              <%= check_box_tag "rooky#{rooky.id}" -%>
               <%= rooky.full_name %> | <%= rooky.phone %> | <%= rooky.email %>
               <br />
               <%= rooky.notes %>
