@@ -6,15 +6,17 @@
     <%= javascript_include_tag :datatables, :admin_index %>
 <% end %>
 
+<div style="margin: 10px;"><%= link_to '« Volver', root_path %></div>
+
 <div id="content-inner">
   <h1>Resetear cr&eacute;ditos</h1>
-  <%= form_tag({controller: "users", action: "reset"}, method: "post") do %>
+  <%= form_tag({controller: "users", action: "reset"}, method: "post", id: "reset-credits-form") do %>
   <fieldset class="gray">
 
     <div class="clearfix">
       <%= label_tag :last_reset_date, 'Último reseteo' %>
       <div class="input">
-        <%= text_field_tag(:last_reset_date, @last_reset_date, :readonly => true) -%>
+        <%= text_field_tag(:last_reset_date, l(@last_reset_date, :format => '%d/%m/%Y'), :readonly => true) -%>
       </div>
     </div>
 
@@ -25,14 +27,14 @@
         <%= select_tag :year, options_for_select((Time.now.year-2..Time.now.year+1).to_a, @selected_year || Time.now.year) %>
       </div>
     </div>
-
+  <!--
     <div class="clearfix">
       <%= label_tag :credit_to_reset, 'Créditos a resetear' %>
       <div class="input">
         <%= text_field_tag(:credit_to_reset, @credits_to_reset, :readonly => true) -%>
       </div>
     </div>
-
+  -->
     <div class="actions">
       <%= button_tag("Simular", id: "search-reset", class: "btn primary", :type => 'button') -%>
       <%= button_tag("Resetear", id: "do-reset", class: "btn", :type => 'button') -%>
@@ -49,14 +51,23 @@
 
 <script>
     $(document).ready(
-            function() {
-                var oTable = $('#reset-credits-table').resetCreditsTable();
+        function() {
+            var oTable = $('#reset-credits-table').resetCreditsTable();
 
-                $('#search-reset').click(
-                        function () {
-                            oTable.ajax.url("/users/reset_search.json?month=" + $('#month').val() + "&year=" + $('#year').val()).load();
-                        }
-                );
-            }
+            $('#search-reset').click(
+                function () {
+                    oTable.ajax.url("/users/reset_search.json?month=" + $('#month').val() + "&year=" + $('#year').val()).load();
+                }
+            );
+
+            $( "#do-reset").click(
+                function () {
+                    $("span", this).text('Reseteando...')
+                    $(this).prop("disabled", true);
+                    $("#reset-credits-form").submit();
+                }
+            );
+        }
     );
+
 </script>

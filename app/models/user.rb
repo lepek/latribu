@@ -26,32 +26,10 @@ class User < ActiveRecord::Base
 
   scope :clients, -> { where(:role_id => Role.find_by_name(CLIENT_ROLE).id) }
 
+  scope :to_reset, -> { where('reset_credit = 1') }
+
   attr_accessor :full_name
   after_initialize :full_name
-
-
-  def self.reset_credits
-    if defined?(Rails) && (Rails.env == 'development')
-      Rails.logger = Logger.new(STDOUT)
-    end
-    logger = Rails.logger
-    User.clients.each do |user|
-      #user = User.find(154)
-      if user.reset_credit?
-        user.payments.where("reset_date IS NULL AND month_year < '#{Chronic.parse('1 this month')}'").update_all(:reset_date => Chronic.parse("now"))
-        total_credit = user.payments.where('reset_date IS NULL').map(&:credit).sum
-        used_credit = user.payments.where('reset_date IS NULL').map(&:used_credit).sum
-
-        logger.info user.id.to_s + " - " + user.full_name
-        logger.info "Credito actual: #{user.credit}"
-        logger.info "Nuevo credito: #{total_credit - used_credit}"
-
-        user.last_reset_date = Chronic.parse("now")
-        user.credit = total_credit - used_credit
-        user.save!
-      end
-    end
-  end
 
   def attributes
     super.merge({'full_name' => self.full_name})
@@ -85,6 +63,22 @@ class User < ActiveRecord::Base
   #
   def is_new?
     self.admin? || self.credit > 0 || self.inscriptions.any?
+  end
+
+  def calculate_future_credit(month_year)
+    self.payments.select('credit-used_credit AS future_credit').where("reset_date IS NULL AND month_year > '#{month_year}'").map(&:future_credit).sum
+  end
+
+  def self.reset_credits(month_year)
+    User.to_reset.find_each do |user|
+      future_credit = 0
+      if user.credit > 0
+        future_credit = user.calculate_future_credit(month_year)
+        future_credit = user.credit if future_credit > user.credit # Fix because the first reset was forced directly in the user model
+      end
+      user.update_attributes({:credit => future_credit})
+      user.payments.where("reset_date IS NULL AND month_year <= '#{month_year}'").update_all({:reset_date => Chronic.parse("now")})
+    end
   end
 
 private

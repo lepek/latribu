@@ -1,5 +1,8 @@
+<fieldset class="gray">
+  <%= button_to "Resetear créditos", credits_users_path, :method => "get" %>
+</fieldset>
 <% datatable "users-table", ["Nombre", "E-mail", "Teléfono", "Crédito",""], :class => "selectable" do -%>
-    <% users.each do |user| -%>
+    <% @users.each do |user| -%>
         <tr>
           <td><%= user.full_name %></td>
           <td><%= user.email %></td>
@@ -7,11 +10,19 @@
           <td><%= user.credit %></td>
           <td>
             <% unless current_user == user %>
-                <%= button_to "Pago", new_user_payment_path(user), :method => :get %>
-                <%= button_to "Editar", edit_user_path(user), :method => :get %>
-                <%= button_to "Borrar", {:action=>"destroy", :controller=>"users", :id => user}, data: { confirm: "¿Está seguro que desea eliminar \nel usuario #{user.full_name.upcase}?" }, :method => :delete %>
+                <%= button_to "Pago", new_user_payment_path(user), :method => :get, :id => "payment" %>
+                <%= button_to "Editar", edit_user_path(user), :method => :get, :id => "edit" %>
+                <%= button_to "Borrar", {:action=>"destroy", :controller=>"users", :id => user}, data: { confirm: "¿Está seguro que desea eliminar \nel usuario #{user.full_name.upcase}?" }, :method => :delete, :id => "delete" %>
             <% end %>
           </td>
         </tr>
     <% end -%>
 <% end -%>
+
+<script>
+    $(document).ready(function() {
+        var oTable = $("#users-table").usersTable();
+        $(":submit").button();
+    } );
+
+</script>

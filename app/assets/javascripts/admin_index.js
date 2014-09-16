@@ -1,6 +1,20 @@
 $(document).ready(function () {
-    $('#tabs').tabs({cookie:{expires:1}});
-    $("#users-table").usersTable();
+    $('#tabs').tabs({
+        cookie: {expires:1},
+        beforeLoad: function( event, ui ) {
+            if ( ui.tab.data( "loaded" ) ) {
+                event.preventDefault();
+                return;
+            } else {
+                ui.panel.html('<center><div class="alert-message block-message info" style="width: 300px; padding: 20px; margin: 20px; font-weight: bold;">Cargando...</div></center>');
+            }
+
+            ui.jqXHR.success(function() {
+                ui.tab.data( "loaded", true );
+            });
+        }
+    });
+
     $("#shifts-table").shiftsTable();
     $("#payments-table").paymentsTable();
     $("#stats-table").statsTable();

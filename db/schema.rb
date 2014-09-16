@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20140525231622) do
+ActiveRecord::Schema.define(version: 20140901231622) do
 
   create_table "disciplines", force: true do |t|
     t.string   "name"
@@ -57,6 +57,8 @@ ActiveRecord::Schema.define(version: 20140525231622) do
   create_table "roles", force: true do |t|
     t.string "name"
   end
+
+  add_index "roles", ["name"], name: "index_roles_on_name", using: :btree
 
   create_table "rookies", force: true do |t|
     t.datetime "shift_date"

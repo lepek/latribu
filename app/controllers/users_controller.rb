@@ -1,6 +1,11 @@
 class UsersController < ApplicationController
   load_and_authorize_resource
 
+  def index
+    @users = User.accessible_by(current_ability).clients.order("last_name")
+    render 'users/_tab', :layout => false
+  end
+
   def destroy
     @user = User.find(params[:id])
 
@@ -33,7 +38,7 @@ class UsersController < ApplicationController
 
   def credits
     month_year = Chronic.parse("1 this month")
-    @credits_to_reset = Payment.select('credit-used_credit AS spare_credit').where("reset_date IS NULL AND credit > 0 AND used_credit < credit AND month_year <= '#{month_year}'").map(&:spare_credit).sum
+    #@credits_to_reset = Payment.select('credit-used_credit AS spare_credit').where("reset_date IS NULL AND month_year <= '#{month_year}'").map(&:spare_credit).sum
     @last_reset_date = Payment.select('MAX(reset_date) AS reset_date').try(:first).try(:reset_date)
   end
 
@@ -42,10 +47,11 @@ class UsersController < ApplicationController
     @month = params[:month]
     @year = params[:year]
     month_year = Chronic.parse("1 #{@month} #{@year}")
-    User.eager_load(:payments).where('reset_credit = 1').find_each do |user|
-      future_credit = user.credit
+    User.to_reset.find_each do |user|
+      future_credit = 0
       if user.credit > 0
-        future_credit = user.payments.select('credit-used_credit AS future_credit').where("reset_date IS NULL AND month_year > '#{month_year}'").map(&:future_credit).sum
+        future_credit = user.calculate_future_credit(month_year)
+        future_credit = user.credit if future_credit > user.credit # Fix because the first reset was forced directly in the user model
       end
       data << {:full_name => user.full_name, :current_credit => user.credit, :future_credit => future_credit}
     end
@@ -53,7 +59,11 @@ class UsersController < ApplicationController
   end
 
   def reset
-    spare_credit = user.payments.select('credit-used_credit AS spare_credit').where("reset_date IS NULL AND payments.credit > 0 AND used_credit < payments.credit AND month_year <= '#{month_year}'").map(&:spare_credit).sum
+    @month = params[:month]
+    @year = params[:year]
+    month_year = Chronic.parse("1 #{@month} #{@year}")
+    User.reset_credits(month_year)
+    redirect_to credits_users_path
   end
 
 private
