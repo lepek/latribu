@@ -1,6 +1,5 @@
 $(document).ready(function () {
     $('#tabs').tabs({
-        cookie: {expires:1},
         beforeLoad: function( event, ui ) {
             if ( ui.tab.data( "loaded" ) ) {
                 event.preventDefault();
