@@ -23,7 +23,7 @@ class Ability
     can :manage, Inscription, :user_id => @user.id
     can :read, [Shift, Instructor, Discipline]
     can :read, Payment, :user_id => @user.id
-    can [:inscription, :cancel_inscription], Shift
+    can [:inscription, :cancel_inscription, :indiscriminate_inscription], Shift
     can :access, :client
   end
 

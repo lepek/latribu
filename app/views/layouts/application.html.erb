@@ -19,6 +19,20 @@
 <div class="main container">
   <div id="flash-messages">
     <%= flash_messages %>
+
+    <% if @shift -%>
+    <div id="info" class="alert-message block-message info">
+        <div style="float:left;">
+          Si confirmas la inscripción a la clase del <span style="font-weight: bold;"><%= l(@shift.next_fixed_shift, :format => '%A, %e de %B %H:%M hs.') %></span> no podrás liberarla luego
+        </div>
+        <div style="float:left; padding-left: 20px;">
+          <%= button_to "Confirmar", indiscriminate_inscription_shift_path(@shift), :method => :get -%>
+        </div>
+        <div style="clear:both;">
+        </div>
+    </div>
+
+    <% end -%>
   </div>
   <section id="content">
     <%= yield %>

@@ -11,10 +11,10 @@ class Shift < ActiveRecord::Base
   STATUS = {:open => 'abierta', :close => 'cerrada', :full => 'completa'}
 
   DEFAULT_SHIFT_DURATION = 1
-  MARTIN_BIANCULLI_ID = 2
+  MARTIN_BIANCULLI_ID = 21
   MARCELO_PERRETTA_ID =  41
-  EMILIO_TARALLO_ID = 608
-  ALLOWED_USERS = [MARTIN_BIANCULLI_ID, MARCELO_PERRETTA_ID, EMILIO_TARALLO_ID]
+  IVAN_TREVISAN_ID = 7
+  ALLOWED_USERS = [MARTIN_BIANCULLI_ID, MARCELO_PERRETTA_ID, IVAN_TREVISAN_ID]
 
   before_validation :set_end_time
   before_destroy :remove_inscriptions
@@ -95,6 +95,10 @@ class Shift < ActiveRecord::Base
     end
   end
 
+  def needs_confirmation?
+    Chronic.parse("now") > Chronic.parse("#{self.cancel_inscription} hours ago", :now => self.next_fixed_shift)
+  end
+
   def cancel_next_shift(user)
     if available_for_cancel?(user)
       self.inscriptions.where({:user_id => user.id, :shift_date => self.next_fixed_shift}).first.destroy
@@ -141,7 +145,7 @@ class Shift < ActiveRecord::Base
   end
 
   def available_for_cancel?(user)
-    user_inscription(user) && (status != STATUS[:close] || ALLOWED_USERS.include?(user.id) )
+    user_inscription(user) && (status != STATUS[:close] && !needs_confirmation? || ALLOWED_USERS.include?(user.id) )
   end
 
   ##

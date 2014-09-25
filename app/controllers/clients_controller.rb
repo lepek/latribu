@@ -6,5 +6,11 @@ class ClientsController < ApplicationController
       @shifts = Shift.accessible_by(current_ability).eager_load(:instructor)
       @events = current_user.inscriptions.eager_load(:shift => :discipline)
     end
+
+    if params[:shift_id].present?
+      @shift = Shift.find(params[:shift_id])
+      @shift = nil unless @shift.needs_confirmation?
+    end
+
   end
 end

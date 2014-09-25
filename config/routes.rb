@@ -24,6 +24,7 @@ Nahual::Application.routes.draw do
     member do
       get 'inscription'
       get 'cancel_inscription'
+      get 'indiscriminate_inscription'
     end
   end
 

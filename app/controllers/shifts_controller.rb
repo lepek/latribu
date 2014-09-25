@@ -76,8 +76,23 @@ class ShiftsController < ApplicationController
   def inscription
     @shift = Shift.find(params[:id])
     respond_to do |format|
+      if @shift.needs_confirmation?
+        format.html { redirect_to clients_path({:shift_id => @shift.id}) }
+      elsif @shift.enroll_next_shift(current_user)
+        format.html { redirect_to clients_path, success: "Te anotaste a la clase del #{format_date_for_alerts} Tenes hasta las #{last_cancel_time} para liberar la clase" }
+        format.json { render json: @shift, status: :created, location: @shift }
+      else
+        format.html { redirect_to clients_path, error: @shift.errors.full_messages.to_sentence }
+        format.json { render json: @shift.errors, status: :unprocessable_entity }
+      end
+    end
+  end
+
+  def indiscriminate_inscription
+    @shift = Shift.find(params[:id])
+    respond_to do |format|
       if @shift.enroll_next_shift(current_user)
-        format.html { redirect_to clients_path, success: "Te anotaste a la clase del #{format_date_for_alerts}" }
+        format.html { redirect_to clients_path, success: "Te anotaste a la clase del #{format_date_for_alerts} Esta clase <b>no puede ser liberada</b>" }
         format.json { render json: @shift, status: :created, location: @shift }
       else
         format.html { redirect_to clients_path, error: @shift.errors.full_messages.to_sentence }
@@ -103,6 +118,10 @@ class ShiftsController < ApplicationController
 
     def format_date_for_alerts
       "<b>#{I18n.l(@shift.next_fixed_shift, :format => '%A, %e de %B %H:%M hs.')}</b>"
+    end
+
+    def last_cancel_time
+      "<b>#{I18n.l(Chronic.parse("#{@shift.cancel_inscription} hours ago", :now => @shift.next_fixed_shift), :format => '%H:%M hs.')}</b>"
     end
 
     def shift_params
