@@ -11,7 +11,7 @@ class Shift < ActiveRecord::Base
   STATUS = {:open => 'abierta', :close => 'cerrada', :full => 'completa'}
 
   DEFAULT_SHIFT_DURATION = 1
-  MARTIN_BIANCULLI_ID = 21
+  MARTIN_BIANCULLI_ID = 2
   MARCELO_PERRETTA_ID =  41
   IVAN_TREVISAN_ID = 7
   ALLOWED_USERS = [MARTIN_BIANCULLI_ID, MARCELO_PERRETTA_ID, IVAN_TREVISAN_ID]
