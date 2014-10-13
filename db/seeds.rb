@@ -44,4 +44,35 @@ Instructor.create(
     :last_name => 'Tosti'
 ) unless Instructor.where(:first_name => 'Antonela', :last_name => 'Tosti').count > 0
 
-Discipline.create(:name => 'Crossfit') unless Discipline.where(:name => 'Crossfit').count > 0
+Instructor.create(
+    first_name: "German",
+    last_name: "Verdolini"
+) unless Instructor.where(first_name: "German", last_name: "Verdolini").count > 0
+
+USERS = [
+    {first_name: 'martin', last_name: 'bianculli'},
+    {first_name: 'ines del carmen', last_name: 'la torre'},
+    {first_name: 'fernando', last_name: 'vicini'},
+    {first_name: 'nicolas', last_name: 'amorelli'},
+    {first_name: 'guillermo', last_name: 'davoli'},
+    {first_name: 'georgina', last_name: 'neyra'},
+    {first_name: 'iván', last_name: 'trevisán'},
+    {first_name: 'elisabet', last_name: 'trevisan'}
+]
+
+USERS.each do |user_data|
+  users = User.where(user_data)
+  if users.count > 1
+    puts "Duplicates user #{user_data}"
+  elsif users.count == 1
+    users.first.update_attributes({:reset_credit => false})
+  end
+end
+
+unconventional_training = Discipline.find_or_create_by(:name => 'Unconventional Training')
+Discipline.find_or_create_by(:name => 'Advanced Training') unless Discipline.where(:name => 'Advanced Training').count > 0
+Discipline.find_or_create_by(:name => 'Fuerza') unless Discipline.where(:name => 'Fuerza').count > 0
+
+User.find_each do |user|
+  user.disciplines << unconventional_training
+end

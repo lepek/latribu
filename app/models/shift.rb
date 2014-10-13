@@ -20,7 +20,7 @@ class Shift < ActiveRecord::Base
   before_destroy :remove_inscriptions
 
   validates_presence_of :day, :start_time, :max_attendants, :open_inscription, :close_inscription, :instructor, :discipline
-  validates_uniqueness_of :start_time, :scope => [:day, :discipline_id]
+  validates_uniqueness_of :start_time, :scope => [:day]
 
   def self.days
     DAYS
@@ -130,11 +130,11 @@ class Shift < ActiveRecord::Base
   #
   def available_for_enroll?(user)
     @available_for_enroll ||= self.exceptions?(user)
-    @available_for_enroll ||= ( self.status == STATUS[:open] && self.user_inscription(user).nil? && user.credit > 0 && self.another_today_inscription?(user).nil? )
+    @available_for_enroll ||= ( self.status == STATUS[:open] && self.user_inscription(user).nil? && user.credit > 0 && user.disciplines.include?(self.discipline) && self.another_today_inscription?(user).nil? )
   end
 
   def exceptions?(user)
-    ALLOWED_USERS.include?(user.id) && self.status != STATUS[:full] && self.user_inscription(user).nil? && user.credit > 0
+    ALLOWED_USERS.include?(user.id) && self.status != STATUS[:full] && self.user_inscription(user).nil? && user.credit > 0 && user.disciplines.include?(self.discipline)
   end
 
   ##
@@ -156,7 +156,7 @@ class Shift < ActiveRecord::Base
   end
 
   def another_today_inscription?(user)
-    user.next_inscriptions.find { |i| i.shift_date.strftime('%D') == self.next_fixed_shift.strftime('%D') }
+    user.next_inscriptions.find { |i| i.shift_date.strftime('%D') == self.next_fixed_shift.strftime('%D') && i.shift.discipline == self.discipline }
   end
 
   def set_end_time

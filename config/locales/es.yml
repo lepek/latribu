@@ -24,12 +24,16 @@ es:
         password_confirmation: 'Confirmar contraseña'
         phone: 'Teléfono'
         current_password: 'Contraseña actual'
+        reset_credit: 'Reseteo de créditos'
+        disciplines: 'Disciplinas'
+        discipline_ids: 'Disciplinas'
       shift:
         day: 'Día'
         start_time: 'Hora de comienzo'
         max_attendants: 'Cupo'
         open_inscription: 'Abrir inscripción'
         close_inscription: 'Cerrar inscripción'
+        discipline_id: 'Disciplina'
       payment:
         amount: 'Monto'
         credit: 'Crédito'

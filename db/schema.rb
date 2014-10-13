@@ -11,12 +11,13 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20140925131057) do
+ActiveRecord::Schema.define(version: 20141013132909) do
 
   create_table "disciplines", force: true do |t|
     t.string   "name"
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.string   "color"
   end
 
   create_table "inscriptions", force: true do |t|
@@ -95,6 +96,14 @@ ActiveRecord::Schema.define(version: 20140925131057) do
     t.datetime "created_at"
     t.datetime "updated_at"
   end
+
+  create_table "user_disciplines", force: true do |t|
+    t.integer "user_id"
+    t.integer "discipline_id"
+  end
+
+  add_index "user_disciplines", ["discipline_id"], name: "index_user_disciplines_on_discipline_id", using: :btree
+  add_index "user_disciplines", ["user_id"], name: "index_user_disciplines_on_user_id", using: :btree
 
   create_table "users", force: true do |t|
     t.string   "email",                  default: "",                    null: false
