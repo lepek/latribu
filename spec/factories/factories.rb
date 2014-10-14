@@ -1,3 +1,7 @@
+def get_discipline
+  Discipline.where(:name => 'Crossfit').first || FactoryGirl.create(:discipline)
+end
+
 FactoryGirl.define do
 
   sequence :email do |n|
@@ -28,6 +32,9 @@ FactoryGirl.define do
     factory :admin do
       role_id 1
     end
+    after(:create) do |user, evaluator|
+      user.disciplines << get_discipline
+    end
   end
 
   factory :payment do
@@ -43,8 +50,9 @@ FactoryGirl.define do
     max_attendants "12"
     open_inscription "999999"
     close_inscription "0"
+    cancel_inscription "2"
     instructor
-    discipline
+    discipline { |shift| get_discipline }
   end
 
 end

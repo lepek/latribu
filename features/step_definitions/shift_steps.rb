@@ -8,7 +8,7 @@ Given /^the following shifts exist$/ do |table|
 end
 
 Given /^Today is "(.*?)"$/ do |date|
-  Timecop.freeze(Time.parse(date))
+  Timecop.freeze(Chronic.parse(date))
 end
 
 Then /^I should see the next class on "(.*?)"$/ do |next_class|

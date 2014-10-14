@@ -70,7 +70,7 @@ class User < ActiveRecord::Base
     self.payments.select('credit-used_credit AS future_credit').where("reset_date IS NULL AND month_year > '#{month_year}'").map(&:future_credit).sum
   end
 
-  def self.reset_credits(month_year)
+  def self.reset_credits(month_year = Chronic.parse("1 this month"))
     User.to_reset.find_each do |user|
       future_credit = 0
       if user.credit > 0
