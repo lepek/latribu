@@ -34,6 +34,7 @@ es:
         open_inscription: 'Abrir inscripción'
         close_inscription: 'Cerrar inscripción'
         discipline_id: 'Disciplina'
+        cancel_inscription: 'Anular la liberación'
       payment:
         amount: 'Monto'
         credit: 'Crédito'
@@ -72,12 +73,15 @@ es:
               blank: 'El Día no puede estar en blanco'
             start_time:
               blank: 'La Hora de comienzo no puede estar en blanco'
+              taken: 'Ya existe una clase en este horario'
             max_attendants:
               blank: 'El Cupo no puede estar en blanco'
             open_inscription:
               blank: 'Las horas para abrir la inscripción no puede estar en blanco'
             close_inscription:
               blank: 'Las horas para cerrar la inscripción no puede estar en blanco'
+            cancel_inscription:
+              blank: 'Las horas para anular la liberación no puede estar en blanco'
         payment:
           attributes:
             month_year:
