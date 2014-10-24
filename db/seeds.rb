@@ -74,5 +74,5 @@ Discipline.find_or_create_by(:name => 'Advanced Training') unless Discipline.whe
 Discipline.find_or_create_by(:name => 'Fuerza') unless Discipline.where(:name => 'Fuerza').count > 0
 
 User.find_each do |user|
-  user.disciplines << unconventional_training
+  user.disciplines << unconventional_training if user.disciplines.empty?
 end
