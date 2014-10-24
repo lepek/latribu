@@ -107,7 +107,7 @@ private
   end
 
   def set_discipline
-    self.set_discipline_id ||= 1
+    self.disciplines << Discipline.find(1) if self.disciplines.empty?
   end
 
 end
