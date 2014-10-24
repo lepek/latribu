@@ -20,6 +20,7 @@ class User < ActiveRecord::Base
 
   before_validation :set_role
   before_create :set_credit
+  before_create :set_discipline
   before_destroy :remove_payments
 
   CLIENT_ROLE = 'Cliente'
@@ -103,6 +104,10 @@ private
 
   def set_credit
     self.credit ||= 0
+  end
+
+  def set_discipline
+    self.set_discipline_id ||= 1
   end
 
 end
