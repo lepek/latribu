@@ -1,4 +1,4 @@
-<% if current_user.is_new? -%>
+<% if current_user.is_not_new? -%>
     <% content_for :stylesheets do %>
         <%= stylesheet_link_tag :datatables %>
     <% end %>

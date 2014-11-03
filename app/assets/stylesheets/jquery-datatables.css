@@ -10,6 +10,10 @@
     background-color: yellow !important;
 }
 
+.c-center {
+    text-align: center;
+}
+
 /* jQuery UI-specific styling */
 table.dataTable thead th {
     padding: 5px 5px 5px 8px;

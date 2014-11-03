@@ -63,7 +63,7 @@ class User < ActiveRecord::Base
   ##
   # @return [Boolean] If the user is a pretty new user without credits or inscriptions
   #
-  def is_new?
+  def is_not_new?
     self.admin? || self.credit > 0 || self.inscriptions.any?
   end
 

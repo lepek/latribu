@@ -1,11 +1,12 @@
-<% datatable "inscriptions-table", ["Clase", "Instructor", "Anotados", "Estado","Anotado", "", ""], :class => "selectable" do -%>
+<% datatable "inscriptions-table", ["", "Clase", "Instructor", "Anotados", "Estado","Anotado", "", ""], :class => "selectable" do -%>
     <% shifts.each do |shift| -%>
         <tr>
-          <td><%= l(shift.next_fixed_shift, :format => '%A, %e de %B %H:%M hs.') %></td>
+          <td><img src="<%= asset_path "clase-0#{shift.discipline_id}.png" %>" style="width: 60%" /></td>
+          <td><%= l(shift.next_fixed_shift, :format => '%a, %e de %b %H:%M hs.') %></td>
           <td><%= shift.instructor.full_name %></td>
           <td><%= shift.close? ? 0 : shift.next_fixed_shift_count %></td>
           <td><%= shift.status.capitalize %></td>
-          <td><%= l(shift.user_inscription(current_user).created_at, :format => '%A, %e de %B %H:%M hs.') unless shift.user_inscription(current_user).nil? %></td>
+          <td><%= l(shift.user_inscription(current_user).created_at, :format => '%a, %e de %b %H:%M hs.') unless shift.user_inscription(current_user).nil? %></td>
           <td>
             <% if shift.available_for_enroll?(current_user) %><%= button_to "Anotarse", inscription_shift_path(shift), :method => :get %><% end %>
             <% if shift.available_for_cancel?(current_user) %><%= button_to "Liberar", cancel_inscription_shift_path(shift), :method => :get %><% end %>

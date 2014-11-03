@@ -43,7 +43,7 @@ $(document).ready(function () {
     $.fn.selectableTable = function (tableOptions) {
         // Set the options that all of them share
         tableOptions.iDisplayLength = 10;
-        tableOptions.bAutoWidth = false;
+        tableOptions.bAutoWidth = true;
         tableOptions.bJQueryUI = true;
         tableOptions.bSort = true;
         tableOptions.bLengthChange = true;
@@ -56,13 +56,14 @@ $(document).ready(function () {
 
     $.fn.inscriptionsTable = function () {
         var tableOptions = {
-            aaSorting: [[ 6, "asc" ]],
-            aoColumns:[
-                $.extend({}, nameColumn, {iDataSort: 6}), // Shift
-                shortNameColumn, // Instructor
+            order: [[ 7, "asc" ]],
+            columns:[
+                $.extend({}, countColumn, {sClass: "c-center"}), // Icon
+                $.extend({}, nameColumn, {dataSort: 7}), // Shift
+                nameColumn, // Instructor
                 countColumn, // Attendants
                 shortNameColumn, // Status
-                nameColumn, // enrolled?
+                nameColumn, // Shift
                 actionColumn, // Action buttons
                 hiddenColumn
             ]

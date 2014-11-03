@@ -2,8 +2,8 @@ class ClientsController < ApplicationController
   def index
     authorize! :access, :client
 
-    if current_user.is_new?
-      @shifts = Shift.accessible_by(current_ability).eager_load(:instructor)
+    if current_user.is_not_new?
+      @shifts = Shift.accessible_by(current_ability).eager_load(:instructor, :discipline)
       @events = current_user.inscriptions.eager_load(:shift => :discipline)
     end
 
