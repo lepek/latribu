@@ -13,13 +13,13 @@ Feature: Client inscriptions
   Scenario: Today is Tuesday, November 12th and the next class is Monday, November 18th 21:00 hs
     Given Today is "Nov 12 2013, 0:00"
     And I am in the inscriptions page
-    Then I should see the next class on "lunes, 18 de noviembre 21:00 hs."
+    Then I should see the next class on "lun, 18 de nov 21:00 hs."
 
   Scenario: The class does not show up because it is in the past
     Given Today is "Nov 19 2013, 0:00"
     And I am in the inscriptions page
-    Then I should not see the next class on "lunes, 18 de noviembre 21:00 hs."
-    And I should see the next class on "lunes, 25 de noviembre 21:00 hs."
+    Then I should not see the next class on "lun, 18 de nov 21:00 hs."
+    And I should see the next class on "lun, 25 de nov 21:00 hs."
 
   Scenario: The class is unavailable because it is not opened yet
     Given Today is "Nov 18 2013, 8:00"

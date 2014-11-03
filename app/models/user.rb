@@ -20,7 +20,7 @@ class User < ActiveRecord::Base
 
   before_validation :set_role
   before_create :set_credit
-  before_create :set_discipline
+  after_create :set_discipline
   before_destroy :remove_payments
 
   CLIENT_ROLE = 'Cliente'
@@ -107,7 +107,10 @@ private
   end
 
   def set_discipline
-    self.disciplines << Discipline.find(1) if self.disciplines.empty?
+    begin
+      self.disciplines << Discipline.find(1) if !self.admin? && self.disciplines.empty?
+    rescue ActiveRecord::RecordNotFound
+    end
   end
 
 end
