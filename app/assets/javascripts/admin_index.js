@@ -44,6 +44,12 @@ $(document).ready(function () {
         sWidth:"160px"
     };
 
+    var longActionColumn = {
+        bSearchable:false,
+        bSortable:false,
+        sWidth:"250px"
+    };
+
     var shortActionColumn = {
         bSearchable:false,
         bSortable:false,
@@ -93,7 +99,7 @@ $(document).ready(function () {
                 nameColumn, // email
                 shortNameColumn, // phone
                 countColumn, // Credito
-                actionColumn // Action buttons
+                longActionColumn // Action buttons
             ]
         };
         return this.selectableTable(tableOptions);

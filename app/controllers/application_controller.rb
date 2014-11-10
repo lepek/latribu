@@ -24,6 +24,8 @@ class ApplicationController < ActionController::Base
     params[resource] &&= send(method) if respond_to?(method, true)
   end
 
+  impersonates :user
+
   def after_sign_in_path_for(user)
     if current_user.admin?
       admins_path

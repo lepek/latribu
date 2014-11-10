@@ -85,4 +85,6 @@ gem 'to_xls'
 
 gem 'newrelic_rpm'
 
+gem 'pretender'
+
 

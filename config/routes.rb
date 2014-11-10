@@ -17,6 +17,10 @@ Nahual::Application.routes.draw do
       get 'credits', to: 'users#credits'
       post 'reset', to: 'users#reset'
       get 'reset_search', to: 'users#reset_search'
+      get 'stop_impersonating'
+    end
+    member do
+      get 'impersonate'
     end
   end
 

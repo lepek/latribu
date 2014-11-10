@@ -1,5 +1,5 @@
 class PaymentsController < ApplicationController
-  load_and_authorize_resource
+  authorize_resource
 
   def search
     @payments = filter

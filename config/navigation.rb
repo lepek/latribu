@@ -11,6 +11,8 @@ SimpleNavigation::Configuration.run do |navigation|
     end
 
     top.item :sign_in, '<img src="'+image_url("nav_icons/keys-icon.png")+'" /> Ingresar', main_app.new_user_session_path, :unless => Proc.new { user_signed_in? }
-    top.item :sign_out, '<img src="'+image_url("nav_icons/logout.png")+'" /> Cerrar Sesión', main_app.destroy_user_session_path, :method => :delete, :if => Proc.new { user_signed_in? }
+    top.item :sign_out, '<img src="'+image_url("nav_icons/logout.png")+'" /> Cerrar Sesión', main_app.destroy_user_session_path, :method => :delete, :if => Proc.new { user_signed_in? && current_user == true_user }
+
+    top.item :stop_impersonating, '<img src="'+image_url("nav_icons/logout.png")+'" /> Volver a Admin', main_app.stop_impersonating_users_path, :method => :get, :if => Proc.new { user_signed_in? && current_user != true_user && true_user.admin? }
   end
 end

@@ -1,5 +1,5 @@
 class ShiftsController < ApplicationController
-  load_and_authorize_resource
+  authorize_resource
 
   # GET /shifts/new
   # GET /shifts/new.json
