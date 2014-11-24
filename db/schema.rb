@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20141013132909) do
+ActiveRecord::Schema.define(version: 20141124222627) do
 
   create_table "disciplines", force: true do |t|
     t.string   "name"
@@ -87,6 +87,7 @@ ActiveRecord::Schema.define(version: 20141013132909) do
     t.integer  "discipline_id"
     t.integer  "instructor_id"
     t.integer  "cancel_inscription", default: 2
+    t.datetime "deleted_at"
   end
 
   add_index "shifts", ["discipline_id"], name: "index_shifts_on_discipline_id", using: :btree

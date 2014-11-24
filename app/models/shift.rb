@@ -5,6 +5,8 @@ class Shift < ActiveRecord::Base
   has_many :users, through: :inscriptions
   has_many :rookies
 
+  acts_as_paranoid
+
   DAYS = {:monday => 'lunes', :tuesday => 'martes', :wednesday => 'miércoles', :thursday => 'jueves', :friday => 'viernes', :saturday => 'sábado', :sunday => 'domingo'}
 
   # I can use this later
@@ -171,7 +173,7 @@ class Shift < ActiveRecord::Base
   # When removing a shift we remove the inscriptions to that shift and refund the credits
   #
   def remove_inscriptions
-    self.inscriptions.destroy_all
+    self.next_fixed_shift_users.destroy_all
   end
 
   # current_time = 10:00
