@@ -10,7 +10,7 @@ class UsersController < ApplicationController
     @user = User.find(params[:id])
 
     if @user.destroy
-      flash[:success] = "El cliente #{@user.full_name} fue eliminado correctamente."
+      flash[:success] = "El usuario <b>#{@user.full_name}</b> fue eliminado correctamente."
     else
       flash[:error] = @user.errors.to_a.join("<br />")
     end
@@ -27,7 +27,7 @@ class UsersController < ApplicationController
     params.delete('password') && params.delete('password_confirmation') if params[:password].blank?
     respond_to do |format|
       if @user.update_attributes(params)
-        format.html { redirect_to root_url, success: 'Usuario actualizado.' }
+        format.html { redirect_to root_url, success: "Usuario <b>#{@user.full_name}</b> actualizado." }
         format.json { head :ok }
       else
         format.html { render action: "edit" }
@@ -48,7 +48,6 @@ class UsersController < ApplicationController
   end
 
   def credits
-    month_year = Chronic.parse("1 this month")
     #@credits_to_reset = Payment.select('credit-used_credit AS spare_credit').where("reset_date IS NULL AND month_year <= '#{month_year}'").map(&:spare_credit).sum
     @last_reset_date = Payment.select('MAX(reset_date) AS reset_date').try(:first).try(:reset_date)
   end
@@ -77,10 +76,20 @@ class UsersController < ApplicationController
     redirect_to credits_users_path
   end
 
+  def certificate
+    @user = User.find(params[:id])
+    if params.has_key?("user_certificate#{@user.id}") and !!params["user_certificate#{@user.id}".to_sym] == true
+      @user.update_attributes({:certificate => true})
+    else
+      @user.update_attributes({:certificate => false})
+    end
+    render status: :ok, json: {}
+  end
+
 private
 
   def user_params
-    params.require(:user).permit(:id, :first_name, :last_name, :phone, :email, :password, :password_confirmation, :reset_credit, :discipline_ids => [])
+    params.require(:user).permit(:id, :first_name, :last_name, :phone, :email, :password, :password_confirmation, :enable, :reset_credit, :certificate, :discipline_ids => [])
   end
 
 end

@@ -38,6 +38,16 @@ class RookiesController < ApplicationController
     redirect_to root_path(:anchor => 'rookies')
   end
 
+  def attended
+    @rooky = Rooky.find(params[:id])
+    if params.has_key?("rooky_attended#{@rooky.id}") and !!params["rooky_attended#{@rooky.id}".to_sym] == true
+      @rooky.update_attributes({:attended => true})
+    else
+      @rooky.update_attributes({:attended => false})
+    end
+    render status: :ok, json: {}
+  end
+
 private
 
   def rooky_params

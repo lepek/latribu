@@ -60,6 +60,7 @@ group :development, :test do
   gem 'capistrano'
   gem 'capistrano-rails'
   gem 'capistrano-nginx-unicorn'
+  gem 'launchy'
 end
 
 # jQuery based replacement for select boxes

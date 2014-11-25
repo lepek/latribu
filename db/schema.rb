@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20141124222627) do
+ActiveRecord::Schema.define(version: 20141124235605) do
 
   create_table "disciplines", force: true do |t|
     t.string   "name"
@@ -26,6 +26,7 @@ ActiveRecord::Schema.define(version: 20141124222627) do
     t.datetime "updated_at"
     t.integer  "user_id"
     t.integer  "shift_id"
+    t.boolean  "attended",   default: true
   end
 
   add_index "inscriptions", ["shift_date"], name: "index_inscriptions_on_shift_date", using: :btree
@@ -70,6 +71,7 @@ ActiveRecord::Schema.define(version: 20141124222627) do
     t.string   "email"
     t.string   "notes"
     t.integer  "shift_id"
+    t.boolean  "attended",   default: true
   end
 
   add_index "rookies", ["shift_date"], name: "index_rookies_on_shift_date", using: :btree
@@ -127,6 +129,8 @@ ActiveRecord::Schema.define(version: 20141124222627) do
     t.datetime "deleted_at"
     t.boolean  "reset_credit",           default: true
     t.datetime "last_reset_date",        default: '2014-03-05 02:00:00'
+    t.boolean  "certificate",            default: false
+    t.boolean  "enable",                 default: true
   end
 
   add_index "users", ["email"], name: "index_users_on_email", unique: true, using: :btree

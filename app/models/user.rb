@@ -83,6 +83,14 @@ class User < ActiveRecord::Base
     end
   end
 
+  def active_for_authentication?
+    enable?
+  end
+
+  def inactive_message
+    enable? ? super : "Tu cuenta de usuario fue suspendida temporalmente. Contactate con la administración."
+  end
+
 private
 
   def last_month

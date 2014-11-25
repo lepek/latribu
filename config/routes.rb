@@ -21,6 +21,7 @@ Nahual::Application.routes.draw do
     end
     member do
       get 'impersonate'
+      post 'certificate'
     end
   end
 
@@ -45,6 +46,12 @@ Nahual::Application.routes.draw do
     collection do
       get 'new_in_shift/:shift_id', to: 'rookies#new_in_shift', as: 'new_in_shift'
     end
+    member do
+      post 'attended'
+    end
   end
+
+
+  post 'incriptions/:id/attended', to: 'inscriptions#attended'
 
 end

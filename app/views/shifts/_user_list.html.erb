@@ -1,0 +1,54 @@
+<% if shift.next_fixed_shift_users.count > 0 %>
+    <p>
+      <b>Inscriptos</b>
+    <ul class="unstyled">
+      <% shift.next_fixed_shift_users.each do |inscription| -%>
+          <li>
+            <%= check_box_tag "user_attended#{inscription.id}", true, inscription.attended,
+                              data: {
+                        remote: true,
+                        method: :post,
+                url: url_for(controller: :inscriptions, action: :attended, id: inscription.id)
+                }
+            -%>
+            <b><%= inscription.user.full_name %></b>
+            |
+            <%= inscription.user.phone %>
+            |
+            <%= inscription.user.email %>
+            |
+            <b>Certificado m&eacute;dico:</b>
+            <%= check_box_tag "user_certificate#{inscription.user.id}", true, inscription.user.certificate,
+                              data: {
+                        remote: true,
+                        method: :post,
+                url: url_for(controller: :users, action: :certificate, id: inscription.user.id)
+                }
+            -%>
+
+          </li>
+      <% end -%>
+    </ul>
+    </p>
+<% end %>
+<% if shift.next_fixed_shift_rookies.count > 0 %>
+    <p>
+      <b>Pruebas</b>
+    <ul class="unstyled">
+      <% shift.next_fixed_shift_rookies.each do |rooky| -%>
+          <li>
+            <%= check_box_tag "rooky_attended#{rooky.id}", true, rooky.attended,
+                              data: {
+                        remote: true,
+                        method: :post,
+                url: url_for(controller: :rookies, action: :attended, id: rooky.id)
+                }
+            -%>
+            <b><%= rooky.full_name %></b> | <%= rooky.phone %> | <%= rooky.email %>
+            <br />
+            <%= rooky.notes %>
+          </li>
+      <% end -%>
+    </ul>
+    </p>
+<% end %>
