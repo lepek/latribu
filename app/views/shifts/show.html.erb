@@ -38,7 +38,7 @@
       <%= @shift.discipline.name %>
     </p>
 
-    <%= render partial: "user_list", locals: {shift: @shift} %>
+    <%= render partial: "user_list", locals: {users: @shift.next_fixed_shift_users, rookies: @shift.next_fixed_shift_rookies} %>
 
     <%= link_to 'Volver', root_path(:anchor => 'shifts') %>
 </div>

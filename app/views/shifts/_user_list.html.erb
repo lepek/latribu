@@ -1,8 +1,8 @@
-<% if shift.next_fixed_shift_users.count > 0 %>
+<% if users.count > 0 %>
     <p>
       <b>Inscriptos</b>
     <ul class="unstyled">
-      <% shift.next_fixed_shift_users.each do |inscription| -%>
+      <% users.each do |inscription| -%>
           <li>
             <%= check_box_tag "user_attended#{inscription.id}", true, inscription.attended,
                               data: {
@@ -31,11 +31,11 @@
     </ul>
     </p>
 <% end %>
-<% if shift.next_fixed_shift_rookies.count > 0 %>
+<% if rookies.count > 0 %>
     <p>
       <b>Pruebas</b>
     <ul class="unstyled">
-      <% shift.next_fixed_shift_rookies.each do |rooky| -%>
+      <% rookies.each do |rooky| -%>
           <li>
             <%= check_box_tag "rooky_attended#{rooky.id}", true, rooky.attended,
                               data: {

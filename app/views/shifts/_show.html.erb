@@ -36,7 +36,7 @@
       <%= shift.discipline.name %>
     </p>
 
-    <%= render partial: "shifts/user_list", locals: {shift: shift} %>
+    <%= render partial: "shifts/user_list", locals: {users: shift.current_fixed_shift_users, rookies: shift.current_fixed_shift_rookies} %>
 
   <% end %>
 
