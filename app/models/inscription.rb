@@ -1,5 +1,6 @@
 class Inscription < ActiveRecord::Base
-  belongs_to :shift
+
+  belongs_to :shift, -> { unscope(where: :deleted_at) }
   belongs_to :user
 
   after_destroy :add_credit

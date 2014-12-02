@@ -4,7 +4,7 @@ class ClientsController < ApplicationController
 
     if current_user.is_not_new?
       @shifts = Shift.accessible_by(current_ability).eager_load(:instructor, :discipline)
-      @events = current_user.inscriptions.joins(:shift => :discipline)
+      @events = current_user.inscriptions.eager_load(:shift => :discipline)
     end
 
     if params[:shift_id].present?

@@ -1,11 +1,12 @@
 class Shift < ActiveRecord::Base
+
+  acts_as_paranoid
+
   belongs_to :instructor
   belongs_to :discipline
   has_many :inscriptions
   has_many :users, through: :inscriptions
   has_many :rookies
-
-  acts_as_paranoid
 
   DAYS = {:monday => 'lunes', :tuesday => 'martes', :wednesday => 'miércoles', :thursday => 'jueves', :friday => 'viernes', :saturday => 'sábado', :sunday => 'domingo'}
 

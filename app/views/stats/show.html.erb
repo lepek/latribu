@@ -1,0 +1,8 @@
+<%= javascript_include_tag "//www.google.com/jsapi", "chartkick" %>
+
+<div style="margin: 10px;"><%= link_to '« Volver', root_path(:anchor => 'stats') %></div>
+<div id="content-inner">
+  <h1><%= l(Chronic.parse(@date), :format => '%B %Y').capitalize %></h1>
+  <%= bar_chart month_inscriptions_chart_stat_path(@date), id: "users-chart", height: "1300px", library: {chartArea:{left:200,top:10,width:'100%'}}  %>
+</div>
+

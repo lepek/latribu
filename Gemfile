@@ -76,7 +76,7 @@ gem 'rails-i18n', "~> 4.0.2"
 
 gem "simple_calendar", "~> 0.1.9"
 
-gem 'paranoia', '~> 2.0'
+gem 'paranoia', '~> 2.0.3'
 
 gem 'redis'
 
@@ -88,4 +88,5 @@ gem 'newrelic_rpm'
 
 gem 'pretender'
 
+gem "chartkick"
 

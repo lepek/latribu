@@ -187,7 +187,8 @@ $(document).ready(function () {
                 $.extend({}, nameColumn, {iDataSort: 3}), // Mes
                 countColumn, // Creditos
                 countColumn, // Inscriptiones
-                hiddenColumn
+                hiddenColumn,
+                actionColumn, // Action buttons
             ]
         };
         return this.selectableTable(tableOptions);

@@ -26,7 +26,7 @@ ActiveRecord::Schema.define(version: 20141124235605) do
     t.datetime "updated_at"
     t.integer  "user_id"
     t.integer  "shift_id"
-    t.boolean  "attended",   default: true
+    t.boolean  "attended",   default: false
   end
 
   add_index "inscriptions", ["shift_date"], name: "index_inscriptions_on_shift_date", using: :btree
@@ -71,7 +71,7 @@ ActiveRecord::Schema.define(version: 20141124235605) do
     t.string   "email"
     t.string   "notes"
     t.integer  "shift_id"
-    t.boolean  "attended",   default: true
+    t.boolean  "attended",   default: false
   end
 
   add_index "rookies", ["shift_date"], name: "index_rookies_on_shift_date", using: :btree
