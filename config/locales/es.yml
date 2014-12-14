@@ -37,6 +37,7 @@ es:
         close_inscription: 'Cerrar inscripción'
         discipline_id: 'Disciplina'
         cancel_inscription: 'Anular la liberación'
+        instructor_id: 'Coach'
       payment:
         amount: 'Monto'
         credit: 'Crédito'
