@@ -49,10 +49,26 @@ Instructor.create(
     last_name: "Verdolini"
 ) unless Instructor.where(first_name: "German", last_name: "Verdolini").count > 0
 
-unconventional_training = Discipline.find_or_create_by(:name => 'Unconventional Training')
-Discipline.find_or_create_by(:name => 'Advanced Level') unless Discipline.where(:name => 'Advanced Level').count > 0
-Discipline.find_or_create_by(:name => 'Strenght Training') unless Discipline.where(:name => 'Strenght Training').count > 0
+Instructor.create(
+    first_name: "Zoraida",
+    last_name: "Gordillo"
+) unless Instructor.where(first_name: "Zoraida", last_name: "Gordillo").count > 0
+
+unconventional = Discipline.find_or_create_by(:name => 'Unconventional Training')
+unconventional.update_attributes(:default => true)
+
+Discipline.find_or_create_by(:name => 'Advanced Level')
+
+strength = Discipline.find_by_name('Strenght Training')
+strength.update_attributes(:name => 'Strength Training') if strength
+strength = Discipline.find_or_create_by(:name => 'Strength Training')
+strength.update_attributes(:default => true)
+
+mobility = Discipline.find_or_create_by(:name => 'Mobility')
+mobility.update_attributes(:default => true)
 
 User.find_each do |user|
-  user.disciplines << unconventional_training if user.disciplines.empty?
+  user.disciplines << unconventional unless user.disciplines.include?(unconventional)
+  user.disciplines << strength unless user.disciplines.include?(strength)
+  user.disciplines << mobility unless user.disciplines.include?(mobility)
 end

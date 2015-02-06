@@ -17,6 +17,7 @@ Then /^I should be registered$/ do
   user.role_id == 2
   user.role == 'Cliente'
   user.email.should_not be_empty
+  user.disciplines == Discipline.where(:default => true)
 end
 
 Given /^I fill all the registration form without the "(.*?)"$/ do |field|

@@ -46,7 +46,6 @@ Then /^The class is full$/ do
     user.reload
     @class.enroll_next_shift user
   end
-  binding.pry
   @class.errors.count.should == 0
   @class.next_fixed_shift_users.count.should == @class.max_attendants
   @class.status.should == Shift::STATUS[:full]

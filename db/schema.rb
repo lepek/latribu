@@ -11,13 +11,14 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20141124235605) do
+ActiveRecord::Schema.define(version: 20150206133529) do
 
   create_table "disciplines", force: true do |t|
     t.string   "name"
     t.datetime "created_at"
     t.datetime "updated_at"
     t.string   "color"
+    t.boolean  "default"
   end
 
   create_table "inscriptions", force: true do |t|

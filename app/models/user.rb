@@ -115,10 +115,8 @@ private
   end
 
   def set_discipline
-    begin
-      self.disciplines << Discipline.find(1) if !self.admin? && self.disciplines.empty?
-    rescue ActiveRecord::RecordNotFound
-    end
+    @disciplines = Discipline.where(:default => true)
+    self.disciplines = @disciplines if @disciplines && !self.admin? && self.disciplines.empty?
   end
 
 end
