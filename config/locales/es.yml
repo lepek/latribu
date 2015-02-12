@@ -29,6 +29,7 @@ es:
         discipline_ids: 'Disciplinas'
         certificate: 'Certificado médico'
         enable: 'Cuenta habilitada'
+        profession: 'Profesión'
       shift:
         day: 'Día'
         start_time: 'Hora de comienzo'

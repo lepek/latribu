@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150206133529) do
+ActiveRecord::Schema.define(version: 20150212204018) do
 
   create_table "disciplines", force: true do |t|
     t.string   "name"
@@ -132,6 +132,7 @@ ActiveRecord::Schema.define(version: 20150206133529) do
     t.datetime "last_reset_date",        default: '2014-03-05 02:00:00'
     t.boolean  "certificate",            default: false
     t.boolean  "enable",                 default: true
+    t.string   "profession"
   end
 
   add_index "users", ["email"], name: "index_users_on_email", unique: true, using: :btree
