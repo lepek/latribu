@@ -6,7 +6,7 @@
   <%= stylesheet_link_tag :default, :session %>
   <!--[if lte IE 6]><%= stylesheet_link_tag :ie6 %><![endif]-->
   <%= yield :stylesheets %>
-  <%= javascript_include_tag "data-turbolinks-track" => true %>
+  <%= javascript_include_tag "jquery", "jquery_ujs", "data-turbolinks-track" => true %>
   <%= csrf_meta_tags %>
 </head>
 

@@ -18,7 +18,7 @@
             </div>
           </div>
           <div class="clearfix" style="text-align: center">
-              <%= f.submit "Ingresar", {:class => "btn primary"} %>
+              <%= f.submit "Ingresar", data: { disable_with: "Entrando..." }, :class => "btn primary" %>
           </div>
           <div class="clearfix">
             <%- if devise_mapping.recoverable? && controller_name != 'passwords' && controller_name != 'registrations' %>

@@ -8,8 +8,8 @@
           <td><%= shift.status.capitalize %></td>
           <td><%= l(shift.user_inscription(current_user).created_at, :format => '%a, %e de %b %H:%M hs.') unless shift.user_inscription(current_user).nil? %></td>
           <td>
-            <% if shift.available_for_enroll?(current_user) %><%= button_to "Anotarse", inscription_shift_path(shift), :method => :get %><% end %>
-            <% if shift.available_for_cancel?(current_user) %><%= button_to "Liberar", cancel_inscription_shift_path(shift), :method => :get %><% end %>
+            <% if shift.available_for_enroll?(current_user) %><%= button_to "Anotarse", inscription_shift_path(shift), :method => :get, data: { disable_with: "Procesando..." } %><% end %>
+            <% if shift.available_for_cancel?(current_user) %><%= button_to "Liberar", cancel_inscription_shift_path(shift), :method => :get, data: { disable_with: "Procesando..." } %><% end %>
           </td>
           <td><%= shift.next_fixed_shift %></td>
         </tr>
