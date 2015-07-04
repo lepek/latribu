@@ -67,8 +67,13 @@ strength.update_attributes(:default => true)
 mobility = Discipline.find_or_create_by(:name => 'Mobility')
 mobility.update_attributes(:default => true)
 
+oly = Discipline.find_or_create_by(:name => 'Oly')
+
+
 User.find_each do |user|
   user.disciplines << unconventional unless user.disciplines.include?(unconventional)
   user.disciplines << strength unless user.disciplines.include?(strength)
   user.disciplines << mobility unless user.disciplines.include?(mobility)
+  user.disciplines << oly unless user.disciplines.include?(oly)
+
 end
