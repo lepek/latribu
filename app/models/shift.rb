@@ -19,10 +19,9 @@ class Shift < ActiveRecord::Base
   IVAN_TREVISAN_ID = 7
   ALLOWED_USERS = [MARTIN_BIANCULLI_ID, MARCELO_PERRETTA_ID, IVAN_TREVISAN_ID]
 
-  before_validation :set_end_time
   before_destroy :remove_inscriptions
 
-  validates_presence_of :day, :start_time, :max_attendants, :open_inscription, :close_inscription, :instructor, :discipline, :cancel_inscription
+  validates_presence_of :day, :start_time, :end_time, :max_attendants, :open_inscription, :close_inscription, :instructor, :discipline, :cancel_inscription
   validates_uniqueness_of :start_time, :scope => [:day]
 
   def self.days
@@ -160,10 +159,6 @@ class Shift < ActiveRecord::Base
 
   def another_today_inscription?(user)
     user.next_inscriptions.find { |i| i.shift_date.strftime('%D') == self.next_fixed_shift.strftime('%D') && i.shift.discipline == self.discipline }
-  end
-
-  def set_end_time
-    self.end_time = self.start_time + DEFAULT_SHIFT_DURATION.hours unless self.start_time.blank?
   end
 
   def day_and_time

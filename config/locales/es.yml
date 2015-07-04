@@ -33,6 +33,7 @@ es:
       shift:
         day: 'Día'
         start_time: 'Hora de comienzo'
+        end_time: 'Hora de finalización'
         max_attendants: 'Cupo'
         open_inscription: 'Abrir inscripción'
         close_inscription: 'Cerrar inscripción'

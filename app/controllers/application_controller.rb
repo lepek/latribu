@@ -37,7 +37,7 @@ class ApplicationController < ActionController::Base
 protected
 
   def messages
-    unless current_user.nil?
+    unless current_user.blank?
       unless current_user.admin?
         if current_user.credit == 0
           flash[:warning] = "No podrás incribirte a ningún turno por no tener créditos. Comunicate con La Tribu para poder volver a entrenar."
