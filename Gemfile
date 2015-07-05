@@ -1,7 +1,7 @@
 source 'https://rubygems.org'
 
 # Bundle edge Rails instead: gem 'rails', github: 'rails/rails'
-gem 'rails', '4.1.5'
+gem 'rails', '4.2'
 
 # Use MySQL as the database for Active Record
 gem 'mysql2'
@@ -47,7 +47,7 @@ end
 # Use debugger
 # gem 'debugger', group: [:development, :test]
 
-gem 'devise', '3.1.1'
+gem 'devise', '~> 3.2'
 gem 'cancan', '1.6.10'
 
 group :development, :test do
@@ -89,4 +89,6 @@ gem 'newrelic_rpm'
 gem 'pretender'
 
 gem "chartkick"
+
+#gem 'devise_token_auth'
 
