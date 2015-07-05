@@ -30,6 +30,7 @@ es:
         certificate: 'Certificado médico'
         enable: 'Cuenta habilitada'
         profession: 'Profesión'
+        role_id: 'Rol'
       shift:
         day: 'Día'
         start_time: 'Hora de comienzo'

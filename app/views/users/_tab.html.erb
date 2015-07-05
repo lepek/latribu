@@ -1,11 +1,11 @@
 <fieldset class="gray">
   <%= button_to "Resetear créditos", credits_users_path, :method => "get" %>
 </fieldset>
-<% datatable "users-table", ["Nombre", "E-mail", "Teléfono", "Crédito",""], :class => "selectable" do -%>
+<% datatable "users-table", ["Nombre", "Profesión", "Teléfono", "Crédito",""], :class => "selectable" do -%>
     <% @users.each do |user| -%>
         <tr>
           <td><%= user.full_name %></td>
-          <td><%= user.email %></td>
+          <td><%= user.profession %></td>
           <td><%= user.phone %></td>
           <td><%= user.credit %></td>
           <td>
