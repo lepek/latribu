@@ -235,8 +235,6 @@ GEM
     timecop (0.7.3)
     to_xls (1.5.3)
       spreadsheet
-    turbolinks (2.5.3)
-      coffee-rails
     tzinfo (1.2.2)
       thread_safe (~> 0.1)
     uglifier (2.7.1)
@@ -287,6 +285,5 @@ DEPENDENCIES
   simple_calendar (~> 0.1.9)
   timecop
   to_xls
-  turbolinks
   uglifier (>= 1.3.0)
   unicorn

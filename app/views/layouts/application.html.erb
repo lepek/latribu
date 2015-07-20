@@ -4,12 +4,12 @@
   <title>La Tribu</title>
   <meta http-equiv="Content-type" content="text/html;charset=UTF-8">
 
-  <%= stylesheet_link_tag media: "all", "data-turbolinks-track" => true %>
-  <%= stylesheet_link_tag :default %>
+  <%= stylesheet_link_tag media: "all" %>
+  <%= stylesheet_link_tag :default, :datatables %>
   <!--[if lte IE 6]><%= stylesheet_link_tag :ie6 %><![endif]-->
   <%= yield :stylesheets %>
 
-  <%= javascript_include_tag :default, "data-turbolinks-track" => true %>
+  <%= javascript_include_tag :default, :datatables %>
   <%= yield :javascripts %>
 
   <%= csrf_meta_tags %>

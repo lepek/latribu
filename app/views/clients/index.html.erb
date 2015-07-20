@@ -1,10 +1,6 @@
 <% if current_user.is_not_new? -%>
-    <% content_for :stylesheets do %>
-        <%= stylesheet_link_tag :datatables %>
-    <% end %>
-
     <% content_for :javascripts do %>
-        <%= javascript_include_tag :datatables, :clients_index %>
+        <%= javascript_include_tag :clients_index %>
     <% end %>
 
     <!-- The master panel with admin grid -->

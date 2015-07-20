@@ -1,8 +1,11 @@
 class User < ActiveRecord::Base
+
   # Include default devise modules. Others available are:
   # :confirmable, :lockable, :timeoutable, :rememberable and :omniauthable
   devise :database_authenticatable, :registerable,
          :recoverable, :trackable, :validatable
+
+  #include DeviseTokenAuth::Concerns::User
 
   belongs_to :role
   has_many :payments
@@ -16,12 +19,10 @@ class User < ActiveRecord::Base
   validates_presence_of :phone
   validates_presence_of :role
 
-  acts_as_paranoid
-
   before_validation :set_role
   before_create :set_credit
   after_create :set_discipline
-  before_destroy :remove_payments
+  before_destroy :remove_future_inscriptions
 
   CLIENT_ROLE = 'Cliente'
   ADMIN_ROLE = 'Admin'
@@ -101,9 +102,8 @@ private
     Chronic.parse("now").strftime('%B %Y').downcase
   end
 
-  def remove_payments
-    self.inscriptions.destroy_all
-    self.payments.destroy_all
+  def remove_future_inscriptions
+    self.inscriptions.where("shift_date > '#{Chronic.parse("now")}'").destroy_all
   end
 
   def set_role
