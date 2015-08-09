@@ -16,6 +16,11 @@ es:
       shift: 'Clase'
       payment: 'Pago'
     attributes:
+      discipline:
+        name: 'Disciplina'
+        default: 'Agregar a nuevos usuarios'
+        color: 'Color de fondo'
+        font_color: 'Color de letra'
       user:
         first_name: 'Nombre'
         last_name: 'Apellido'

@@ -18,6 +18,7 @@ $(document).ready(function () {
     $("#payments-table").paymentsTable();
     $("#stats-table").statsTable();
     $("#rookies-table").rookiesTable();
+    $("#disciplines-table").disciplinesTable();
 });
 
 (function ($) {
@@ -99,6 +100,16 @@ $(document).ready(function () {
                 nameColumn, // email
                 shortNameColumn, // phone
                 countColumn, // Credito
+                longActionColumn // Action buttons
+            ]
+        };
+        return this.selectableTable(tableOptions);
+    };
+
+    $.fn.disciplinesTable = function () {
+        var tableOptions = {
+            columns:[
+                nameColumn, // Nombre
                 longActionColumn // Action buttons
             ]
         };

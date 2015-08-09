@@ -1,0 +1,16 @@
+<% datatable "disciplines-table", ["Disciplina", ""], :class => "selectable" do -%>
+    <% disciplines.each do |discipline| -%>
+        <tr>
+          <td><%= discipline.name %></td>
+          <td>
+            <%= button_to "Editar", edit_discipline_path(discipline), :method => :get %>
+            <%= button_to "Habilitar todos", enable_all_discipline_path(discipline),
+                          data: { confirm: "¿Está seguro que desea permitir que todos\n los usuarios se inscriban a #{discipline.name}?" }, :method => :post %>
+            <%= button_to "Deshabilitar todos", disable_all_discipline_path(discipline),
+                          data: { confirm: "¿Está seguro que desea NO permitir que todos\n los usuarios se inscriban a #{discipline.name}?" }, :method => :post %>
+            <%= button_to "Borrar", {:action=>"destroy", :controller=>"disciplines", :id => discipline},
+                          data: { confirm: "¿Está seguro que desea eliminar \n#{discipline.name}?" }, :method => :delete %>
+          </td>
+        </tr>
+    <% end -%>
+<% end -%>

@@ -11,6 +11,13 @@ Nahual::Application.routes.draw do
 
   resources :admins
 
+  resources :disciplines do
+    member do
+      post 'disable_all'
+      post 'enable_all'
+    end
+  end
+
   resources :users, :only => [:index, :destroy, :edit, :update] do
     resources :payments, :only => [:new, :create]
     collection do

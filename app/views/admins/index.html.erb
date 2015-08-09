@@ -11,6 +11,8 @@
           <li><a href="#next_shift">Pr&oacute;xima clase de hoy</a></li>
           <li><a href="#shifts">Clases</a></li>
       <% end %>
+      <% if can? :manage, Discipline %><li><a href="#disciplines">Disciplinas</a><% end %>
+
       <% if can? :manage, User %><li><a href="/users">Clientes</a><% end %>
       <% if can? :manage, Payment %><li><a href="#payments">Pagos</a></li><% end %>
       <% if can? :manage, Rooky %><li><a href="#rookies">Inscripciones manuales</a></li><% end %>
@@ -23,6 +25,12 @@
         </div>
         <div id="next_shift">
           <%= render "shifts/show", :shift => @shift %>
+        </div>
+    <% end -%>
+
+    <% if can? :manage, Discipline -%>
+        <div id="disciplines">
+          <%= render "disciplines/tab", :disciplines => @disciplines %>
         </div>
     <% end -%>
 

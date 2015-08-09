@@ -190,13 +190,3 @@ table.selectable tr.row-selected {
     color: white;
     background-color: #47B8E5;
 }
-
-table.selectable tr:hover {
-    color: white;
-    background-color: #46B6E5;
-}
-
-table.selectable tr:active {
-    color: white;
-    background-color: #2BABE1;
-}

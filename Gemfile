@@ -75,5 +75,4 @@ gem 'pretender'
 
 gem "chartkick"
 
-#gem 'devise_token_auth'
-
+gem 'jquery-minicolors-rails'
