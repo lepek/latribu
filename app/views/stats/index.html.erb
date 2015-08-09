@@ -1,0 +1,20 @@
+<%= javascript_include_tag "//www.google.com/jsapi", "chartkick" %>
+
+<div style="margin: 10px;"><%= link_to '« Volver', root_path(:anchor => 'stats') %></div>
+<div id="content-inner">
+  <h1><%= l(Chronic.parse(@date), :format => '%B %Y').capitalize %></h1>
+  <h3>Promedio de inscripciones por turno</h3>
+  <form action="/stats" method="get">
+    <input type="hidden" name="date" value="<%= @date %>" />
+    Orden:
+    <select name="order">
+      <option value="">Cambiar el orden...</option>
+      <option value="desc">Descendente</option>
+      <option value="asc">Ascendente</option>
+      <option value="date">Cronológico</option>
+    </select>
+    <input type="submit" value="Ordenar" />
+  </form>
+  <%= bar_chart month_inscriptions_chart_stats_path(date: @date, order: @order), id: "users-chart", height: "1300px", library: {chartArea:{left:200,top:10,width:'100%'}}  %>
+</div>
+

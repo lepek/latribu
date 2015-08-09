@@ -58,8 +58,8 @@ Nahual::Application.routes.draw do
     end
   end
 
-  resources :stats, :only => [:show] do
-    member do
+  resources :stats, :only => [:index] do
+    collection do
       get 'month_inscriptions_chart', to: 'stats#month_inscriptions_chart', as: 'month_inscriptions_chart'
     end
   end
