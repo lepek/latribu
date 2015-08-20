@@ -23,6 +23,7 @@ Nahual::Application.routes.draw do
     collection do
       get 'credits', to: 'users#credits'
       post 'reset', to: 'users#reset'
+      post 'set_reset', to: 'users#set_reset'
       get 'reset_search', to: 'users#reset_search'
       get 'stop_impersonating'
     end

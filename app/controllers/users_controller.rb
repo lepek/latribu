@@ -86,6 +86,11 @@ class UsersController < ApplicationController
     render status: :ok, json: {}
   end
 
+  def set_reset
+    User.update_all(reset_credit: true)
+    redirect_to root_path(:anchor => 'users'), success: "Todos los usuarios están habilitados para ser reseteados."
+  end
+
 private
 
   def user_params
