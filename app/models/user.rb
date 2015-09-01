@@ -49,7 +49,7 @@ class User < ActiveRecord::Base
     self.full_name = "#{self.first_name} #{self.last_name}" if self.has_attribute?(:first_name) && self.has_attribute?(:last_name)
   end
 
-  def full_name_email
+  def name
     "#{self.first_name} #{self.last_name} (#{self.email})"
   end
 

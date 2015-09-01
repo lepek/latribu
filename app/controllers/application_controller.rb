@@ -1,15 +1,12 @@
-require 'datatables/controller_mixin'
-
 class ApplicationController < ActionController::Base
   add_flash_types :error, :success
+
+  layout :set_layout
 
   # Prevent CSRF attacks by raising an exception.
   # For APIs, you may want to use :null_session instead.
   protect_from_forgery with: :exception
   skip_before_filter :verify_authenticity_token, if: -> { controller_name == 'sessions' && action_name == 'destroy' }
-
-
-  include Datatables::ControllerMixin
 
   before_filter :set_time_zone
   before_filter :authenticate_user!, :unless => :devise_controller?
@@ -34,7 +31,7 @@ class ApplicationController < ActionController::Base
     end
   end
 
-protected
+  private
 
   def messages
     unless current_user.blank?
@@ -56,6 +53,11 @@ protected
 
   def configure_permitted_parameters
     devise_parameter_sanitizer.for(:sign_up) << [:first_name, :last_name, :phone, :profession]
+    devise_parameter_sanitizer.for(:account_update) << [:first_name, :last_name, :phone, :profession]
+  end
+
+  def set_layout
+    current_user.present? ? 'application' : 'guest'
   end
 
 end

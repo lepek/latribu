@@ -1,18 +1,20 @@
 class PaymentsController < ApplicationController
   authorize_resource
 
-  def search
-    @payments = filter
-    render status: :ok, json: { "aaData" => @payments }, include: :user
+  def index
+    respond_to do |format|
+      format.html
+      format.json { render json: PaymentDatatable.new(view_context) }
+    end
   end
 
   def user_payments
-    @payments = Payment.select('id, amount, month_year, credit, created_at, NULL AS created_at_formatted').where(:user_id => params[:user_id]).to_a.map(&:serializable_hash)
-    render status: :ok, json: { "aaData" => @payments }
+    respond_to do |format|
+      format.html
+      format.json { render json: UserPaymentDatatable.new(view_context) }
+    end
   end
 
-  # GET /payments/new
-  # GET /payments/new.json
   def new
     @user = User.find(params[:user_id])
     @payment = @user.payments.build

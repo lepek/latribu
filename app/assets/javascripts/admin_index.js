@@ -1,4 +1,4 @@
-$(document).ready(function () {
+/*$(document).ready(function () {
     $('#tabs').tabs({
         beforeLoad: function( event, ui ) {
             if ( ui.tab.data( "loaded" ) ) {
@@ -22,23 +22,23 @@ $(document).ready(function () {
 });
 
 (function ($) {
-    /**
+    *//**
      * A column with default values.
-     */
+     *//*
     var standardColumn = null;
 
-    /**
+    *//**
      * A hidden column.
-     */
+     *//*
     var hiddenColumn = {
         bSearchable:false,
         bSortable:false,
         bVisible:false
     }
 
-    /**
+    *//**
      * A column that holds action buttons.
-     */
+     *//*
     var actionColumn = {
         bSearchable:false,
         bSortable:false,
@@ -220,4 +220,4 @@ $(document).ready(function () {
         return this.selectableTable(tableOptions);
     };
 
-})(jQuery);
+})(jQuery);*/

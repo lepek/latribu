@@ -1,40 +1,20 @@
-<div id="content-inner">
-    <h1>Editar mis datos</h1>
-    <%= form_for(resource, :as => resource_name, :url => registration_path(resource_name), :html => { :method => :put }) do |f| %>
-      <%= devise_error_messages! %>
-        <fieldset class="gray">
-          <div class="clearfix">
-            <%= f.label :email %>
-            <div class="input">
-              <%= f.email_field :email %>
-            </div>
-          </div>
-
-          <div class="clearfix">
-            <%= f.label :current_password %>
-            <div class="input">
-              <%= f.password_field :current_password %>
-            </div>
-          </div>
-
-          <div class="clearfix">
-            <h4>Dejar en blanco si no se quiere cambiar la contraseña:</h4>
-          </div>
-          <div class="clearfix">
-            <%= f.label :password %>
-            <div class="input">
-              <%= f.password_field :password, :autocomplete => "off" %> [La clave debe tener 8 caracteres]
-            </div>
-          </div>
-          <div class="clearfix">
-            <%= f.label :password_confirmation %>
-            <div class="input">
-              <%= f.password_field :password_confirmation %>
-            </div>
-          </div>
-          <div class="actions">
-            <%= f.submit 'Guardar', :class => "btn primary" %>
-          </div>
-        </fieldset>
+<%= bootstrap_devise_error_messages! %>
+<div class="panel panel-default">
+  <div class="panel-heading">
+    <h4><%= t('.title', :resource => resource_class.model_name.human , :default => 'Edit #{resource_name.to_s.humanize}') %></h4>
+  </div>
+  <div class="panel-body">
+    <%= simple_form_for(resource, :as => resource_name, :url => registration_path(resource_name), :html => { :method => :put }) do |f| %>
+      <%= f.input :first_name, autofocus: true %>
+      <%= f.input :last_name %>
+      <%= f.input :email %>
+      <%= f.input :phone %>
+      <%= f.input :profession %>
+      <%= f.input :password, hint: 'dejar esto en blanco sino se desea cambiar la contraseña' %>
+      <%= f.input :password_confirmation %>
+      <%= f.input :current_password, hint: t('.we_need_your_current_password_to_confirm_your_changes') %>
+      <%= f.submit 'Actualizar', data: { disable_with: "Procesando..." }, class: "btn btn-primary" %>
+      <%= link_to "Volver", :back, class: "btn btn-default" %>
     <% end %>
- </div>
+  </div>
+</div>

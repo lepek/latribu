@@ -41,7 +41,7 @@ Nahual::Application.routes.draw do
     end
   end
 
-  resources :payments, :only => [:destroy] do
+  resources :payments, :only => [:index, :destroy] do
     collection do
       get 'user_payments/:user_id', to: 'payments#user_payments', as: 'user_payments'
       get 'search', to: 'payments#search', as: 'search_payments'

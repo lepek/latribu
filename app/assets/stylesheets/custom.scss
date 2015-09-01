@@ -1,0 +1,49 @@
+/*
+  Include this after bootstrap css to customize and override bootstrap styles
+*/
+
+.glyphicon {
+  padding-right: 5px;
+}
+
+.no-padding {
+  padding: 0;
+}
+
+.month-year-field {
+  margin-bottom: 15px;
+}
+
+@media (max-width: 768px) {
+  .nav-pills li { width:100%; }
+}
+
+.navbar-brand {
+  padding: 0;
+  margin-left: 5px !important;
+}
+
+.nav-pills li {
+  margin-top: 4px;
+}
+
+.user_disciplines .checkbox {
+  margin-left: 10px;
+}
+
+#user-payments-table_wrapper, #payments-table_wrapper {
+  margin: 10px;
+}
+
+#payment-history-panel {
+  margin-top: 20px;
+}
+
+.filter-buttons-div {
+  line-height: 59px; /* This match the height of the datepicker control container */
+  margin-bottom: 15px;
+  button {
+    vertical-align: bottom;
+  }
+}
+

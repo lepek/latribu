@@ -11,3 +11,22 @@
 // about supported directives.
 //
 
+//= require jquery
+//= require jquery_ujs
+//= require bootstrap-sprockets
+//= require select2
+//= require select2_locale_es
+//= require jquery-ui/button
+//= require jquery-ui/tabs
+//= require jquery-ui/datepicker
+//= require jquery-ui/datepicker-es
+//= require jquery.minicolors
+//= require dataTables/jquery.dataTables
+//= require dataTables/bootstrap/3/jquery.dataTables.bootstrap
+//= require dataTables/extras/dataTables.tableTools
+//= require moment
+//= require bootstrap-datetimepicker
+//= require moment/es
+//= require_tree .
+
+

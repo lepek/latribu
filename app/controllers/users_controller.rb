@@ -2,8 +2,10 @@ class UsersController < ApplicationController
   authorize_resource
 
   def index
-    @users = User.accessible_by(current_ability).clients.order("last_name")
-    render 'users/_tab', :layout => false
+    respond_to do |format|
+      format.html
+      format.json { render json: UserDatatable.new(view_context) }
+    end
   end
 
   def destroy

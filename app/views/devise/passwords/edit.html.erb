@@ -1,29 +1,24 @@
-<div id="content-inner">
-    <h2>Cambiar contraseña</h2>
-
-    <%= form_for(resource, :as => resource_name, :url => password_path(resource_name), :html => { :method => :put }) do |f| %>
-      <%= devise_error_messages! %>
+<%= bootstrap_devise_error_messages! %>
+<div class="panel panel-default">
+  <div class="panel-heading">
+    <h4><%= t('.change_your_password', :default => 'Change your password') %></h4>
+  </div>
+  <div class="panel-body">
+    <%= form_for(resource, :as => resource_name, :url => password_path(resource_name), :html => { :method => :put, role: "form" }) do |f| %>
       <%= f.hidden_field :reset_password_token %>
 
-      <fieldset class="gray">
-        <div class="clearfix">
-          <%= f.label :password, "Nueva contraseña" %>
-          <div class="input">
-            <%= f.password_field :password, :autofocus => true %> [La clave debe tener 8 caracteres]
-          </div>
-        </div>
+      <div class="form-group">
+        <%= f.label :password, t('.new_password', :default => 'New password') %>
+        <%= f.password_field :password, autofocus: true, class: "form-control"  %>
+      </div>
 
-        <div class="clearfix">
-          <%= f.label :password_confirmation, "Confirmar contraseña" %>
-          <div class="input">
-            <%= f.password_field :password_confirmation %>
-          </div>
-        </div>
+      <div class="form-group">
+        <%= f.label :password_confirmation, t('.confirm_new_password', :default => 'Confirm new password') %>
+        <%= f.password_field :password_confirmation, class: "form-control"  %>
+      </div>
 
-        <div class="actions">
-          <%= f.submit 'Cambiar mi contraseña', :class => "btn primary" %>
-        </div>
-      </fieldset>
+      <%= f.submit t('.change_my_password', :default => 'Change my password'), class: "btn btn-primary" %>
     <% end %>
-
+  </div>
 </div>
+<%= render "devise/shared/links" %>

@@ -1,0 +1,57 @@
+<div class="panel panel-default">
+  <div class="panel-heading">
+    <h4>Filtrar pagos</h4>
+  </div>
+  <div class="panel-body">
+    <%= form_tag({controller: "payments", action: "download", format: "xls"}, method: "post", id: "payments_form") do %>
+      <div class="container-fluid">
+        <div class='col-md-3'>
+          <div class="form-group">
+            <label for="date-from">Desde</label>
+            <div class='input-group date' id='date-from-comp'>
+              <input type='text' class="form-control" name="date_from" id="date-from" />
+              <span class="input-group-addon">
+                  <span class="glyphicon glyphicon-calendar"></span>
+              </span>
+            </div>
+          </div>
+        </div>
+        <div class='col-md-3'>
+          <div class="form-group">
+            <label for="date-to">Hasta</label>
+            <div class='input-group date' id='date-to-comp'>
+              <input type='text' class="form-control" name="date_to" id="date-to" />
+              <span class="input-group-addon">
+                  <span class="glyphicon glyphicon-calendar"></span>
+              </span>
+            </div>
+          </div>
+        </div>
+        <div class='col-md-3 filter-buttons-div'>
+          <%= button_tag("Buscar", id: "payments-search-button", class: "btn btn-primary", :type => 'button') -%>
+          <%= button_tag("Exportar", id: "payments-export-button", class: "btn btn-default", :type => 'button') -%>
+        </div>
+      </div>
+    <% end %>
+
+    <div id="payment-panel" class="panel panel-default">
+      <div class="panel-heading">Pagos</div>
+      <div class="table-responsive">
+        <table id="payments-table" class="table table-striped" cellspacing="0" width="100%" data-source="/payments.json">
+          <thead>
+          <tr>
+            <th>Fecha de pago</th>
+            <th>Cliente</th>
+            <th>Monto</th>
+            <th>Crédito</th>
+            <th>Mes acreditado</th>
+          </tr>
+          </thead>
+          <tbody>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+  </div>
+</div>

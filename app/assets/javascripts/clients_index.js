@@ -1,26 +1,33 @@
+/*
 $(document).ready(function () {
     $('#tabs').tabs({cookie:{expires:1}});
     $("#inscriptions-table").inscriptionsTable();
 });
 
 (function ($) {
-    /**
+    */
+/**
      * A column with default values.
-     */
+     *//*
+
     var standardColumn = null;
 
-    /**
+    */
+/**
      * A hidden column.
-     */
+     *//*
+
     var hiddenColumn = {
         bSearchable:false,
         bSortable:false,
         bVisible:false
     }
 
-    /**
+    */
+/**
      * A column that holds action buttons.
-     */
+     *//*
+
     var actionColumn = {
         bSearchable:false,
         bSortable:false,
@@ -72,3 +79,4 @@ $(document).ready(function () {
     };
 
 })(jQuery);
+*/
