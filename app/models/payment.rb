@@ -8,10 +8,6 @@ class Payment < ActiveRecord::Base
 
   acts_as_paranoid
 
-  def self.months
-    MONTHS
-  end
-
   def add_credit
     self.user.increment!(:credit, self.credit)
   end
@@ -20,8 +16,15 @@ class Payment < ActiveRecord::Base
     self.user.decrement!(:credit, self.credit)
   end
 
-  def user_full_name
-    self.user.full_name
+  def self.filter_by_dates(date_from, date_to)
+    if date_from.present? && date_to.present?
+      from = Chronic.parse(date_from, :endian_precedence => [:little, :middle])
+      to = Chronic.parse(date_to, :endian_precedence => [:little, :middle])
+      Payment.joins(:user).where(created_at: from..to)
+    else
+      Payment.joins(:user).all
+    end
+
   end
 
 end

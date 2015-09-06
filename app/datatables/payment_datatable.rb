@@ -25,13 +25,7 @@ class PaymentDatatable < AjaxDatatablesRails::Base
   end
 
   def get_raw_records
-    if params[:date_from].present? && params[:date_to].present?
-      from = Chronic.parse(params[:date_from], :endian_precedence => [:little, :middle])
-      to = Chronic.parse(params[:date_to], :endian_precedence => [:little, :middle])
-      Payment.joins(:user).where(created_at: from..to)
-    else
-      Payment.joins(:user).all
-    end
+    Payment.filter_by_dates(params[:date_from], params[:date_to])
   end
 
 end

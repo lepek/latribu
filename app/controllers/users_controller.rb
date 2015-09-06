@@ -16,7 +16,7 @@ class UsersController < ApplicationController
     else
       flash[:error] = @user.errors.to_a.join("<br />")
     end
-    redirect_to root_path(:anchor => 'users')
+    redirect_to users_path
   end
 
   def edit
@@ -29,7 +29,7 @@ class UsersController < ApplicationController
     params.delete('password') && params.delete('password_confirmation') if params[:password].blank?
     respond_to do |format|
       if @user.update_attributes(params)
-        format.html { redirect_to root_url, success: "Usuario <b>#{@user.full_name}</b> actualizado." }
+        format.html { redirect_to users_path, success: "Usuario <b>#{@user.full_name}</b> actualizado." }
         format.json { head :ok }
       else
         format.html { render action: "edit" }
@@ -90,7 +90,7 @@ class UsersController < ApplicationController
 
   def set_reset
     User.update_all(reset_credit: true)
-    redirect_to root_path(:anchor => 'users'), success: "Todos los usuarios están habilitados para ser reseteados."
+    redirect_to users_path, success: "Todos los usuarios están habilitados para ser reseteados."
   end
 
 private

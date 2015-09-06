@@ -14,7 +14,7 @@ jQuery(document).ready(function() {
     var oTable = $('#user-payments-table').DataTable()
     var user_id = $('#payment_user_id').val()
     if (user_id) {
-      oTable.ajax.url("/payments/user_payments/" + user_id + ".json").load();
+      oTable.ajax.url("/payments?user_id=" + user_id + ".json").load();
     }
   } );
 });

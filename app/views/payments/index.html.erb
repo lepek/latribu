@@ -3,7 +3,7 @@
     <h4>Filtrar pagos</h4>
   </div>
   <div class="panel-body">
-    <%= form_tag({controller: "payments", action: "download", format: "xls"}, method: "post", id: "payments_form") do %>
+    <%= form_tag(payments_path(format: :xlsx), method: "get", id: "payments_form") do %>
       <div class="container-fluid">
         <div class='col-md-3'>
           <div class="form-group">

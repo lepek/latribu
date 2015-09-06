@@ -64,7 +64,7 @@ gem 'redis'
 
 gem 'unicorn'
 
-gem 'to_xls'
+gem 'axlsx_rails', '~> 0.4.0'
 
 gem 'newrelic_rpm'
 

@@ -2,6 +2,14 @@ class StatsController < ApplicationController
   authorize_resource
 
   def index
+    respond_to do |format|
+      format.html
+      format.json { render json: StatDatatable.new(view_context) }
+    end
+    @stats = Stat.accessible_by(current_ability).credit_and_inscriptions
+  end
+
+  def show
     @order = params[:order]
     @date = params[:date]
   end
