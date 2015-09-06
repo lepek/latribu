@@ -43,7 +43,7 @@ class Payment < ActiveRecord::Base
   end
 
   def user_full_name
-    self.user.full_name
+    self.user.try(:full_name)
   end
 
 private

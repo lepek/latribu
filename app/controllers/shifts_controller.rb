@@ -15,7 +15,14 @@ class ShiftsController < ApplicationController
   # POST /shifts
   # POST /shifts.json
   def create
-    @shift = Shift.new(shift_params)
+    deleted_shifts = Shift.only_deleted.where(start_time: shift_params[:start_time], day: shift_params[:day])
+    if deleted_shifts.count > 0
+      @shift = deleted_shifts.first
+      @shift.restore
+      @shift.update(shift_params)
+    else
+      @shift = Shift.new(shift_params)
+    end
     respond_to do |format|
       if @shift.save
         format.html { redirect_to root_url, success: 'Nueva Clase creada.' }
