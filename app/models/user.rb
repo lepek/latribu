@@ -28,8 +28,7 @@ class User < ActiveRecord::Base
   ADMIN_ROLE = 'Admin'
 
   scope :clients, -> { where(:role_id => Role.find_by_name(CLIENT_ROLE).id) }
-
-  scope :to_reset, -> { where('reset_credit = 1') }
+  scope :to_reset, -> { clients.where('reset_credit = 1') }
 
   attr_accessor :full_name
   after_initialize :full_name
@@ -69,10 +68,14 @@ class User < ActiveRecord::Base
   end
 
   def calculate_future_credit(month_year)
-    self.payments.select('credit-used_credit AS future_credit').where("reset_date IS NULL AND month_year > '#{month_year}'").map(&:future_credit).sum
+    return 0 unless credit > 0
+    future_credit = self.payments.select('credit - used_credit AS future_credit').where("reset_date IS NULL AND month_year > '#{month_year}'").map(&:future_credit).sum
+    # Fix because the first reset was forced directly in the user model
+    return if future_credit > credit ? credit : future_credit
   end
 
-  def self.reset_credits(month_year = Chronic.parse("1 this month"))
+  def self.reset_credits(month_year)
+    raise ArgumentError, 'A date to reset must be provided' unless month_year.present?
     User.to_reset.find_each do |user|
       future_credit = 0
       if user.credit > 0

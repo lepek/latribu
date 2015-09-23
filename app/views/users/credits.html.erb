@@ -1,73 +1,48 @@
-<% content_for :stylesheets do %>
-    <%= stylesheet_link_tag :datatables %>
-<% end %>
-
-<% content_for :javascripts do %>
-    <%= javascript_include_tag :datatables, :admin_index %>
-<% end %>
-
-<div style="margin: 10px;"><%= link_to '« Volver', root_path %></div>
-
-<div id="content-inner">
-  <h1>Resetear cr&eacute;ditos</h1>
-  <%= form_tag({controller: "users", action: "reset"}, method: "post", id: "reset-credits-form") do %>
-  <fieldset class="gray">
-
-    <div class="clearfix">
-      <%= label_tag :last_reset_date, 'Último reseteo' %>
-      <div class="input">
-        <%= text_field_tag(:last_reset_date, l(@last_reset_date, :format => '%d/%m/%Y'), :readonly => true) -%>
+<div class="container-fluid">
+  <div class="panel panel-default table-responsive" style="overflow-x: visible;">
+    <div class="panel-heading">
+      <div class="row">
+        <div class="col-xs-9">
+          <h4>Resetear créditos</h4>
+        </div>
+        <div class="col-xs-3">
+          Último reseteo: <%= l(@last_reset_date, :format => '%d/%m/%Y') %>
+        </div>
       </div>
     </div>
+    <div class="panel-body">
 
-    <div class="clearfix">
-      <%= label_tag :mes_reset, 'Resetear hasta' %>
-      <div class="input">
-        <%= select_tag :month, options_for_select(Payment.months.invert, @selected_month || Chronic.parse("now").strftime('%B').downcase ), :style => "text-transform:capitalize" %>
-        <%= select_tag :year, options_for_select((Time.now.year-2..Time.now.year+1).to_a, @selected_year || Time.now.year) %>
-      </div>
-    </div>
-  <!--
-    <div class="clearfix">
-      <%= label_tag :credit_to_reset, 'Créditos a resetear' %>
-      <div class="input">
-        <%= text_field_tag(:credit_to_reset, @credits_to_reset, :readonly => true) -%>
-      </div>
-    </div>
-  -->
-    <div class="actions">
-      <%= button_tag("Simular", id: "search-reset", class: "btn primary", :type => 'button') -%>
-      <%= button_tag("Resetear", id: "do-reset", class: "btn", :type => 'button') -%>
-    </div>
-  </fieldset>
-  <% end %>
+      <%= form_tag({controller: "users", action: "reset"}, id: "reset-credits-form", class: "form-inline") do %>
+          <div class="form-group">
+            <label for="reset-month-year">Resetear hasta </label>
+            <div class='input-group date' id='month-year'>
+              <input type='text' class="form-control" name="month_year" id="reset-month-year" />
+              <span class="input-group-addon">
+                  <span class="glyphicon glyphicon-calendar"></span>
+              </span>
+            </div>
+          </div>
 
-  <div class="clearfix">
-    <% datatable "reset-credits-table", ["Cliente", "Créditos actuales", "Créditos después del reseteo"], :class => "selectable", :footer => true do -%>
-    <% end -%>
+          <%= button_tag("Simular", id: "search-reset", class: "btn btn-primary", type: 'button') -%>
+          <%= button_tag("Resetear", data: { disable_with: "Reseteando...", confirm: "¿Seguro que desea resetear los créditos de todos los usuarios?\nEsta acción no puede deshacerse" }, class: "btn btn-danger", type: 'submit' ) -%>
+      <% end %>
+
+      <div id="credit-reset-panel" class="panel panel-default">
+        <div class="table-responsive">
+          <table id="credit-reset-table" class="table table-striped" cellspacing="0" width="100%" data-source="/users/reset_search.json">
+            <thead>
+            <tr>
+              <th>Cliente</th>
+              <th>Crédito actual</th>
+              <th>Crédito después del reseteo</th>
+            </tr>
+            </thead>
+            <tbody>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+    </div>
   </div>
-
 </div>
-
-<script>
-    $(document).ready(
-        function() {
-            var oTable = $('#reset-credits-table').resetCreditsTable();
-
-            $('#search-reset').click(
-                function () {
-                    oTable.ajax.url("/users/reset_search.json?month=" + $('#month').val() + "&year=" + $('#year').val()).load();
-                }
-            );
-
-            $( "#do-reset").click(
-                function () {
-                    $("span", this).text('Reseteando...')
-                    $(this).prop("disabled", true);
-                    $("#reset-credits-form").submit();
-                }
-            );
-        }
-    );
-
-</script>

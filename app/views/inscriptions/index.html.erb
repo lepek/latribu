@@ -1,0 +1,54 @@
+<div class="panel panel-default">
+  <div class="panel-heading">
+    <h4>Turnos</h4>
+  </div>
+  <div class="panel-body">
+    <div id='calendar'></div>
+  </div>
+</div>
+
+<!-- MODAL -->
+<div id="bookModal" class="modal fade">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">×</span> <span class="sr-only">close</span></button>
+        <h4 id="bookModalTitle" class="modal-title">Inscripción</h4>
+      </div>
+      <div id="bookBody" class="modal-body">
+        Te inscribiste a:
+        <br />
+        &nbsp;&nbsp;<span id="bookTitle" style="font-weight: bold"></span>
+        <br />
+        &nbsp;&nbsp;<span id="bookDate" style="font-weight: bold"></span>
+        <br />
+        Tienes hasta las <span id="deadline" style="font-weight: bold"></span> para liberar y recuperar el crédito.
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Aceptar</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- MODAL -->
+<div id="cancelModal" class="modal fade">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">×</span> <span class="sr-only">close</span></button>
+        <h4 id="cancelModalTitle" class="modal-title">Inscripción</h4>
+      </div>
+      <div id="cancelBody" class="modal-body">
+        Liberaste la clase:
+        <br />
+        &nbsp;&nbsp;<span id="cancelTitle" style="font-weight: bold"></span>
+        <br />
+        &nbsp;&nbsp;<span id="cancelDate" style="font-weight: bold"></span>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Aceptar</button>
+      </div>
+    </div>
+  </div>
+</div>

@@ -1,8 +1,13 @@
 class ShiftsController < ApplicationController
   authorize_resource
 
-  # GET /shifts/new
-  # GET /shifts/new.json
+  def index
+    respond_to do |format|
+      format.html
+      format.json { render json: ShiftDatatable.new(view_context) }
+    end
+  end
+
   def new
     @shift = Shift.new
 

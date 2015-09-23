@@ -58,7 +58,7 @@ Nahual::Application.routes.draw do
     end
   end
 
-
+  resources :inscriptions
   post 'incriptions/:id/attended', to: 'inscriptions#attended'
 
 end

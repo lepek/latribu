@@ -10,7 +10,6 @@ class UsersController < ApplicationController
 
   def destroy
     @user = User.find(params[:id])
-
     if @user.destroy
       flash[:success] = "El usuario <b>#{@user.full_name}</b> fue eliminado correctamente."
     else
@@ -27,14 +26,10 @@ class UsersController < ApplicationController
     @user = User.find(params[:id])
     params = user_params
     params.delete('password') && params.delete('password_confirmation') if params[:password].blank?
-    respond_to do |format|
-      if @user.update_attributes(params)
-        format.html { redirect_to users_path, success: "Usuario <b>#{@user.full_name}</b> actualizado." }
-        format.json { head :ok }
-      else
-        format.html { render action: "edit" }
-        format.json { render json: @user.errors, status: :unprocessable_entity }
-      end
+    if @user.update_attributes(params)
+      redirect_to users_path, success: "Usuario <b>#{@user.full_name}</b> actualizado."
+    else
+      render action: "edit"
     end
   end
 
@@ -50,31 +45,22 @@ class UsersController < ApplicationController
   end
 
   def credits
-    #@credits_to_reset = Payment.select('credit-used_credit AS spare_credit').where("reset_date IS NULL AND month_year <= '#{month_year}'").map(&:spare_credit).sum
     @last_reset_date = Payment.select('MAX(reset_date) AS reset_date').try(:first).try(:reset_date)
   end
 
   def reset_search
-    data = []
-    @month = params[:month]
-    @year = params[:year]
-    month_year = Chronic.parse("1 #{@month} #{@year}")
-    User.to_reset.find_each do |user|
-      future_credit = 0
-      if user.credit > 0
-        future_credit = user.calculate_future_credit(month_year)
-        future_credit = user.credit if future_credit > user.credit # Fix because the first reset was forced directly in the user model
-      end
-      data << {:full_name => user.full_name, :current_credit => user.credit, :future_credit => future_credit}
-    end
-    render status: :ok, json: { "aaData" => data }
+    date = params[:month_year].present? ? Chronic.parse("1/#{params[:month_year]} 00:00", :endian_precedence => [:little, :middle]) : nil
+    render json: UserResetCreditDatatable.new(view_context, { date: date })
   end
 
   def reset
-    @month = params[:month]
-    @year = params[:year]
-    month_year = Chronic.parse("1 #{@month} #{@year}")
-    User.reset_credits(month_year)
+    if params[:month_year].present?
+      date = Chronic.parse("1/#{params[:month_year]} 00:00", :endian_precedence => [:little, :middle])
+      User.reset_credits(date)
+      flash[:success] = 'Créditos reseteados'
+    else
+      flash[:error] = 'Debe seleccionar una fecha para realizar el reseteo de créditos'
+    end
     redirect_to credits_users_path
   end
 

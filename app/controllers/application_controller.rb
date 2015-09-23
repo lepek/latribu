@@ -27,7 +27,7 @@ class ApplicationController < ActionController::Base
     if current_user.admin?
       admins_path
     else
-      clients_path
+      inscriptions_path
     end
   end
 

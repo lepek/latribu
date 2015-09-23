@@ -8,8 +8,6 @@ class Shift < ActiveRecord::Base
   has_many :users, through: :inscriptions
   has_many :rookies
 
-  DAYS = {:monday => 'lunes', :tuesday => 'martes', :wednesday => 'miércoles', :thursday => 'jueves', :friday => 'viernes', :saturday => 'sábado', :sunday => 'domingo'}
-
   # I can use this later
   STATUS = {:open => 'abierta', :close => 'cerrada', :full => 'completa'}
 
@@ -17,15 +15,29 @@ class Shift < ActiveRecord::Base
   MARTIN_BIANCULLI_ID = 2
   MARCELO_PERRETTA_ID =  41
   IVAN_TREVISAN_ID = 7
-  ALLOWED_USERS = [MARTIN_BIANCULLI_ID, MARCELO_PERRETTA_ID, IVAN_TREVISAN_ID]
+  #ALLOWED_USERS = [MARTIN_BIANCULLI_ID, MARCELO_PERRETTA_ID, IVAN_TREVISAN_ID]
+  ALLOWED_USERS = []
+
+  DISABLE_TEXT_COLOR = '#CCCCCC'
+  DISABLE_BG_COLOR = '#EBEBE4'
 
   before_destroy :remove_inscriptions
 
-  validates_presence_of :day, :start_time, :end_time, :max_attendants, :open_inscription, :close_inscription, :instructor, :discipline, :cancel_inscription
-  validates_uniqueness_of :start_time, :scope => [:day]
+  validates_presence_of :week_day, :start_time, :end_time, :max_attendants, :open_inscription, :close_inscription, :instructor, :discipline, :cancel_inscription
+  validates_uniqueness_of :start_time, :scope => [:week_day]
 
-  def self.days
-    DAYS
+  def self.with_discipline_and_instructor
+    preload(:discipline, :instructor)
+  end
+
+  def self.with_shift_dates
+    select(
+      "IF (
+        NOW() > STR_TO_DATE(CONCAT(DATE_FORMAT(DATE_ADD(NOW(), interval (week_day - DAYOFWEEK(NOW())) day), '%Y-%m-%d'),' ', start_time), '%Y-%m-%d %H:%i'),
+        STR_TO_DATE(CONCAT(DATE_FORMAT(DATE_ADD(NOW(), interval (7 + week_day - DAYOFWEEK(NOW())) day), '%Y-%m-%d'),' ', start_time), '%Y-%m-%d %H:%i'),
+        STR_TO_DATE(CONCAT(DATE_FORMAT(DATE_ADD(NOW(), interval (week_day - DAYOFWEEK(NOW())) day), '%Y-%m-%d'),' ', start_time), '%Y-%m-%d %H:%i')
+      ) as next_shift, shifts.*"
+    )
   end
 
   ##
@@ -33,35 +45,55 @@ class Shift < ActiveRecord::Base
   #
   def self.get_next_class
     @shift = Shift.where(
-        'day = ? AND end_time > ?',
-        Chronic.parse("now").strftime('%A').downcase,
+        'week_day = ? AND end_time > ?',
+        Chronic.parse("now").strftime('%w').to_i + 1,
         Chronic.parse("now").strftime('%H:%M')
     ).eager_load(:instructor, :discipline).order("end_time ASC").first
+  end
+
+  def as_json(options = {})
+    user = options[:user]
+    open = available_for_enroll?(user) || available_for_cancel?(user)
+    {
+      id: id,
+      title: discipline.name,
+      start: next_shift.rfc822,
+      end: (next_shift + 1.hour).rfc822,
+      color: open ? discipline.color : DISABLE_BG_COLOR,
+      textColor: open ? discipline.font_color : DISABLE_TEXT_COLOR,
+      description: "Coach: #{instructor.first_name}<br />Anotados: #{next_fixed_shift_count.to_s}",
+      className: 'calendar-text',
+      status: status, # just to show the status
+      open: open,
+      deadline: cancel_inscription,
+      booked: !user_inscription(user).nil?
+    }
   end
 
   ##
   # @return The specific date of the next class of this shift
   #
   def next_fixed_shift
-    @next_fixed_shift ||= get_next_shift
+    next_shift
   end
 
   ##
   # @return The specific date of the current or next class of this shift
   #
   def current_fixed_shift
-    @current_fixed_shift ||= get_next_shift(self.end_time.strftime('%H:%M'))
+    next_shift
+    #@current_fixed_shift ||= get_next_shift(self.end_time.strftime('%H:%M'))
   end
 
   ##
   # @return [ActiveRecord::Relation] inscriptions for the next class of this shift
   #
   def next_fixed_shift_users
-    self.inscriptions.where(:shift_date => self.next_fixed_shift)
+    inscriptions.where(:shift_date => next_fixed_shift)
   end
 
   def next_fixed_shift_rookies
-    self.rookies.where(:shift_date => self.next_fixed_shift)
+    rookies.where(:shift_date => next_fixed_shift)
   end
 
   ##
@@ -76,20 +108,20 @@ class Shift < ActiveRecord::Base
   # @return Number of inscriptions for the current or next shift
   #
   def current_fixed_shift_count
-    self.current_fixed_shift_users.count + self.current_fixed_shift_rookies.count
+    current_fixed_shift_users.count + current_fixed_shift_rookies.count
   end
 
   def current_fixed_shift_users
-    self.inscriptions.where(:shift_date => self.current_fixed_shift)
+    inscriptions.where(:shift_date => current_fixed_shift)
   end
 
   def current_fixed_shift_rookies
-    self.rookies.where(:shift_date => self.current_fixed_shift)
+    rookies.where(:shift_date => current_fixed_shift)
   end
 
   def enroll_next_shift(user)
     if available_for_enroll?(user)
-      self.inscriptions << Inscription.create({:user_id => user.id, :shift_date => self.next_fixed_shift})
+      self.inscriptions << Inscription.create({:user_id => user.id, :shift_date => next_fixed_shift})
       $redis.cache(:key => redis_key, :recalculate => true) { next_fixed_shift_count_db }
     else
       self.errors[:base] << "No es posible anotarse a la clase, ya está anotado, está cerrada o completa"
@@ -98,12 +130,12 @@ class Shift < ActiveRecord::Base
   end
 
   def needs_confirmation?
-    Chronic.parse("now") > Chronic.parse("#{self.cancel_inscription} hours ago", :now => self.next_fixed_shift)
+    Chronic.parse("now") > Chronic.parse("#{self.cancel_inscription} hours ago", :now => next_fixed_shift)
   end
 
   def cancel_next_shift(user)
     if available_for_cancel?(user)
-      self.inscriptions.where({:user_id => user.id, :shift_date => self.next_fixed_shift}).first.destroy
+      self.inscriptions.where({:user_id => user.id, :shift_date => next_fixed_shift}).first.destroy
       $redis.cache(:key => redis_key, :recalculate => true) { next_fixed_shift_count_db }
     else
       self.errors[:base] << "No es posible liberar la clase, ya está cerrada o no está anotado"
@@ -113,8 +145,8 @@ class Shift < ActiveRecord::Base
 
   def enroll_next_shift_rooky(rooky)
     if self.available_for_try?
-      rooky.shift_date ||= get_next_shift
-      rooky.shift_id ||= self.id
+      rooky.shift_date ||= next_fixed_shift
+      rooky.shift_id ||= id
       rooky.save!
       $redis.cache(:key => redis_key, :recalculate => true) { next_fixed_shift_count_db }
     else
@@ -131,12 +163,12 @@ class Shift < ActiveRecord::Base
   # @return [Boolean] if the shift is available to enroll a user or not
   #
   def available_for_enroll?(user)
-    @available_for_enroll ||= self.exceptions?(user)
-    @available_for_enroll ||= ( self.status == STATUS[:open] && self.user_inscription(user).nil? && user.credit > 0 && user.disciplines.include?(self.discipline) && self.another_today_inscription?(user).nil? )
+    @available_for_enroll ||= exceptions?(user)
+    @available_for_enroll ||= ( status == STATUS[:open] && user_inscription(user).nil? && user.credit > 0 && user.disciplines.include?(discipline) && !another_today_inscription?(user) )
   end
 
   def exceptions?(user)
-    ALLOWED_USERS.include?(user.id) && self.status != STATUS[:full] && self.user_inscription(user).nil? && user.credit > 0 && user.disciplines.include?(self.discipline)
+    ALLOWED_USERS.include?(user.id) && status != STATUS[:full] && user_inscription(user).nil? && user.credit > 0 && user.disciplines.include?(discipline)
   end
 
   ##
@@ -147,29 +179,29 @@ class Shift < ActiveRecord::Base
   end
 
   def available_for_cancel?(user)
-    user_inscription(user) && (status != STATUS[:close] && !needs_confirmation? || ALLOWED_USERS.include?(user.id) )
+    user_inscription(user).present? && (status != STATUS[:close] && !needs_confirmation? || ALLOWED_USERS.include?(user.id) )
   end
 
   ##
   # @return nil or the inscription record of the user
   #
   def user_inscription(user)
-    user.next_inscriptions.find { |i| i.shift_date == self.next_fixed_shift }
+    user.next_inscriptions.find { |i| i.shift_date == next_fixed_shift }
   end
 
   def another_today_inscription?(user)
-    user.next_inscriptions.find { |i| i.shift_date.strftime('%D') == self.next_fixed_shift.strftime('%D') && i.shift.discipline == self.discipline }
+    !user.next_inscriptions.find { |i| i.shift_date.strftime('%D') == next_fixed_shift.strftime('%D') && i.shift.discipline == discipline }.nil?
   end
 
   def day_and_time
-    "#{DAYS[self.day.to_sym].capitalize} #{self.start_time.strftime('%H:%M')} hs."
+    "#{I18n.t('date.day_names')[week_day.to_i - 1].capitalize} #{start_time.strftime('%H:%M')} hs."
   end
 
   ##
   # When removing a shift we remove the inscriptions to that shift and refund the credits
   #
   def remove_inscriptions
-    self.next_fixed_shift_users.destroy_all
+    next_fixed_shift_users.destroy_all
   end
 
   # current_time = 10:00
@@ -180,10 +212,10 @@ class Shift < ActiveRecord::Base
   # 12:00 - 10 = 2:00 < 7:00 => abierta (and the cerrada is not met)
   # start_time - open_inscription < current_time => abierta
   def status
-    return STATUS[:full] if self.next_fixed_shift_count >= self.max_attendants
+    return STATUS[:full] if next_fixed_shift_count >= max_attendants
 
-    hours_diff = (self.next_fixed_shift - Chronic.parse("now")) / 3600
-    if hours_diff > self.close_inscription && hours_diff < self.open_inscription
+    hours_diff = (next_fixed_shift - Chronic.parse("now")) / 3600
+    if hours_diff > close_inscription && hours_diff < open_inscription
       STATUS[:open]
     else
       STATUS[:close]
@@ -207,11 +239,11 @@ private
   end
 
   def next_fixed_shift_count_db
-    self.next_fixed_shift_users.count + self.next_fixed_shift_rookies.count
+    next_fixed_shift_users.count + next_fixed_shift_rookies.count
   end
 
   def redis_key
-    "#{self.next_fixed_shift.to_s.gsub(/\s/, '_')} #{self.id}"
+    "#{next_fixed_shift.to_s.gsub(/\s/, '_')} #{id}"
   end
 
 end

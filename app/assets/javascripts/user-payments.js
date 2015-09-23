@@ -11,8 +11,8 @@ jQuery(document).ready(function() {
   $("#payment_user_id").select2();
 
   $('#payment_user_id').change( function () {
-    var oTable = $('#user-payments-table').DataTable()
-    var user_id = $('#payment_user_id').val()
+    var oTable = $('#user-payments-table').DataTable();
+    var user_id = $('#payment_user_id').val();
     if (user_id) {
       oTable.ajax.url("/payments?user_id=" + user_id + ".json").load();
     }

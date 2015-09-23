@@ -40,5 +40,4 @@ class UserDatatable < AjaxDatatablesRails::Base
     User.accessible_by(current_ability).clients
   end
 
-  # ==== Insert 'presenter'-like methods below if necessary
 end

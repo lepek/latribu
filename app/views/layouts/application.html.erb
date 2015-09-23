@@ -38,7 +38,11 @@
 </head>
 <body>
 
-  <%= render partial: 'shared/nav_signed_in' %>
+  <% if current_user.admin? %>
+    <%= render partial: 'shared/nav_signed_in_admin' %>
+  <% else %>
+    <%= render partial: 'shared/nav_signed_in' %>
+  <% end %>
 
   <div class="container">
     <div class="row">

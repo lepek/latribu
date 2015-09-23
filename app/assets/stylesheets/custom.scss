@@ -21,6 +21,7 @@
 .navbar-brand {
   padding: 0;
   margin-left: 5px !important;
+  margin-right: 10px !important;
 }
 
 .nav-pills li {
@@ -31,11 +32,13 @@
   margin-left: 10px;
 }
 
-#user-payments-table_wrapper, #payments-table_wrapper {
+#user-payments-table_wrapper,
+#payments-table_wrapper,
+#credit-reset-table_wrapper {
   margin: 10px;
 }
 
-#payment-history-panel {
+#payment-history-panel, #credit-reset-panel {
   margin-top: 20px;
 }
 
@@ -45,5 +48,17 @@
   button {
     vertical-align: bottom;
   }
+}
+
+.vertical-align {
+  display: flex;
+  align-items: center;
+}
+
+.calendar-text  {
+  .fc-title {
+    font-size: 14px;
+  }
+  cursor: pointer;
 }
 

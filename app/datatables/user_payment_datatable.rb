@@ -27,5 +27,4 @@ class UserPaymentDatatable < AjaxDatatablesRails::Base
     Payment.where(:user_id => params[:user_id])
   end
 
-  # ==== Insert 'presenter'-like methods below if necessary
 end

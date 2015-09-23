@@ -11,14 +11,14 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150809060049) do
+ActiveRecord::Schema.define(version: 20150916181125) do
 
   create_table "disciplines", force: :cascade do |t|
     t.string   "name",       limit: 255
     t.datetime "created_at"
     t.datetime "updated_at"
     t.string   "color",      limit: 255
-    t.boolean  "default",    limit: 1
+    t.boolean  "default"
     t.string   "font_color", limit: 255
   end
 
@@ -28,7 +28,7 @@ ActiveRecord::Schema.define(version: 20150809060049) do
     t.datetime "updated_at"
     t.integer  "user_id",    limit: 4
     t.integer  "shift_id",   limit: 4
-    t.boolean  "attended",   limit: 1, default: false
+    t.boolean  "attended",             default: false
   end
 
   add_index "inscriptions", ["shift_date"], name: "index_inscriptions_on_shift_date", using: :btree
@@ -73,14 +73,14 @@ ActiveRecord::Schema.define(version: 20150809060049) do
     t.string   "email",      limit: 255
     t.string   "notes",      limit: 255
     t.integer  "shift_id",   limit: 4
-    t.boolean  "attended",   limit: 1,   default: false
+    t.boolean  "attended",               default: false
   end
 
   add_index "rookies", ["shift_date"], name: "index_rookies_on_shift_date", using: :btree
   add_index "rookies", ["shift_id"], name: "index_rookies_on_shift_id", using: :btree
 
   create_table "shifts", force: :cascade do |t|
-    t.string   "day",                limit: 255
+    t.integer  "week_day",           limit: 4
     t.time     "start_time"
     t.time     "end_time"
     t.integer  "open_inscription",   limit: 4
@@ -90,7 +90,7 @@ ActiveRecord::Schema.define(version: 20150809060049) do
     t.datetime "updated_at"
     t.integer  "discipline_id",      limit: 4
     t.integer  "instructor_id",      limit: 4
-    t.integer  "cancel_inscription", limit: 4,   default: 2
+    t.integer  "cancel_inscription", limit: 4, default: 2
     t.datetime "deleted_at"
   end
 
@@ -98,6 +98,9 @@ ActiveRecord::Schema.define(version: 20150809060049) do
   add_index "shifts", ["instructor_id"], name: "index_shifts_on_instructor_id", using: :btree
 
   create_table "stats", force: :cascade do |t|
+    t.date     "month_year"
+    t.integer  "inscriptions", limit: 4
+    t.integer  "credits",      limit: 4
     t.datetime "created_at"
     t.datetime "updated_at"
   end
@@ -111,12 +114,12 @@ ActiveRecord::Schema.define(version: 20150809060049) do
   add_index "user_disciplines", ["user_id"], name: "index_user_disciplines_on_user_id", using: :btree
 
   create_table "users", force: :cascade do |t|
-    t.string   "email",                  limit: 255,   default: "",                    null: false
-    t.string   "encrypted_password",     limit: 255,   default: "",                    null: false
+    t.string   "email",                  limit: 255, default: "",                    null: false
+    t.string   "encrypted_password",     limit: 255, default: "",                    null: false
     t.string   "reset_password_token",   limit: 255
     t.datetime "reset_password_sent_at"
     t.datetime "remember_created_at"
-    t.integer  "sign_in_count",          limit: 4,     default: 0,                     null: false
+    t.integer  "sign_in_count",          limit: 4,   default: 0,                     null: false
     t.datetime "current_sign_in_at"
     t.datetime "last_sign_in_at"
     t.string   "current_sign_in_ip",     limit: 255
@@ -129,19 +132,15 @@ ActiveRecord::Schema.define(version: 20150809060049) do
     t.integer  "role_id",                limit: 4
     t.integer  "credit",                 limit: 4
     t.datetime "deleted_at"
-    t.boolean  "reset_credit",           limit: 1,     default: true
-    t.datetime "last_reset_date",                      default: '2014-03-05 02:00:00'
-    t.boolean  "certificate",            limit: 1,     default: false
-    t.boolean  "enable",                 limit: 1,     default: true
+    t.boolean  "reset_credit",                       default: true
+    t.datetime "last_reset_date",                    default: '2014-03-05 02:00:00'
+    t.boolean  "certificate",                        default: false
+    t.boolean  "enable",                             default: true
     t.string   "profession",             limit: 255
-    t.string   "provider",               limit: 255,                                   null: false
-    t.string   "uid",                    limit: 255,   default: "",                    null: false
-    t.text     "tokens",                 limit: 65535
   end
 
   add_index "users", ["email"], name: "index_users_on_email", unique: true, using: :btree
   add_index "users", ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true, using: :btree
   add_index "users", ["role_id"], name: "index_users_on_role_id", using: :btree
-  add_index "users", ["uid", "provider"], name: "index_users_on_uid_and_provider", using: :btree
 
 end

@@ -1,28 +1,21 @@
-<div class="table-responsive">
-  <table id="users-table" class="table table-striped table-bordered" cellspacing="0" width="100%" data-source="<%= stats_path(format: :json) %>">
-    <thead>
-    <tr>
-      <th>Mes</th>
-      <th>Créditos otorgados</th>
-      <th>Inscripciones</th>
-      <th></th>
-    </tr>
-    </thead>
-    <tbody>
-    </tbody>
-  </table>
-</div>
-
-<% datatable "stats-table", ["Mes", "Créditos otorgados", "Inscripciones", "", ""], :class => "selectable" do -%>
-    <% stats.each do |date, stat| -%>
+<div class="panel panel-default">
+  <div class="panel-heading">
+    <h4>Estadísticas</h4>
+  </div>
+  <div class="panel-body">
+    <div class="table-responsive">
+      <table id="stats-table" class="table table-striped table-bordered" cellspacing="0" width="100%" data-source="<%= stats_path(format: :json) %>">
+        <thead>
         <tr>
-          <td><%= l(date, :format => '%B %Y').capitalize %></td>
-          <td><%= stat[:credits] %></td>
-          <td><%= stat[:inscriptions] %></td>
-          <td><%= date %></td>
-          <td>
-            <%= button_to "Detalle", stats_path, :method => :get, :params => {date: l(date, :format => '%Y-%m-%d'), order: 'desc'} %>
-          </td>
+          <th>Fecha</th>
+          <th>Créditos otorgados</th>
+          <th>Inscripciones</th>
+          <th></th>
         </tr>
-    <% end -%>
-<% end -%>
+        </thead>
+        <tbody>
+        </tbody>
+      </table>
+    </div>
+   </div>
+</div>
