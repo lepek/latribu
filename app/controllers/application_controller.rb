@@ -34,16 +34,8 @@ class ApplicationController < ActionController::Base
   private
 
   def messages
-    unless current_user.blank?
-      unless current_user.admin?
-        if current_user.credit == 0
-          flash[:warning] = "No podrás incribirte a ningún turno por no tener créditos. Comunicate con La Tribu para poder volver a entrenar."
-        end
-        #time_gap_to_reset = (Chronic.parse("5th this month").to_date - Chronic.parse("now").to_date).to_i
-        #if current_user.credit > 0 && time_gap_to_reset > 0 && time_gap_to_reset < 9
-        #  flash[:info] = "A partir del <b>#{I18n.localize(Chronic.parse("5th this month"), :format => '%A,%e de %B')}</b> no podrán usarse los créditos del mes anterior."
-        #end
-      end
+    if current_user.present? && !current_user.admin? && current_user.credit == 0
+      flash[:warning] = "No podrás incribirte a ningún turno por no tener créditos. Comunicate con La Tribu para poder volver a entrenar."
     end
   end
 

@@ -29,6 +29,7 @@
 //= require moment/es
 //= require fullcalendar
 //= require fullcalendar/lang/es
+//= require bootbox
 //= require_tree .
 
 

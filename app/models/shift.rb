@@ -66,7 +66,8 @@ class Shift < ActiveRecord::Base
       status: status, # just to show the status
       open: open,
       deadline: cancel_inscription,
-      booked: !user_inscription(user).nil?
+      booked: !user_inscription(user).nil?,
+      needs_confirmation: needs_confirmation?
     }
   end
 
