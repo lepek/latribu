@@ -14,8 +14,16 @@
     <!-- Collect the nav links, forms, and other content for toggling -->
     <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
       <ul class="nav nav-pills navbar-right">
-        <li><%= link_to image_tag('nav_icons/sign-up-icon.png') + 'Registrarse', new_user_registration_path %></li>
-        <li><%= link_to image_tag('nav_icons/keys-icon.png') + 'Ingresar', new_user_session_path %></li>
+        <li>
+          <%= link_to new_user_registration_path do %>
+            <span class="glyphicon glyphicon-edit" aria-hidden="true"></span>Registrarse
+          <% end %>
+        </li>
+        <li>
+          <%= link_to new_user_session_path do %>
+            <span class="glyphicon glyphicon-log-in" aria-hidden="true"></span>Ingresar
+          <% end %>
+        </li>
       </ul>
     </div><!-- /.navbar-collapse -->
 </nav>
