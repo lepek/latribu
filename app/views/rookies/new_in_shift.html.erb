@@ -1,5 +1,16 @@
-<div id="content-inner">
-  <h1>Nueva inscripci&oacute;n de prueba</h1>
-  <%= render 'form' %>
-  <%= link_to 'Volver', root_path(:anchor => 'rookies') %>
+<div class="panel panel-default">
+  <div class="panel-heading">
+    <h4><%= l(@shift.next_fixed_shift, :format => '%A, %e de %B %H:%M hs.').capitalize %> - Inscripción de prueba</h4>
+  </div>
+  <div class="panel-body">
+    <%= simple_form_for(@rooky) do |f| %>
+      <%= f.input :shift_id, as: :hidden, input_html: { value: @shift.id } %>
+      <%= f.input :full_name, autofocus: true %>
+      <%= f.input :phone %>
+      <%= f.input :email %>
+      <%= f.input :notes %>
+      <%= f.submit 'Guardar', data: { disable_with: "Procesando..." }, class: "btn btn-primary" %>
+      <%= link_to "Volver", :back, class: "btn btn-default" %>
+    <% end %>
+  </div>
 </div>

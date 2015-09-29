@@ -148,11 +148,14 @@ class Shift < ActiveRecord::Base
     if self.available_for_try?
       rooky.shift_date ||= next_fixed_shift
       rooky.shift_id ||= id
-      rooky.save!
-      $redis.cache(:key => redis_key, :recalculate => true) { next_fixed_shift_count_db }
+      if rooky.save
+        $redis.cache(:key => redis_key, :recalculate => true) { next_fixed_shift_count_db }
+        return true
+      end
     else
       self.errors[:base] << "No es posible anotarse a la clase, ya está anotado, está cerrada o completa"
     end
+    return false
   end
 
   def cancel_inscription_rooky

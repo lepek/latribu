@@ -1,54 +1,97 @@
 <% if users.count > 0 %>
-    <p>
-      <b>Inscriptos</b>
-    <ul class="unstyled">
-      <% users.each do |inscription| -%>
-          <li>
-            <%= check_box_tag "user_attended#{inscription.id}", true, inscription.attended,
-                              data: {
+  <div class="panel panel-default table-responsive">
+    <div class="panel-heading">
+      <h5>Inscriptos</h5>
+    </div>
+    <div class="panel-body">
+      <div class="table-responsive">
+        <table class="table table-striped">
+          <tr>
+            <th>Asistencia</th>
+            <th>Nombre</th>
+            <th>Teléfono</th>
+            <th>Email</th>
+            <th>Certificado médico</th>
+          </tr>
+          <% users.each do |inscription| -%>
+            <tr>
+              <td>
+                <%= check_box_tag "user_attended#{inscription.id}", true, inscription.attended,
+                                  data: {
                         remote: true,
                         method: :post,
-                url: url_for(controller: :inscriptions, action: :attended, id: inscription.id)
-                }
-            -%>
-            <b><%= inscription.user.full_name %></b>
-            |
-            <%= inscription.user.phone %>
-            |
-            <%= inscription.user.email %>
-            |
-            <b>Certificado m&eacute;dico:</b>
-            <%= check_box_tag "user_certificate#{inscription.user.id}", true, inscription.user.certificate,
-                              data: {
+                    url: url_for(controller: :inscriptions, action: :attended, id: inscription.id)
+                    }
+                -%>
+              </td>
+              <td>
+                <%= inscription.user.full_name %>
+              </td>
+              <td>
+                <%= inscription.user.phone %>
+              </td>
+              <td>
+                <%= inscription.user.email %>
+              </td>
+              <td>
+                <%= check_box_tag "user_certificate#{inscription.user.id}", true, inscription.user.certificate,
+                                  data: {
                         remote: true,
                         method: :post,
-                url: url_for(controller: :users, action: :certificate, id: inscription.user.id)
-                }
-            -%>
-
-          </li>
-      <% end -%>
-    </ul>
-    </p>
+                    url: url_for(controller: :users, action: :certificate, id: inscription.user.id)
+                    }
+                -%>
+              </td>
+            </tr>
+          <% end -%>
+        </table>
+      </div>
+    </div>
+  </div>
 <% end %>
+
 <% if rookies.count > 0 %>
-    <p>
-      <b>Pruebas</b>
-    <ul class="unstyled">
-      <% rookies.each do |rooky| -%>
-          <li>
-            <%= check_box_tag "rooky_attended#{rooky.id}", true, rooky.attended,
-                              data: {
-                        remote: true,
-                        method: :post,
-                url: url_for(controller: :rookies, action: :attended, id: rooky.id)
-                }
-            -%>
-            <b><%= rooky.full_name %></b> | <%= rooky.phone %> | <%= rooky.email %>
-            <br />
-            <%= rooky.notes %>
-          </li>
-      <% end -%>
-    </ul>
-    </p>
+  <div class="panel panel-default">
+    <div class="panel-heading">
+      <h5>Pruebas</h5>
+    </div>
+    <div class="panel-body">
+      <div class="table-responsive">
+        <table class="table table-striped">
+          <tr>
+            <th>Asistencia</th>
+            <th>Nombre</th>
+            <th>Teléfono</th>
+            <th>Email</th>
+            <th>Notas</th>
+          </tr>
+          <% rookies.each do |rooky| -%>
+            <tr>
+              <td>
+                <%= check_box_tag "rooky_attended#{rooky.id}", true, rooky.attended,
+                                  data: {
+                            remote: true,
+                            method: :post,
+                    url: url_for(controller: :rookies, action: :attended, id: rooky.id)
+                    }
+                -%>
+              </td>
+              <td>
+                <%= rooky.full_name %></b>
+              </td>
+              <td>
+                <%= rooky.phone %>
+              </td>
+              <td>
+                <%= rooky.email %>
+              </td>
+              <td>
+                <%= rooky.notes %>
+              </td>
+            </tr>
+          <% end -%>
+        </table>
+      </div>
+    </div>
+  </div>
 <% end %>

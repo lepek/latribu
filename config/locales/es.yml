@@ -37,15 +37,15 @@ es:
         profession: 'Profesión'
         role_id: 'Rol'
       shift:
-        day: 'Día'
+        week_day: 'Día'
         start_time: 'Hora de comienzo'
         end_time: 'Hora de finalización'
         max_attendants: 'Cupo'
         open_inscription: 'Abrir inscripción'
         close_inscription: 'Cerrar inscripción'
-        discipline_id: 'Disciplina'
+        discipline: 'Disciplina'
         cancel_inscription: 'Anular la liberación'
-        instructor_id: 'Coach'
+        instructor: 'Coach'
       payment:
         amount: 'Monto'
         credit: 'Crédito'
@@ -80,7 +80,7 @@ es:
               confirmation: 'Las contraseñas no coinciden'
         shift:
           attributes:
-            day:
+            week_day:
               blank: 'El Día no puede estar en blanco'
             start_time:
               blank: 'La Hora de comienzo no puede estar en blanco'
