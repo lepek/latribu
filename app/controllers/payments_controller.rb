@@ -25,23 +25,16 @@ class PaymentsController < ApplicationController
     @payment = @user.payments.build
   end
 
-  # POST /payments
-  # POST /payments.json
   def create
     params = payment_params
     month = params.delete(:month)
     year = params.delete(:year)
     params = params.merge( {:month_year => Chronic.parse("1 #{month} #{year}")} )
     @payment = Payment.new(params)
-
-    respond_to do |format|
-      if @payment.save
-        format.html { redirect_to root_url, notice: 'Nuevo Pago creado.' }
-        format.json { render json: @payment, status: :created, location: @payment }
-      else
-        format.html { render action: "new" }
-        format.json { render json: @payment.errors, status: :unprocessable_entity }
-      end
+    if @payment.save
+      redirect_to root_url, notice: 'Nuevo Pago creado.'
+    else
+      render action: "new"
     end
   end
 

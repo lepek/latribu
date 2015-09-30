@@ -19,4 +19,20 @@ jQuery(document).ready(function() {
       $(this).parent().addClass('active');
     }
   });
+
+  $('#next_class').click(function() {
+    $.ajax({
+      url: "/shifts/next_class.json",
+      type: "GET",
+      dataType: "json",
+      dataType: 'json',
+      success: function(shift_id) {
+        document.location.href = '/shifts/' + shift_id;
+      },
+      error: function (xhr, ajaxOptions, thrownError) {
+        alert('No hay más clases para el día de hoy');
+      }
+    });
+  });
+
 });

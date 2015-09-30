@@ -5,6 +5,13 @@ class RookiesController < ApplicationController
     @shift = Shift.with_shift_dates.where(id: params[:shift_id]).first
   end
 
+  def index
+    respond_to do |format|
+      format.html
+      format.json { render json: RookyDatatable.new(view_context) }
+    end
+  end
+
   def create
     @rooky = Rooky.new(rooky_params)
     @shift = Shift.with_shift_dates.where(id: params[:rooky][:shift_id]).first

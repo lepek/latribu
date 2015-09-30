@@ -21,6 +21,7 @@
 //= require jquery-ui/datepicker
 //= require jquery-ui/datepicker-es
 //= require jquery.minicolors
+//= require jquery.minicolors.simple_form
 //= require dataTables/jquery.dataTables
 //= require dataTables/bootstrap/3/jquery.dataTables.bootstrap
 //= require dataTables/extras/dataTables.tableTools

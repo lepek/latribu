@@ -14,7 +14,7 @@
     <!-- Collect the nav links, forms, and other content for toggling -->
     <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
       <ul class="nav nav-pills navbar-left">
-        <li role="presentation"><%= link_to 'Próxima clase', '#' %></li>
+        <li role="presentation"><%= link_to 'Próxima clase', '#', id: 'next_class' %></li>
         <li role="presentation" class="dropdown">
           <a class="dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">
             Clientes <span class="caret"></span>
@@ -24,7 +24,7 @@
             <li role="presentation"><%= link_to 'Reseteo de créditos', credits_users_path %></li>
           </ul>
         </li>
-        <li role="presentation"><%= link_to 'Inscripciones manuales', '#' %></li>
+        <li role="presentation"><%= link_to 'Inscripciones manuales', rookies_path %></li>
         <li role="presentation" class="dropdown">
           <a class="dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">
             Consulta <span class="caret"></span>

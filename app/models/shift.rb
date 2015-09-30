@@ -44,11 +44,11 @@ class Shift < ActiveRecord::Base
   # @return The next class of all the shift collection in the database
   #
   def self.get_next_class
-    @shift = Shift.where(
+    Shift.where(
         'week_day = ? AND end_time > ?',
         Chronic.parse("now").strftime('%w').to_i + 1,
         Chronic.parse("now").strftime('%H:%M')
-    ).eager_load(:instructor, :discipline).order("end_time ASC").first
+    ).eager_load(:instructor, :discipline).order("end_time ASC").limit(1).first
   end
 
   def as_json(options = {})

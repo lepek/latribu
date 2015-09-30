@@ -1,6 +1,15 @@
 class ShiftsController < ApplicationController
   authorize_resource
 
+  def next_class
+    shift = Shift.get_next_class
+    if shift.present?
+      render json: shift.id
+    else
+      head status: :not_found
+    end
+  end
+
   def index
     respond_to do |format|
       format.html

@@ -1,15 +1,8 @@
 Nahual::Application.routes.draw do
   devise_for :users
 
-  #devise_scope :user do
-  #  root 'devise/sessions#new'
-  #end
+  root :to => 'inscriptions#index'
 
-  root :to => 'admins#index'
-
-  resources :clients
-
-  resources :admins
 
   resources :disciplines do
     member do
@@ -35,9 +28,10 @@ Nahual::Application.routes.draw do
 
   resources :shifts do
     member do
-      get 'inscription'
-      get 'cancel_inscription'
       get 'indiscriminate_inscription'
+    end
+    collection do
+      get 'next_class'
     end
   end
 

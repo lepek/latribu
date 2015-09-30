@@ -25,7 +25,8 @@ class ApplicationController < ActionController::Base
 
   def after_sign_in_path_for(user)
     if current_user.admin?
-      admins_path
+      next_class = Shift.get_next_class
+      next_class.present? ? shift_path(next_class) : shifts_path
     else
       inscriptions_path
     end

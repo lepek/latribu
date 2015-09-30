@@ -13,4 +13,8 @@ jQuery(document).ready(function() {
       }
     ]
   });
+
+  $('#discipline_color').minicolors();
+  $('#discipline_font_color').minicolors();
+
 });
