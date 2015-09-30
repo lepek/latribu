@@ -32,8 +32,8 @@ group :doc do
   gem 'sdoc', require: false
 end
 
-gem 'devise', '~> 3.2'
-gem 'cancan', '1.6.10'
+gem 'devise', '~> 3.5.2'
+gem 'cancancan', '~> 1.12'
 
 group :development, :test do
   gem 'rspec-rails', '~> 2.0'

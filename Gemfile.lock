@@ -60,7 +60,7 @@ GEM
     bootstrap3-datetimepicker-rails (4.15.35)
       momentjs-rails (>= 2.8.1)
     builder (3.2.2)
-    cancan (1.6.10)
+    cancancan (1.12.0)
     capistrano (3.4.0)
       i18n
       rake (>= 10.0.0)
@@ -103,7 +103,7 @@ GEM
       nokogiri (~> 1.5)
       rails (>= 3, < 5)
     database_cleaner (1.4.1)
-    devise (3.4.1)
+    devise (3.5.2)
       bcrypt (~> 3.0)
       orm_adapter (~> 0.1)
       railties (>= 3.2.6, < 5)
@@ -285,7 +285,7 @@ DEPENDENCIES
   bootstrap-sass (~> 3.3.5)
   bootstrap-sass-extras (~> 0.0.6)
   bootstrap3-datetimepicker-rails (~> 4.15.35)
-  cancan (= 1.6.10)
+  cancancan (~> 1.12)
   capistrano
   capistrano-nginx-unicorn
   capistrano-rails
@@ -294,7 +294,7 @@ DEPENDENCIES
   coffee-rails (~> 4.0.0)
   cucumber-rails
   database_cleaner
-  devise (~> 3.2)
+  devise (~> 3.5.2)
   devise-bootstrap-views (~> 0.0.5)
   factory_girl_rails
   fullcalendar-rails (~> 2.3.1)

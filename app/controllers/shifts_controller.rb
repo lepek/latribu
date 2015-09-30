@@ -1,5 +1,4 @@
 class ShiftsController < ApplicationController
-  authorize_resource
 
   def next_class
     shift = Shift.get_next_class

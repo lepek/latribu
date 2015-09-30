@@ -1,5 +1,4 @@
 class DisciplinesController < ApplicationController
-  authorize_resource
 
   def index
     respond_to do |format|

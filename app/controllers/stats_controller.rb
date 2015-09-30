@@ -1,5 +1,4 @@
 class StatsController < ApplicationController
-  authorize_resource
 
   def index
     @order = params[:order]

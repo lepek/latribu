@@ -1,4 +1,7 @@
 class ApplicationController < ActionController::Base
+
+  ADMIN_CONTROLLERS = ['disciplines', 'payments', 'rookies', 'shifts', 'stats']
+
   add_flash_types :error, :success
 
   layout :set_layout
@@ -10,16 +13,9 @@ class ApplicationController < ActionController::Base
 
   before_filter :set_time_zone
   before_filter :authenticate_user!, :unless => :devise_controller?
+  before_filter :authorize_admin_actions, if: -> { current_user.present? }
   before_filter :configure_permitted_parameters, :if => :devise_controller?
   before_filter :messages
-
-  # Fix to make Cancan work with Rails 4 and string paramters
-  # https://github.com/ryanb/cancan/issues/835#issuecomment-18663815
-  before_filter do
-    resource = controller_path.singularize.gsub('/', '_').to_sym
-    method = "#{resource}_params"
-    params[resource] &&= send(method) if respond_to?(method, true)
-  end
 
   impersonates :user
 
@@ -33,6 +29,10 @@ class ApplicationController < ActionController::Base
   end
 
   private
+
+  def authorize_admin_actions
+    raise CanCan::AccessDenied if ADMIN_CONTROLLERS.include?(controller_name) && !current_user.admin?
+  end
 
   def messages
     if current_user.present? && !current_user.admin? && current_user.credit == 0
