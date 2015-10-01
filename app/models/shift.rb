@@ -30,12 +30,12 @@ class Shift < ActiveRecord::Base
     preload(:discipline, :instructor)
   end
 
-  def self.with_shift_dates
+  def self.with_shift_dates(start_date = Chronic.parse("now"))
     select(
-      "IF (
-        NOW() > STR_TO_DATE(CONCAT(DATE_FORMAT(DATE_ADD(NOW(), interval (week_day - DAYOFWEEK(NOW())) day), '%Y-%m-%d'),' ', start_time), '%Y-%m-%d %H:%i'),
-        STR_TO_DATE(CONCAT(DATE_FORMAT(DATE_ADD(NOW(), interval (7 + week_day - DAYOFWEEK(NOW())) day), '%Y-%m-%d'),' ', start_time), '%Y-%m-%d %H:%i'),
-        STR_TO_DATE(CONCAT(DATE_FORMAT(DATE_ADD(NOW(), interval (week_day - DAYOFWEEK(NOW())) day), '%Y-%m-%d'),' ', start_time), '%Y-%m-%d %H:%i')
+        "IF (
+        '#{start_date}' > STR_TO_DATE(CONCAT(DATE_FORMAT(DATE_ADD('#{start_date}', interval (week_day - DAYOFWEEK('#{start_date}')) day), '%Y-%m-%d'),' ', start_time), '%Y-%m-%d %H:%i'),
+        STR_TO_DATE(CONCAT(DATE_FORMAT(DATE_ADD('#{start_date}', interval (7 + week_day - DAYOFWEEK('#{start_date}')) day), '%Y-%m-%d'),' ', start_time), '%Y-%m-%d %H:%i'),
+        STR_TO_DATE(CONCAT(DATE_FORMAT(DATE_ADD('#{start_date}', interval (week_day - DAYOFWEEK('#{start_date}')) day), '%Y-%m-%d'),' ', start_time), '%Y-%m-%d %H:%i')
       ) as next_shift, shifts.*"
     )
   end
@@ -54,19 +54,24 @@ class Shift < ActiveRecord::Base
   def as_json(options = {})
     user = options[:user]
     open = available_for_enroll?(user) || available_for_cancel?(user)
+    booked = !user_inscription(user).nil?
+    closed_unattended = !open && booked && Chronic.parse('now') < next_shift
+    description = "Coach: #{instructor.first_name}<br />Anotados: #{next_fixed_shift_count.to_s}"
+    description += '<br /> No puede liberarse' if closed_unattended
+    #binding.pry
     {
       id: id,
       title: discipline.name,
       start: next_shift.rfc822,
-      end: (next_shift + 1.hour).rfc822,
-      color: open ? discipline.color : DISABLE_BG_COLOR,
-      textColor: open ? discipline.font_color : DISABLE_TEXT_COLOR,
-      description: "Coach: #{instructor.first_name}<br />Anotados: #{next_fixed_shift_count.to_s}",
+      end: (next_shift + (end_time - start_time).second).rfc822,
+      color: open || closed_unattended ? discipline.color : DISABLE_BG_COLOR,
+      textColor: open || closed_unattended ? discipline.font_color : DISABLE_TEXT_COLOR,
+      description: description,
       className: 'calendar-text',
       status: status, # just to show the status
       open: open,
       deadline: cancel_inscription,
-      booked: !user_inscription(user).nil?,
+      booked: booked,
       needs_confirmation: needs_confirmation?
     }
   end
@@ -131,7 +136,7 @@ class Shift < ActiveRecord::Base
   end
 
   def needs_confirmation?
-    Chronic.parse("now") > Chronic.parse("#{self.cancel_inscription} hours ago", :now => next_fixed_shift)
+    Chronic.parse("now") > Chronic.parse("#{cancel_inscription} hours ago", :now => next_fixed_shift)
   end
 
   def cancel_next_shift(user)
@@ -232,15 +237,6 @@ class Shift < ActiveRecord::Base
   end
 
 private
-
-  def get_next_shift(shift_time = self.start_time.strftime('%H:%M'))
-    if Chronic.parse("#{self.day.to_s} #{shift_time}", :now => Chronic.parse("now") - 1.day) > Chronic.parse("now")
-      @fixed_shift = Chronic.parse("#{self.day.to_s} #{self.start_time.strftime('%H:%M')}", :now => Chronic.parse("now") - 1.day)
-    else
-      @fixed_shift = Chronic.parse("#{self.day.to_s} #{self.start_time.strftime('%H:%M')}")
-    end
-    @fixed_shift
-  end
 
   def next_fixed_shift_count_db
     next_fixed_shift_users.count + next_fixed_shift_rookies.count

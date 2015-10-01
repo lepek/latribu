@@ -3,13 +3,13 @@ class InscriptionsController < ApplicationController
   def index
     respond_to do |format|
       format.html
-      format.json { render json: Shift.with_discipline_and_instructor.with_shift_dates.as_json({user: current_user}) }
+      format.json { render json: Shift.with_discipline_and_instructor.with_shift_dates(params[:start]).as_json({ user: current_user }) }
     end
   end
 
   def create
     @shift = Shift.with_shift_dates.where(id: params[:id]).first
-    if @shift.enroll_next_shift(current_user)
+    if !@shift.enroll_next_shift(current_user)
       render json: current_user.reload, status: :created
     else
       render json: @shift.errors, status: :unprocessable_entity

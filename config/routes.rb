@@ -27,9 +27,6 @@ Nahual::Application.routes.draw do
   end
 
   resources :shifts do
-    member do
-      get 'indiscriminate_inscription'
-    end
     collection do
       get 'next_class'
     end

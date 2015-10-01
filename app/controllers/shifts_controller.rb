@@ -62,20 +62,6 @@ class ShiftsController < ApplicationController
     redirect_to shifts_url
   end
 
-  def indiscriminate_inscription
-    @shift = Shift.find(params[:id])
-    respond_to do |format|
-      if @shift.enroll_next_shift(current_user)
-        format.html { redirect_to clients_path, success: "Te anotaste a la clase del #{format_date_for_alerts} Esta clase <b>no puede ser liberada</b>" }
-        format.json { render json: @shift, status: :created, location: @shift }
-      else
-        format.html { redirect_to clients_path, error: @shift.errors.full_messages.to_sentence }
-        format.json { render json: @shift.errors, status: :unprocessable_entity }
-      end
-    end
-  end
-
-
   private
 
     def format_date_for_alerts

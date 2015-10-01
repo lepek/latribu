@@ -1,4 +1,5 @@
 jQuery(document).ready(function() {
+  bootbox.setLocale('es');
 
   var today = moment();
 
@@ -36,7 +37,6 @@ jQuery(document).ready(function() {
       },
       dataType: 'json',
       success: function(user) {
-        $("#calendar").fullCalendar("refetchEvents");
         $("#user-credit").html(user.credit);
 
         var deadline = event.start.clone().subtract(event.deadline, 'hours');
@@ -44,6 +44,9 @@ jQuery(document).ready(function() {
         $('#bookDate').html(event.start.format("LLLL") + ' hs.');
         $('#deadline').html(deadline.format('HH:mm') + 'hs.');
         $('#bookModal').modal();
+      },
+      error: function (xhr, ajaxOptions, thrownError) {
+        bootbox.alert('Ha ocurrido un <strong>error</strong> al intentar inscribirte, por favor <strong>intentalo nuevamente</strong>.<br />Si el problema persiste comunicate con la Administración.');
       }
     });
   }
@@ -59,13 +62,15 @@ jQuery(document).ready(function() {
       },
       dataType: 'json',
       success: function(user) {
-        $("#calendar").fullCalendar("refetchEvents");
         $("#user-credit").html(user.credit);
 
         var deadline = event.start.clone().subtract(event.deadline, 'hours');
         $('#cancelTitle').html(event.title);
         $('#cancelDate').html(event.start.format("LLLL") + ' hs.');
         $('#cancelModal').modal();
+      },
+      error: function (xhr, ajaxOptions, thrownError) {
+        bootbox.alert('Ha ocurrido un <strong>error</strong> al intentar liberar la clase, por favor <strong>intentalo nuevamente</strong>.<br />Si el problema persiste comunicate con la Administración.');
       }
     });
   }
@@ -73,7 +78,7 @@ jQuery(document).ready(function() {
   function CreateTooltip(event, element) {
     var tooltip = event.description;
     if (!event.open) {
-      tooltip += '<br />' + event.status.charAt(0).toUpperCase() + event.status.substring(1);
+      if (!event.booked) tooltip += '<br />' + event.status.charAt(0).toUpperCase() + event.status.substring(1);
       $(element).css('cursor', 'not-allowed');
     }
     $(element).attr("data-original-title", tooltip);
@@ -107,7 +112,6 @@ jQuery(document).ready(function() {
           CancelEnroll(event);
         } else {
           if (event.needs_confirmation) {
-            bootbox.setLocale('es');
             bootbox.confirm("Esta clase <strong>no podrá ser liberada</strong> y el crédito no podrá ser devuelto.<br />Por favor <strong>confirmá</strong> o <strong>cancela</strong> ahora.", function(result) {
               if (result) EnrollClient(event);
             });
@@ -115,6 +119,7 @@ jQuery(document).ready(function() {
             EnrollClient(event);
           }
         }
+        $("#calendar").fullCalendar("refetchEvents");
       }
     },
     eventMouseover: function( event, jsEvent, view ) {
@@ -122,6 +127,13 @@ jQuery(document).ready(function() {
     },
     eventMouseout: function( event, jsEvent, view ) {
       if (event.open) $(this).css('background-color', event.color);
+    },
+    loading: function(bool) {
+      if (bool) {
+        $('#loading').show();
+      } else {
+        $('#loading').hide();
+      }
     }
   })
 });
