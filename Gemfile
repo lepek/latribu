@@ -24,19 +24,11 @@ gem 'jquery-ui-rails', '~> 5.0.0'
 gem 'jquery-datatables-rails', '~> 3.3.0'
 gem 'ajax-datatables-rails', '~> 0.3.1'
 
-# Build JSON APIs with ease. Read more: https://github.com/rails/jbuilder
-gem 'jbuilder', '~> 1.2'
-
-group :doc do
-  # bundle exec rake doc:rails generates the API under doc/api.
-  gem 'sdoc', require: false
-end
 
 gem 'devise', '~> 3.5.2'
 
 group :development, :test do
-  gem 'rspec-rails', '~> 2.0'
-  gem 'cucumber-rails', :require => false
+  gem 'rspec-rails', '~> 3.0'
   gem 'database_cleaner'
   gem 'factory_girl_rails'
   gem 'timecop'
