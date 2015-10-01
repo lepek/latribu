@@ -17,11 +17,11 @@
             <tr>
               <td>
                 <%= check_box_tag "user_attended#{inscription.id}", true, inscription.attended,
-                                  data: {
-                        remote: true,
-                        method: :post,
+                  data: {
+                    remote: true,
+                    method: :post,
                     url: url_for(controller: :inscriptions, action: :attended, id: inscription.id)
-                    }
+                  }
                 -%>
               </td>
               <td>
@@ -35,11 +35,11 @@
               </td>
               <td>
                 <%= check_box_tag "user_certificate#{inscription.user.id}", true, inscription.user.certificate,
-                                  data: {
-                        remote: true,
-                        method: :post,
+                  data: {
+                    remote: true,
+                    method: :post,
                     url: url_for(controller: :users, action: :certificate, id: inscription.user.id)
-                    }
+                  }
                 -%>
               </td>
             </tr>
@@ -69,11 +69,11 @@
             <tr>
               <td>
                 <%= check_box_tag "rooky_attended#{rooky.id}", true, rooky.attended,
-                                  data: {
-                            remote: true,
-                            method: :post,
+                  data: {
+                    remote: true,
+                    method: :post,
                     url: url_for(controller: :rookies, action: :attended, id: rooky.id)
-                    }
+                  }
                 -%>
               </td>
               <td>

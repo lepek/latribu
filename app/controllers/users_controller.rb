@@ -70,7 +70,7 @@ class UsersController < ApplicationController
     else
       @user.update_attributes({:certificate => false})
     end
-    render status: :ok, json: {}
+    head status: :ok
   end
 
   def set_reset

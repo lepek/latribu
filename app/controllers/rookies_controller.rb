@@ -41,7 +41,7 @@ class RookiesController < ApplicationController
     else
       @rooky.update_attributes({:attended => false})
     end
-    render status: :ok, json: {}
+    head status: :ok
   end
 
 private

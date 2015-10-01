@@ -1,6 +1,6 @@
 class UserDatatable < AjaxDatatablesRails::Base
 
-  def_delegators :@view, :link_to, :new_user_payment_path, :edit_user_path, :user_path, :impersonate_user_path, :current_ability
+  def_delegators :@view, :link_to, :new_user_payment_path, :edit_user_path, :user_path, :impersonate_user_path
 
   def sortable_columns
     # Declare strings in this format: ModelName.column_name
@@ -37,7 +37,7 @@ class UserDatatable < AjaxDatatablesRails::Base
   end
 
   def get_raw_records
-    User.accessible_by(current_ability).clients
+    User.clients
   end
 
 end

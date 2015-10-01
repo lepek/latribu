@@ -26,13 +26,14 @@ class InscriptionsController < ApplicationController
   end
 
   def attended
+    raise CanCan::AccessDenied unless current_user.admin?
     @inscription = Inscription.find(params[:id])
     if params.has_key?("user_attended#{@inscription.id}") and !!params["user_attended#{@inscription.id}".to_sym] == true
       @inscription.update_attributes({:attended => true})
     else
       @inscription.update_attributes({:attended => false})
     end
-    render status: :ok, json: {}
+    head status: :ok
   end
 
 end

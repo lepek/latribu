@@ -1,6 +1,6 @@
 class ApplicationController < ActionController::Base
 
-  ADMIN_CONTROLLERS = ['disciplines', 'payments', 'rookies', 'shifts', 'stats']
+  ADMIN_CONTROLLERS = ['disciplines', 'payments', 'rookies', 'shifts', 'stats', 'users']
 
   add_flash_types :error, :success
 

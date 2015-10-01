@@ -1,6 +1,6 @@
 class ShiftDatatable < AjaxDatatablesRails::Base
 
-  def_delegators :@view, :link_to, :new_in_shift_rookies_path, :shift_path, :edit_shift_path, :current_ability, :new_in_shift_rookies_path
+  def_delegators :@view, :link_to, :new_in_shift_rookies_path, :shift_path, :edit_shift_path, :new_in_shift_rookies_path
 
   def sortable_columns
     # Declare strings in this format: ModelName.column_name
@@ -38,7 +38,7 @@ class ShiftDatatable < AjaxDatatablesRails::Base
   end
 
   def get_raw_records
-    Shift.accessible_by(current_ability).with_shift_dates
+    Shift.with_shift_dates
   end
 
 end

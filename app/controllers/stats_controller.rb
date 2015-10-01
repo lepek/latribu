@@ -5,7 +5,7 @@ class StatsController < ApplicationController
     @date = params[:date]
     render :show and return if @date.present?
 
-    Stat.accessible_by(current_ability).generate
+    Stat.generate
     respond_to do |format|
       format.html
       format.json { render json: StatDatatable.new(view_context) }
