@@ -55,15 +55,17 @@ class Shift < ActiveRecord::Base
     user = options[:user]
     open = available_for_enroll?(user) || available_for_cancel?(user)
     booked = !user_inscription(user).nil?
-    closed_unattended = !open && booked && Chronic.parse('now') < next_shift
+    end_date = next_shift + (end_time - start_time).second
+
+    closed_unattended = !open && booked && Chronic.parse('now') < end_date
     description = "Coach: #{instructor.first_name}<br />Anotados: #{next_fixed_shift_count.to_s}"
     description += '<br /> No puede liberarse' if closed_unattended
-    #binding.pry
+
     {
       id: id,
       title: discipline.name,
       start: next_shift.rfc822,
-      end: (next_shift + (end_time - start_time).second).rfc822,
+      end: end_date.rfc822,
       color: open || closed_unattended ? discipline.color : DISABLE_BG_COLOR,
       textColor: open || closed_unattended ? discipline.font_color : DISABLE_TEXT_COLOR,
       description: description,
@@ -195,7 +197,7 @@ class Shift < ActiveRecord::Base
   # @return nil or the inscription record of the user
   #
   def user_inscription(user)
-    user.next_inscriptions.find { |i| i.shift_date == next_fixed_shift }
+    user.inscriptions.find { |i| i.shift_date == next_fixed_shift }
   end
 
   def another_today_inscription?(user)
