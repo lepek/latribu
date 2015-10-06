@@ -64,8 +64,8 @@ class Shift < ActiveRecord::Base
     {
       id: id,
       title: discipline.name,
-      start: next_fixed_shift.rfc822,
-      end: end_date.rfc822,
+      start: next_fixed_shift.strftime('%Y-%m-%d %H:%M'),
+      end: end_date.strftime('%Y-%m-%d %H:%M'),
       color: open || closed_unattended ? discipline.color : DISABLE_BG_COLOR,
       textColor: open || closed_unattended ? discipline.font_color : DISABLE_TEXT_COLOR,
       description: description,
@@ -82,8 +82,7 @@ class Shift < ActiveRecord::Base
   # @return The specific date of the next class of this shift
   #
   def next_fixed_shift
-    next_shift ||= Shift.with_shift_dates.where(id: id).first.next_shift
-    Chronic.parse(next_shift)
+    @next_shift_date ||= Chronic.parse(try(:next_shift)) || Chronic.parse(Shift.with_shift_dates.where(id: id).first.next_shift)
   end
 
   ##

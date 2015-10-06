@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20151004123537) do
+ActiveRecord::Schema.define(version: 20151006084414) do
 
   create_table "disciplines", force: :cascade do |t|
     t.string   "name",       limit: 255
@@ -32,6 +32,7 @@ ActiveRecord::Schema.define(version: 20151004123537) do
   end
 
   add_index "inscriptions", ["shift_date"], name: "index_inscriptions_on_shift_date", using: :btree
+  add_index "inscriptions", ["shift_id", "shift_date"], name: "index_inscriptions_on_shift_id_and_shift_date", using: :btree
   add_index "inscriptions", ["shift_id"], name: "index_inscriptions_on_shift_id", using: :btree
   add_index "inscriptions", ["user_id"], name: "index_inscriptions_on_user_id", using: :btree
 
@@ -75,6 +76,7 @@ ActiveRecord::Schema.define(version: 20151004123537) do
   end
 
   add_index "rookies", ["shift_date"], name: "index_rookies_on_shift_date", using: :btree
+  add_index "rookies", ["shift_id", "shift_date"], name: "index_rookies_on_shift_id_and_shift_date", using: :btree
   add_index "rookies", ["shift_id"], name: "index_rookies_on_shift_id", using: :btree
 
   create_table "shifts", force: :cascade do |t|

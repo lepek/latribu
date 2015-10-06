@@ -94,7 +94,7 @@ jQuery(document).ready(function() {
     hiddenDays: [ 0 ],
     minTime: '08:00:00',
     maxTime: '22:00:00',
-    timezone: 'local',
+    timezone: false,
     now: today,
     eventRender: function (event, element) {
       CreateTooltip(event, element);
