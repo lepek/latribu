@@ -30,12 +30,12 @@ class Shift < ActiveRecord::Base
     preload(:discipline, :instructor)
   end
 
-  def self.with_shift_dates(start_date = Chronic.parse("now"))
+  def self.with_shift_dates(start_date = Chronic.parse("now").strftime('%Y-%m-%d'))
     select(
         "IF (
         '#{start_date}' > STR_TO_DATE(CONCAT(DATE_FORMAT(DATE_ADD('#{start_date}', interval (week_day - DAYOFWEEK('#{start_date}')) day), '%Y-%m-%d'),' ', start_time), '%Y-%m-%d %H:%i'),
-        STR_TO_DATE(CONCAT(DATE_FORMAT(DATE_ADD('#{start_date}', interval (7 + week_day - DAYOFWEEK('#{start_date}')) day), '%Y-%m-%d'),' ', start_time), '%Y-%m-%d %H:%i'),
-        STR_TO_DATE(CONCAT(DATE_FORMAT(DATE_ADD('#{start_date}', interval (week_day - DAYOFWEEK('#{start_date}')) day), '%Y-%m-%d'),' ', start_time), '%Y-%m-%d %H:%i')
+        CONCAT(DATE_FORMAT(DATE_ADD('#{start_date}', interval (7 + week_day - DAYOFWEEK('#{start_date}')) day), '%Y-%m-%d'),' ', start_time),
+        CONCAT(DATE_FORMAT(DATE_ADD('#{start_date}', interval (week_day - DAYOFWEEK('#{start_date}')) day), '%Y-%m-%d'),' ', start_time)
       ) as next_shift, shifts.*"
     )
   end
@@ -55,7 +55,7 @@ class Shift < ActiveRecord::Base
     user = options[:user]
     open = available_for_enroll?(user) || available_for_cancel?(user)
     booked = !user_inscription(user).nil?
-    end_date = next_shift + (end_time - start_time).second
+    end_date = next_fixed_shift + (end_time - start_time).second
 
     closed_unattended = !open && booked && Chronic.parse('now') < end_date
     description = "Coach: #{instructor.first_name}<br />Anotados: #{next_fixed_shift_count.to_s}"
@@ -64,7 +64,7 @@ class Shift < ActiveRecord::Base
     {
       id: id,
       title: discipline.name,
-      start: next_shift.rfc822,
+      start: next_fixed_shift.rfc822,
       end: end_date.rfc822,
       color: open || closed_unattended ? discipline.color : DISABLE_BG_COLOR,
       textColor: open || closed_unattended ? discipline.font_color : DISABLE_TEXT_COLOR,
@@ -82,14 +82,15 @@ class Shift < ActiveRecord::Base
   # @return The specific date of the next class of this shift
   #
   def next_fixed_shift
-    next_shift
+    next_shift ||= Shift.with_shift_dates.where(id: id).first.next_shift
+    Chronic.parse(next_shift)
   end
 
   ##
   # @return The specific date of the current or next class of this shift
   #
   def current_fixed_shift
-    next_shift
+    next_fixed_shift
     #@current_fixed_shift ||= get_next_shift(self.end_time.strftime('%H:%M'))
   end
 

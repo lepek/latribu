@@ -11,7 +11,6 @@ class ApplicationController < ActionController::Base
   protect_from_forgery with: :exception
   skip_before_filter :verify_authenticity_token, if: -> { controller_name == 'sessions' && action_name == 'destroy' }
 
-  before_filter :set_time_zone
   before_filter :authenticate_user!, :unless => :devise_controller?
   before_filter :authorize_admin_actions, if: -> { current_user.present? }
   before_filter :configure_permitted_parameters, :if => :devise_controller?
@@ -38,10 +37,6 @@ class ApplicationController < ActionController::Base
     if current_user.present? && !current_user.admin? && current_user.credit == 0
       flash[:warning] = "No podrás incribirte a ningún turno por no tener créditos. Comunicate con La Tribu para poder volver a entrenar."
     end
-  end
-
-  def set_time_zone
-    Chronic.time_class = Time.zone
   end
 
   def configure_permitted_parameters

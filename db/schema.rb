@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150916181125) do
+ActiveRecord::Schema.define(version: 20151004123537) do
 
   create_table "disciplines", force: :cascade do |t|
     t.string   "name",       limit: 255
@@ -48,10 +48,8 @@ ActiveRecord::Schema.define(version: 20150916181125) do
     t.datetime "created_at"
     t.datetime "updated_at"
     t.integer  "user_id",     limit: 4
-    t.string   "month",       limit: 255
     t.datetime "deleted_at"
-    t.integer  "year",        limit: 4,   default: 2014
-    t.integer  "used_credit", limit: 4,   default: 0
+    t.integer  "used_credit", limit: 4, default: 0
     t.datetime "reset_date"
     t.date     "month_year"
   end

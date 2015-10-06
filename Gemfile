@@ -29,9 +29,9 @@ gem 'devise', '~> 3.5.2'
 
 group :development, :test do
   gem 'rspec-rails', '~> 3.0'
-  gem 'database_cleaner'
-  gem 'factory_girl_rails'
-  gem 'timecop'
+  gem 'database_cleaner', '~> 1.5'
+  gem 'factory_girl_rails', '~> 4.5.0'
+  gem 'timecop', '~> 0.8.0'
   gem 'pry'
   gem 'capistrano'
   gem 'capistrano-rails'
