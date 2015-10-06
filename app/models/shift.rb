@@ -64,8 +64,8 @@ class Shift < ActiveRecord::Base
     {
       id: id,
       title: discipline.name,
-      start: next_fixed_shift.strftime('%Y-%m-%d %H:%M'),
-      end: end_date.strftime('%Y-%m-%d %H:%M'),
+      start: next_fixed_shift.strftime('%F %R'),
+      end: end_date.strftime('%F %R'),
       color: open || closed_unattended ? discipline.color : DISABLE_BG_COLOR,
       textColor: open || closed_unattended ? discipline.font_color : DISABLE_TEXT_COLOR,
       description: description,
@@ -83,14 +83,6 @@ class Shift < ActiveRecord::Base
   #
   def next_fixed_shift
     @next_shift_date ||= Chronic.parse(try(:next_shift)) || Chronic.parse(Shift.with_shift_dates.where(id: id).first.next_shift)
-  end
-
-  ##
-  # @return The specific date of the current or next class of this shift
-  #
-  def current_fixed_shift
-    next_fixed_shift
-    #@current_fixed_shift ||= get_next_shift(self.end_time.strftime('%H:%M'))
   end
 
   ##
@@ -112,23 +104,8 @@ class Shift < ActiveRecord::Base
     count.to_i
   end
 
-  ##
-  # @return Number of inscriptions for the current or next shift
-  #
-  def current_fixed_shift_count
-    current_fixed_shift_users.count + current_fixed_shift_rookies.count
-  end
-
-  def current_fixed_shift_users
-    inscriptions.where(:shift_date => current_fixed_shift)
-  end
-
-  def current_fixed_shift_rookies
-    rookies.where(:shift_date => current_fixed_shift)
-  end
-
   def enroll_next_shift(user)
-    if available_for_enroll?(user)
+    if available_for_enroll?(user.reload)
       self.inscriptions << Inscription.create({:user_id => user.id, :shift_date => next_fixed_shift})
       $redis.cache(:key => redis_key, :recalculate => true) { next_fixed_shift_count_db }
     else
@@ -142,7 +119,7 @@ class Shift < ActiveRecord::Base
   end
 
   def cancel_next_shift(user)
-    if available_for_cancel?(user)
+    if available_for_cancel?(user.reload)
       self.inscriptions.where({:user_id => user.id, :shift_date => next_fixed_shift}).first.destroy
       $redis.cache(:key => redis_key, :recalculate => true) { next_fixed_shift_count_db }
     else
@@ -174,8 +151,8 @@ class Shift < ActiveRecord::Base
   # @return [Boolean] if the shift is available to enroll a user or not
   #
   def available_for_enroll?(user)
-    @available_for_enroll ||= exceptions?(user)
-    @available_for_enroll ||= ( status == STATUS[:open] && user_inscription(user).nil? && user.credit > 0 && user.disciplines.include?(discipline) && !another_today_inscription?(user) )
+    available_for_enroll = exceptions?(user)
+    available_for_enroll ||= ( status == STATUS[:open] && user_inscription(user).nil? && user.credit > 0 && user.disciplines.include?(discipline) && !another_today_inscription?(user) )
   end
 
   def exceptions?(user)
@@ -201,7 +178,7 @@ class Shift < ActiveRecord::Base
   end
 
   def another_today_inscription?(user)
-    !user.next_inscriptions.find { |i| i.shift_date.strftime('%D') == next_fixed_shift.strftime('%D') && i.shift.discipline == discipline }.nil?
+    !user.inscriptions.find { |i| i.shift_date.strftime('%D') == next_fixed_shift.strftime('%D') && i.shift.discipline == discipline }.nil?
   end
 
   def day_and_time

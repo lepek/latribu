@@ -32,18 +32,21 @@ group :development, :test do
   gem 'database_cleaner', '~> 1.5'
   gem 'factory_girl_rails', '~> 4.5.0'
   gem 'timecop', '~> 0.8.0'
+  gem "fakeredis", '~> 0.5.0', :require => "fakeredis/rspec"
   gem 'pry'
+  gem 'pry-stack_explorer'
   gem 'capistrano'
   gem 'capistrano-rails'
   gem 'capistrano-nginx-unicorn'
   gem 'launchy'
+  gem 'simplecov', :require => false
 end
 
 # jQuery based replacement for select boxes
 gem "select2-rails", '~> 3.5.9.3'
 
 # date/time parser
-gem 'chronic'
+gem 'chronic', '~> 0.10.2'
 
 gem 'rails-i18n', "~> 4.0.2"
 
@@ -51,7 +54,7 @@ gem "simple_calendar", "~> 0.1.9"
 
 gem 'paranoia', '~> 2.0.3'
 
-gem 'redis'
+gem 'redis', '~> 3.2.1'
 
 gem 'unicorn'
 
