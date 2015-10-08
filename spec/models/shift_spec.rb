@@ -12,7 +12,21 @@ describe Shift, :type => :model do
 
   describe '#next_fixed_shift' do
     it 'generates the next shift day' do
-      expect(shift.next_fixed_shift.strftime('%Y-%m-%d %H:%M')).to eq(base_date.strftime('%Y-%m-%d %H:%M'))
+      Timecop.freeze(base_date - 1.hour) do
+        expect(shift.next_fixed_shift.strftime('%Y-%m-%d %H:%M')).to eq(base_date.strftime('%Y-%m-%d %H:%M'))
+      end
+    end
+
+    it 'generates the next shift on the next week' do
+      Timecop.freeze(base_date + 1.hour) do
+        expect(shift.next_fixed_shift.strftime('%Y-%m-%d %H:%M')).to eq((base_date + 7.day).strftime('%Y-%m-%d %H:%M'))
+      end
+    end
+
+    it 'generates the next shift on the previous week' do
+      Timecop.freeze(base_date - 7.day) do
+        expect(shift.next_fixed_shift.strftime('%Y-%m-%d %H:%M')).to eq((base_date - 7.day).strftime('%Y-%m-%d %H:%M'))
+      end
     end
   end
 
@@ -106,17 +120,17 @@ describe Shift, :type => :model do
     end
   end
 
-  describe '#available_for_enroll?' do
-    it 'returns false for user without credit' do
+  describe '#enroll_next_shift' do
+    it 'returns number of shift inscriptions' do
       Timecop.freeze(base_date - shift.open_inscription.hour + 1.hour) do
-        expect(shift.available_for_enroll?(user_without_credit)).to eq(false)
+        expect(shift.enroll_next_shift(user_with_credit)).to be(1)
       end
     end
 
     it 'returns false for full shift' do
       shift.update(max_attendants: 0)
       Timecop.freeze(base_date - shift.open_inscription.hour + 1.hour) do
-        expect(shift.available_for_enroll?(user_with_credit)).to eq(false)
+        expect(shift.enroll_next_shift(user_with_credit)).to be(false)
       end
     end
 
@@ -124,28 +138,20 @@ describe Shift, :type => :model do
       user_with_credit.disciplines.find_by_name(shift.discipline.name).destroy
       user_with_credit.reload
       Timecop.freeze(base_date - shift.open_inscription.hour + 1.hour) do
-        expect(shift.available_for_enroll?(user_with_credit)).to eq(false)
+        expect(shift.enroll_next_shift(user_with_credit)).to be(false)
       end
     end
 
-    it 'returns true for user with credit' do
+    it 'returns false if for any reason #available_for_enroll? returns false' do
+      allow(shift).to receive(:available_for_enroll?) { false }
       Timecop.freeze(base_date - shift.open_inscription.hour + 1.hour) do
-        expect(shift.available_for_enroll?(user_with_credit)).to eq(true)
-      end
-    end
-  end
-
-  describe '#enroll_next_shift' do
-    it 'creates an inscription for the next shift' do
-      Timecop.freeze(base_date - shift.open_inscription.hour + 1.hour) do
-        shift.enroll_next_shift(user_with_credit)
-        expect(shift.inscriptions.where(shift_date: shift.next_fixed_shift).first.user).to eq(user_with_credit)
+        expect(shift.enroll_next_shift(user_with_credit)).to be(false)
       end
     end
 
     it 'returns false for a user without credit' do
       Timecop.freeze(base_date - shift.open_inscription.hour + 1.hour) do
-        expect(shift.enroll_next_shift(user_without_credit)).to eq(false)
+        expect(shift.enroll_next_shift(user_without_credit)).to be(false)
       end
     end
 
@@ -154,7 +160,7 @@ describe Shift, :type => :model do
         shift.enroll_next_shift(user_with_credit)
       end
       Timecop.freeze(base_date - shift.open_inscription.hour + 1.hour) do
-        expect(shift.enroll_next_shift(user_with_credit)).to eq(false)
+        expect(shift.enroll_next_shift(user_with_credit)).to be(false)
       end
     end
 
@@ -170,7 +176,7 @@ describe Shift, :type => :model do
       end
 
       Timecop.freeze(base_date - shift.open_inscription.hour + 1.hour) do
-        expect(another_shift.enroll_next_shift(user_with_credit)).to eq(false)
+        expect(another_shift.enroll_next_shift(user_with_credit)).to be(false)
       end
     end
   end
@@ -192,10 +198,66 @@ describe Shift, :type => :model do
         cancellations.times do |i|
           shift.cancel_next_shift(users[i])
         end
-        expect(shift.next_fixed_shift_count).to eq(inscriptions - cancellations)
+        expect(shift.next_fixed_shift_count).to be(inscriptions - cancellations)
       end
     end
   end
 
+  describe '#cancel_next_shift' do
+    it 'returns false if it is too late to cancel' do
+      Timecop.freeze(base_date - shift.cancel_inscription.hour + 1.minute) do
+        shift.enroll_next_shift(user_with_credit)
+        expect(shift.cancel_next_shift(user_with_credit)).to be(false)
+      end
+    end
+
+    it 'returns false if the user is not enrolled' do
+      Timecop.freeze(base_date - shift.open_inscription.hour + 30.minute) do
+        expect(shift.cancel_next_shift(user_with_credit)).to be(false)
+      end
+    end
+
+    it 'returns false if the shift is closed' do
+      Timecop.freeze(base_date - shift.open_inscription.hour - 30.minute) do
+        expect(shift.cancel_next_shift(user_with_credit)).to be(false)
+      end
+    end
+
+    it 'returns false if for any reason #available_for_cancel? returns false' do
+      allow(shift).to receive(:available_for_cancel?) { false }
+      Timecop.freeze(base_date - shift.open_inscription.hour + 30.minute) do
+        shift.enroll_next_shift(user_with_credit)
+        expect(shift.cancel_next_shift(user_with_credit)).to be(false)
+      end
+    end
+
+    it 'returns the number of remaining inscriptions' do
+      Timecop.freeze(base_date - shift.open_inscription.hour + 30.minute) do
+        shift.enroll_next_shift(user_with_credit)
+        expect(shift.cancel_next_shift(user_with_credit)).to be(0)
+      end
+    end
+
+  end
+
+  describe '#as_json' do
+    it 'serialize a closed shift' do
+      Timecop.freeze(base_date - shift.open_inscription.hour - 1.minute) do
+        expect(shift.as_json(user: user_with_credit)[:open]).to eq(false)
+      end
+    end
+
+    it 'serialize an open shift' do
+      Timecop.freeze(base_date - shift.open_inscription.hour + 1.minute) do
+        expect(shift.as_json(user: user_with_credit)[:open]).to eq(true)
+      end
+    end
+
+    it 'serialize the start date' do
+      Timecop.freeze(base_date - shift.open_inscription.hour + 1.minute) do
+        expect(shift.as_json(user: user_with_credit)[:start]).to eq(base_date.strftime('%F %R'))
+      end
+    end
+  end
 
 end

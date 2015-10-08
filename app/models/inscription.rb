@@ -6,6 +6,8 @@ class Inscription < ActiveRecord::Base
   after_destroy :add_credit
   after_create :remove_credit
 
+private
+
   ##
   # Refund the credit when an inscriptions is deleted
   #
@@ -21,15 +23,6 @@ class Inscription < ActiveRecord::Base
     get_oldest_payment_with_credit_to_use.increment!(:used_credit)
     self.user.decrement!(:credit)
   end
-
-  ##
-  # For the calendar
-  #
-  def start_time
-    self.shift_date
-  end
-
-private
 
   ##
   # Get the oldest payment not reset with credit to use

@@ -97,6 +97,7 @@ jQuery(document).ready(function() {
     timezone: false,
     now: today,
     eventRender: function (event, element) {
+      element.attr( 'id', 'shift-' + event.id );
       CreateTooltip(event, element);
       if (event.booked) {
         var time = $(element).find('.fc-time').html();

@@ -30,46 +30,29 @@ class User < ActiveRecord::Base
   scope :clients, -> { where(:role_id => Role.find_by_name(CLIENT_ROLE).id) }
   scope :to_reset, -> { clients.where('reset_credit = 1') }
 
-  attr_accessor :full_name
-  after_initialize :full_name
-
-  def attributes
-    super.merge({'full_name' => self.full_name})
-  end
-
-  ##
-  # @return All the inscriptions for classes in the future for this user
-  #
-  def next_inscriptions
-    @next_inscriptions ||= self.inscriptions.where('shift_date >= ?', Chronic.parse("now") )
-  end
 
   def full_name
-    self.full_name = "#{self.first_name} #{self.last_name}" if self.has_attribute?(:first_name) && self.has_attribute?(:last_name)
+    "#{first_name} #{last_name}" if has_attribute?(:first_name) && has_attribute?(:last_name)
   end
 
   def name
-    "#{self.first_name} #{self.last_name} (#{self.email})"
+    "#{first_name} #{last_name} (#{email})"
   end
 
   def admin?
-    self.role.name == ADMIN_ROLE
-  end
-
-  def reset_credit?
-    self.reset_credit
+    role.name == ADMIN_ROLE
   end
 
   ##
   # @return [Boolean] If the user is a pretty new user without credits or inscriptions
   #
   def is_not_new?
-    self.admin? || self.credit > 0 || self.inscriptions.any?
+    admin? || credit > 0 || inscriptions.any?
   end
 
   def calculate_future_credit(month_year)
     return 0 unless credit > 0
-    future_credit = self.payments.select('credit - used_credit AS future_credit').where("reset_date IS NULL AND month_year > '#{month_year}'").map(&:future_credit).sum
+    future_credit = payments.select('credit - used_credit AS future_credit').where("reset_date IS NULL AND month_year > '#{month_year}'").map(&:future_credit).sum
     # Fix because the first reset was forced directly in the user model
     return if future_credit > credit ? credit : future_credit
   end
@@ -106,7 +89,7 @@ private
   end
 
   def remove_future_inscriptions
-    self.inscriptions.where("shift_date > '#{Chronic.parse("now")}'").destroy_all
+    inscriptions.where("shift_date > '#{Chronic.parse("now")}'").destroy_all
   end
 
   def set_role
@@ -118,8 +101,8 @@ private
   end
 
   def set_discipline
-    @disciplines = Discipline.where(:default => true)
-    self.disciplines = @disciplines if @disciplines && !self.admin? && self.disciplines.empty?
+    default_disciplines = Discipline.where(:default => true)
+    self.disciplines = default_disciplines if default_disciplines.present? && !admin? && disciplines.empty?
   end
 
 end

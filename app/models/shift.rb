@@ -30,7 +30,7 @@ class Shift < ActiveRecord::Base
     preload(:discipline, :instructor)
   end
 
-  def self.with_shift_dates(start_date = Chronic.parse("now").strftime('%Y-%m-%d'))
+  def self.with_shift_dates(start_date = Chronic.parse("now").strftime('%F %R'))
     select(
         "IF (
         '#{start_date}' > STR_TO_DATE(CONCAT(DATE_FORMAT(DATE_ADD('#{start_date}', interval (week_day - DAYOFWEEK('#{start_date}')) day), '%Y-%m-%d'),' ', start_time), '%Y-%m-%d %H:%i'),
@@ -52,12 +52,13 @@ class Shift < ActiveRecord::Base
   end
 
   def as_json(options = {})
+    raise ArgumentException unless options[:user].present?
     user = options[:user]
-    open = available_for_enroll?(user) || available_for_cancel?(user)
+    selectable = available_for_enroll?(user) || available_for_cancel?(user)
     booked = !user_inscription(user).nil?
     end_date = next_fixed_shift + (end_time - start_time).second
 
-    closed_unattended = !open && booked && Chronic.parse('now') < end_date
+    closed_unattended = !selectable && booked && Chronic.parse('now') < end_date
     description = "Coach: #{instructor.first_name}<br />Anotados: #{next_fixed_shift_count.to_s}"
     description += '<br /> No puede liberarse' if closed_unattended
 
@@ -66,12 +67,12 @@ class Shift < ActiveRecord::Base
       title: discipline.name,
       start: next_fixed_shift.strftime('%F %R'),
       end: end_date.strftime('%F %R'),
-      color: open || closed_unattended ? discipline.color : DISABLE_BG_COLOR,
-      textColor: open || closed_unattended ? discipline.font_color : DISABLE_TEXT_COLOR,
+      color: selectable || closed_unattended ? discipline.color : DISABLE_BG_COLOR,
+      textColor: selectable || closed_unattended ? discipline.font_color : DISABLE_TEXT_COLOR,
       description: description,
       className: 'calendar-text',
       status: status, # just to show the status
-      open: open,
+      open: selectable,
       deadline: cancel_inscription,
       booked: booked,
       needs_confirmation: needs_confirmation?
@@ -146,15 +147,6 @@ class Shift < ActiveRecord::Base
     $redis.cache(:key => redis_key, :recalculate => true) { next_fixed_shift_count_db }
   end
 
-  ##
-  # @param user [User] the user we would like to enroll
-  # @return [Boolean] if the shift is available to enroll a user or not
-  #
-  def available_for_enroll?(user)
-    available_for_enroll = exceptions?(user)
-    available_for_enroll ||= ( status == STATUS[:open] && user_inscription(user).nil? && user.credit > 0 && user.disciplines.include?(discipline) && !another_today_inscription?(user) )
-  end
-
   def exceptions?(user)
     ALLOWED_USERS.include?(user.id) && status != STATUS[:full] && user_inscription(user).nil? && user.credit > 0 && user.disciplines.include?(discipline)
   end
@@ -164,10 +156,6 @@ class Shift < ActiveRecord::Base
   #
   def available_for_try?
     status != STATUS[:full]
-  end
-
-  def available_for_cancel?(user)
-    user_inscription(user).present? && (status != STATUS[:close] && !needs_confirmation? || ALLOWED_USERS.include?(user.id) )
   end
 
   ##
@@ -211,11 +199,20 @@ class Shift < ActiveRecord::Base
 
   end
 
-  def close?
-    status == STATUS[:close]
+private
+
+  ##
+  # @param user [User] the user we would like to enroll
+  # @return [Boolean] if the shift is available to enroll a user or not
+  #
+  def available_for_enroll?(user)
+    available_for_enroll = exceptions?(user)
+    available_for_enroll || ( status == STATUS[:open] && user_inscription(user).nil? && user.credit > 0 && user.disciplines.include?(discipline) && !another_today_inscription?(user) )
   end
 
-private
+  def available_for_cancel?(user)
+    user_inscription(user).present? && (status != STATUS[:close] && !needs_confirmation? || ALLOWED_USERS.include?(user.id) )
+  end
 
   def next_fixed_shift_count_db
     next_fixed_shift_users.count + next_fixed_shift_rookies.count

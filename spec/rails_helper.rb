@@ -7,6 +7,8 @@ require 'spec_helper'
 require 'rspec/rails'
 require 'database_cleaner_helper'
 require 'devise'
+require 'support/assert_select_root'
+
 
 # Add additional requires below this line. Rails is not loaded until this point!
 
@@ -54,6 +56,8 @@ RSpec.configure do |config|
   config.infer_spec_type_from_file_location!
 
   config.include Devise::TestHelpers, :type => :controller
+  config.include Warden::Test::Helpers, :type => :request
+  config.include AssertSelectRoot, :type => :request
 
   config.before(:suite) do
     Rails.application.load_seed # loading seeds
