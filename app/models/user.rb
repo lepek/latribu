@@ -54,7 +54,7 @@ class User < ActiveRecord::Base
     return 0 unless credit > 0
     future_credit = payments.select('credit - used_credit AS future_credit').where("reset_date IS NULL AND month_year > '#{month_year}'").map(&:future_credit).sum
     # Fix because the first reset was forced directly in the user model
-    return if future_credit > credit ? credit : future_credit
+    return future_credit > credit ? credit : future_credit
   end
 
   def self.reset_credits(month_year)
@@ -65,7 +65,7 @@ class User < ActiveRecord::Base
         future_credit = user.calculate_future_credit(month_year)
         future_credit = user.credit if future_credit > user.credit # Fix because the first reset was forced directly in the user model
       end
-      user.update_attributes({:credit => future_credit})
+      user.update(credit: future_credit)
       user.payments.where("reset_date IS NULL AND month_year <= '#{month_year}'").update_all({:reset_date => Chronic.parse("now")})
     end
   end
