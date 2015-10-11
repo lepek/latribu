@@ -24,8 +24,11 @@ gem 'jquery-ui-rails', '~> 5.0.0'
 gem 'jquery-datatables-rails', '~> 3.3.0'
 gem 'ajax-datatables-rails', '~> 0.3.1'
 
-
 gem 'devise', '~> 3.5.2'
+
+group :development do
+  gem 'i18n-debug'
+end
 
 group :development, :test do
   gem 'rspec-rails', '~> 3.0'
@@ -35,11 +38,15 @@ group :development, :test do
   gem "fakeredis", '~> 0.5.0', :require => "fakeredis/rspec"
   gem 'pry'
   gem 'pry-stack_explorer'
+  gem 'pry-remote'
   gem 'capistrano'
   gem 'capistrano-rails'
   gem 'capistrano-nginx-unicorn'
   gem 'launchy'
   gem 'simplecov', :require => false
+  gem 'capybara', '~> 2.5.0'
+  gem 'capybara-screenshot'
+  gem 'poltergeist', '~> 1.7.0'
 end
 
 # jQuery based replacement for select boxes
@@ -49,8 +56,6 @@ gem "select2-rails", '~> 3.5.9.3'
 gem 'chronic', '~> 0.10.2'
 
 gem 'rails-i18n', "~> 4.0.2"
-
-gem "simple_calendar", "~> 0.1.9"
 
 gem 'paranoia', '~> 2.0.3'
 
@@ -72,7 +77,7 @@ gem 'sprockets-rails', '~> 2.3.2', :require => 'sprockets/railtie'
 gem 'bootstrap-sass', '~> 3.3.5'
 gem 'bootstrap-sass-extras', '~> 0.0.6'
 
-gem 'devise-bootstrap-views', '~> 0.0.5'
+gem 'devise-bootstrap-views', '~> 0.0.6'
 
 gem 'simple_form', '~> 3.1.1'
 
