@@ -1,21 +1,49 @@
 require "rails_helper"
 
 describe User, :type => :model do
-  context "when user is an admin" do
-    let(:admin) { FactoryGirl.create(:admin) }
+  let(:admin) { FactoryGirl.create(:admin) }
+  let(:user) { FactoryGirl.create(:user) }
+  let(:user_with_credit) { FactoryGirl.create(:user_with_credit) }
+  let(:shift) { FactoryGirl.create(:shift) }
 
+  context "when user is an admin" do
     describe '#admin?' do
       it 'returns true for admin user' do
         expect(admin.admin?).to be(true)
       end
     end
 
+    describe '.reset_credits' do
+      it 'raises an exception' do
+        expect { User.reset_credits('2015/13/12 00:00') }.to raise_error(ArgumentError)
+      end
+
+      it 'does not raise an exception' do
+        [user, user_with_credit, user_with_credit]
+        expect { User.reset_credits('2015/12/12 00:00') }.to_not raise_error(Exception)
+      end
+    end
+
+    describe '.to_reset' do
+      it 'returns only users to reset' do
+        reset_user = user
+        FactoryGirl.create(:user, reset_credit: false)
+        expect(User.to_reset.count).to eq(1)
+        expect(User.to_reset).to include(reset_user)
+      end
+    end
+
+    describe '.clients' do
+      it 'returns only clients' do
+        [admin, user]
+        expect(User.clients.count).to eq(1)
+        expect(User.clients).to include(user)
+      end
+    end
+
   end
 
   context "when user is a client" do
-
-    let(:user) { FactoryGirl.create(:user) }
-    let(:shift) { FactoryGirl.create(:shift) }
 
     describe '#full_name' do
       it 'returns the full name' do
@@ -41,33 +69,26 @@ describe User, :type => :model do
       end
     end
 
-    describe '.reset_credits' do
-      it 'resets all the credits' do
-        user_with_credit = nil
+    describe '#calculate_future_credit' do
+      it 'returns 0 future credits' do
         Timecop.freeze(Time.zone.local(2015, 10, 3, 12, 0, 0)) do
-          user_with_credit = FactoryGirl.create(:user_with_credit)
           shift.enroll_next_shift(user_with_credit)
         end
         Timecop.freeze(Time.zone.local(2015, 11, 5, 12, 0, 0)) do
-          User.reset_credits(Time.zone.local(2015, 10, 1, 0, 0, 0))
+          expect(user_with_credit.calculate_future_credit(Time.zone.local(2015, 10, 1, 0, 0, 0))).to eq(0)
         end
-        expect(user_with_credit.reload.credit).to eq(0)
       end
 
-      it 'does not reset credits of next month' do
+      it 'returns current credits' do
         Timecop.freeze(Time.zone.local(2015, 10, 4, 12, 15, 0)) do
-          user_with_credit = FactoryGirl.create(:user_with_credit)
           shift.enroll_next_shift(user_with_credit)
           old_credits = user_with_credit.reload.credit
-          User.reset_credits(Time.zone.local(2015, 9, 1, 0, 0, 0))
-          expect(user_with_credit.reload.credit).to eq(old_credits)
+          expect(user_with_credit.calculate_future_credit(Time.zone.local(2015, 9, 1, 0, 0, 0))).to eq(old_credits)
         end
       end
 
-      it 'only reset some credits' do
-        user_with_credit = nil
+      it 'returns future credits' do
         Timecop.freeze(Time.zone.local(2015, 8, 27, 10, 00, 0)) do
-          user_with_credit = FactoryGirl.create(:user_with_credit)
           shift.enroll_next_shift(user_with_credit)
         end
         Timecop.freeze(Time.zone.local(2015, 9, 3, 1, 12, 0)) do
@@ -83,26 +104,9 @@ describe User, :type => :model do
           shift.enroll_next_shift(user_with_credit)
         end
         Timecop.freeze(Time.zone.local(2015, 10, 5, 23, 0, 0)) do
-          User.reset_credits(Time.zone.local(2015, 9, 1, 0, 0, 0))
-          expect(user_with_credit.reload.credit).to eq(10)
+          expect(user_with_credit.calculate_future_credit(Time.zone.local(2015, 9, 1, 0, 0, 0))).to eq(10)
         end
       end
-
-      it 'only reset credits from previous payment' do
-        user_with_credit = nil
-        Timecop.freeze(Time.zone.local(2015, 9, 17, 20, 55, 0)) do
-          user_with_credit = FactoryGirl.create(:user_with_credit)
-        end
-        Timecop.freeze(Time.zone.local(2015, 10, 2, 12, 15, 0)) do
-          FactoryGirl.create(:payment, user: user_with_credit)
-          shift.enroll_next_shift(user_with_credit)
-        end
-        Timecop.freeze(Time.zone.local(2015, 10, 5, 23, 0, 0)) do
-          User.reset_credits(Time.zone.local(2015, 9, 1, 0, 0, 0))
-          expect(user_with_credit.reload.credit).to eq(10)
-        end
-      end
-
     end
 
   end

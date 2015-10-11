@@ -58,15 +58,18 @@ class User < ActiveRecord::Base
   end
 
   def self.reset_credits(month_year)
-    raise ArgumentError, 'A date to reset must be provided' unless month_year.present?
-    User.to_reset.find_each do |user|
-      future_credit = 0
-      if user.credit > 0
-        future_credit = user.calculate_future_credit(month_year)
-        future_credit = user.credit if future_credit > user.credit # Fix because the first reset was forced directly in the user model
+    month_year = month_year.present? ? Chronic.parse(month_year) : nil
+    raise ArgumentError, 'A date to reset must be provided' if month_year.nil?
+    User.transaction do
+      User.to_reset.find_each do |user|
+        future_credit = 0
+        if user.credit > 0
+          future_credit = user.calculate_future_credit(month_year)
+          future_credit = user.credit if future_credit > user.credit # Fix because the first reset was forced directly in the user model
+        end
+        user.update(credit: future_credit)
+        user.payments.where("reset_date IS NULL AND month_year <= '#{month_year}'").update_all({:reset_date => Chronic.parse("now")})
       end
-      user.update(credit: future_credit)
-      user.payments.where("reset_date IS NULL AND month_year <= '#{month_year}'").update_all({:reset_date => Chronic.parse("now")})
     end
   end
 
