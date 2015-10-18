@@ -4,6 +4,7 @@ class Discipline < ActiveRecord::Base
   has_many :user_disciplines
   has_many :users, through: :user_disciplines
 
+  validates_presence_of :name
   validates_presence_of :color
   validates_presence_of :font_color
 

@@ -7,6 +7,19 @@ class DisciplinesController < ApplicationController
     end
   end
 
+  def new
+    @discipline = Discipline.new
+  end
+
+  def create
+    @discipline = Discipline.new(discipline_params)
+    if @discipline.save
+      redirect_to disciplines_path, success: "La nueva disciplina #{@discipline.name} a sido creada."
+    else
+      render :new
+    end
+  end
+
   def edit
     @discipline = Discipline.find(params[:id])
   end
