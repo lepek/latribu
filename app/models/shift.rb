@@ -8,15 +8,13 @@ class Shift < ActiveRecord::Base
   has_many :users, through: :inscriptions
   has_many :rookies
 
-  # I can use this later
   STATUS = {:open => 'abierta', :close => 'cerrada', :full => 'completa'}
 
   DEFAULT_SHIFT_DURATION = 1
   MARTIN_BIANCULLI_ID = 2
   MARCELO_PERRETTA_ID =  41
   IVAN_TREVISAN_ID = 7
-  #ALLOWED_USERS = [MARTIN_BIANCULLI_ID, MARCELO_PERRETTA_ID, IVAN_TREVISAN_ID]
-  ALLOWED_USERS = []
+  ALLOWED_USERS = [MARTIN_BIANCULLI_ID, MARCELO_PERRETTA_ID, IVAN_TREVISAN_ID]
 
   DISABLE_TEXT_COLOR = '#CCCCCC'
   DISABLE_BG_COLOR = '#EBEBE4'
@@ -219,7 +217,7 @@ private
   end
 
   def redis_key
-    "#{next_fixed_shift.to_s.gsub(/\s/, '_')} #{id}"
+    "#{next_fixed_shift.to_s.gsub(/\s/, '_')}_#{id}"
   end
 
 end
