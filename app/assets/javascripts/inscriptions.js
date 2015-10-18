@@ -37,6 +37,8 @@ jQuery(document).ready(function() {
       },
       dataType: 'json',
       success: function(user) {
+        $("#calendar").fullCalendar("refetchEvents");
+
         $("#user-credit").html(user.credit);
 
         var deadline = event.start.clone().subtract(event.deadline, 'hours');
@@ -62,6 +64,8 @@ jQuery(document).ready(function() {
       },
       dataType: 'json',
       success: function(user) {
+        $("#calendar").fullCalendar("refetchEvents");
+
         $("#user-credit").html(user.credit);
 
         var deadline = event.start.clone().subtract(event.deadline, 'hours');
@@ -120,7 +124,6 @@ jQuery(document).ready(function() {
             EnrollClient(event);
           }
         }
-        $("#calendar").fullCalendar("refetchEvents");
       }
     },
     eventMouseover: function( event, jsEvent, view ) {

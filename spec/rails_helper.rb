@@ -14,6 +14,7 @@ require 'capybara/poltergeist'
 require 'capybara-screenshot/rspec'
 require 'devise'
 
+Capybara.default_driver = :poltergeist
 Capybara.javascript_driver = :poltergeist
 Capybara.ignore_hidden_elements = true
 Capybara::Screenshot.prune_strategy = :keep_last_run

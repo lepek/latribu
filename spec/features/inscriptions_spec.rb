@@ -12,11 +12,16 @@ describe 'Inscriptions', :type => :feature, :js => true  do
   let!(:shift_saturday) { FactoryGirl.create(:shift, shift_attributes.merge!(week_day: 7)) }
 
   def login_as_user
-    visit '/'
+    visit '/users/sign_in'
     fill_in 'user_email', :with => user_with_credit.email
     fill_in 'user_password', :with => password
     click_on 'sign_in'
     expect(current_path).to eq(inscriptions_path)
+  end
+
+  def load_classes
+    expect(page).to have_selector('#loading')
+    expect(page).to have_no_selector('#loading')
   end
 
   it 'shows all classes' do
@@ -32,13 +37,12 @@ describe 'Inscriptions', :type => :feature, :js => true  do
 
   it 'enrolls into an opened class' do
     # 7:00 Monday, October 12th
-    Timecop.freeze(Time.zone.local(2015, 10, 12, 7, 0, 0)) do
+    Timecop.freeze(Time.zone.local(2015, 10, 12 , 7, 0, 0)) do
       login_as_user
 
       # Loading classes
-      expect(page).to have_selector('#loading')
+      load_classes
       credits_before = find('#user-credit').text.to_i
-      expect(page).to have_selector('#loading', visible: false)
 
       find("#shift-#{shift_monday.id}").click
 
@@ -46,13 +50,10 @@ describe 'Inscriptions', :type => :feature, :js => true  do
       expect(page).to have_selector('#loading')
       expect(find('#bookModal')).to have_content(shift_monday.discipline.name)
       find('#bookModal').find('#accept-book').click
-      expect(page).to have_selector('#loading', visible: false)
+      expect(page).to have_no_selector('#loading')
 
       expect(find('#user-credit').text.to_i).to eq(credits_before - 1)
-
-      # For some reason I need to do this manually to get the updated events
-      page.execute_script('$("#calendar").fullCalendar("refetchEvents")')
-      expect(find("#shift-#{shift_monday.id}")).to have_selector('span.glyphicon-ok-sign')
+      expect(page).to have_selector("#shift-#{shift_monday.id} span.glyphicon-ok-sign")
     end
   end
 
@@ -61,17 +62,62 @@ describe 'Inscriptions', :type => :feature, :js => true  do
       login_as_user
 
       # Loading classes
-      expect(page).to have_selector('#loading')
+      load_classes
       credits_before = find('#user-credit').text.to_i
-      expect(page).to have_selector('#loading', visible: false)
 
       expect(find("#shift-#{shift_monday.id}")['style']).to include('cursor: not-allowed')
       find("#shift-#{shift_monday.id}").click
 
-      # For some reason I need to do this manually to get the updated events
-      page.execute_script('$("#calendar").fullCalendar("refetchEvents")')
       expect(find('#user-credit').text.to_i).to eq(credits_before)
-      expect(find("#shift-#{shift_monday.id}")).not_to have_selector('span.glyphicon-ok-sign')
+      expect(page).to have_no_selector("#shift-#{shift_monday.id} span.glyphicon-ok-sign")
     end
   end
+
+  it 'enrolls to a last hour class after confirmation' do
+    Timecop.freeze(shift_monday.next_fixed_shift - shift_monday.cancel_inscription.hour + 1.minute) do
+      login_as_user
+
+      # Loading classes
+      load_classes
+      credits_before = find('#user-credit').text.to_i
+
+      find("#shift-#{shift_monday.id}").click
+
+      # Confirmation modal
+      expect(page).to have_selector('div.bootbox-confirm')
+      click_on 'Aceptar'
+
+      # Modals
+      expect(page).to have_selector('#loading')
+      expect(find('#bookModal')).to have_content(shift_monday.discipline.name)
+      find('#bookModal').find('#accept-book').click
+      expect(page).to have_no_selector('#loading')
+
+      expect(find('#user-credit').text.to_i).to eq(credits_before - 1)
+      expect(page).to have_selector("#shift-#{shift_monday.id} span.glyphicon-ok-sign")
+    end
+  end
+
+  it 'does not enroll to a last hour class if is not confirmed' do
+    Timecop.freeze(shift_monday.next_fixed_shift - shift_monday.cancel_inscription.hour + 1.minute) do
+      login_as_user
+
+      # Loading classes
+      load_classes
+      credits_before = find('#user-credit').text.to_i
+
+      find("#shift-#{shift_monday.id}").click
+
+      # Confirmation modal
+      expect(page).to have_selector('div.bootbox-confirm')
+      click_on 'Cancelar'
+
+      # Modals
+      expect(page).to have_no_selector('#loading')
+
+      expect(find('#user-credit').text.to_i).to eq(credits_before)
+      expect(page).to have_no_selector("#shift-#{shift_monday.id} span.glyphicon-ok-sign")
+    end
+  end
+
 end

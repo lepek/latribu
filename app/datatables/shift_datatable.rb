@@ -19,7 +19,7 @@ class ShiftDatatable < AjaxDatatablesRails::Base
       [
         record.day_and_time,
         record.max_attendants,
-        I18n.l(record.next_shift, :format => '%A, %e de %B %H:%M hs.').capitalize,
+        I18n.l(record.next_fixed_shift, :format => '%A, %e de %B %H:%M hs.').capitalize,
         record.next_fixed_shift_count,
         record.status.capitalize,
         '<div class="btn-group">' +
@@ -30,7 +30,7 @@ class ShiftDatatable < AjaxDatatablesRails::Base
             "<li>#{link_to('Inscribir', new_in_shift_rookies_path(record))}</li>" +
             "<li>#{link_to('Ver', shift_path(record))}</li>" +
             "<li>#{link_to('Editar', edit_shift_path(record))}</li>" +
-            "<li>#{link_to('Borrar', shift_path(record), data: { confirm: "¿Está seguro que desea eliminar \nla clase del #{record.id}?" }, method: :delete)}</li>" +
+            "<li>#{link_to('Borrar', shift_path(record), data: { confirm: "¿Está seguro que desea eliminar \nla clase del #{I18n.l(record.next_fixed_shift, :format => '%A, %e de %B %H:%M hs.').capitalize}?" }, method: :delete)}</li>" +
             '</ul>' +
         '</div>'
       ]
