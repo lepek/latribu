@@ -13,6 +13,16 @@ class Shift < ActiveRecord::Base
   # I can use this later
   STATUS = {:open => 'abierta', :close => 'cerrada', :full => 'completa'}
 
+  WEEK_DAYS = {
+      '1' => 'sunday',
+      '2' => 'monday',
+      '3' => 'tuesday',
+      '4' => 'wednesday',
+      '5' => 'thursday',
+      '6' => 'friday',
+      '7' => 'saturday'
+  }
+
   DEFAULT_SHIFT_DURATION = 1
   MARTIN_BIANCULLI_ID = 2
   MARCELO_PERRETTA_ID =  41
@@ -21,8 +31,8 @@ class Shift < ActiveRecord::Base
 
   before_destroy :remove_inscriptions
 
-  validates_presence_of :day, :start_time, :end_time, :max_attendants, :open_inscription, :close_inscription, :instructor, :discipline, :cancel_inscription
-  validates_uniqueness_of :start_time, :scope => [:day]
+  validates_presence_of :week_day, :start_time, :end_time, :max_attendants, :open_inscription, :close_inscription, :instructor, :discipline, :cancel_inscription
+  validates_uniqueness_of :start_time, :scope => [:week_day]
 
   def self.days
     DAYS
@@ -33,8 +43,8 @@ class Shift < ActiveRecord::Base
   #
   def self.get_next_class
     @shift = Shift.where(
-        'day = ? AND end_time > ?',
-        Chronic.parse("now").strftime('%A').downcase,
+        'week_day = ? AND end_time > ?',
+        Chronic.parse("now").strftime('%w').to_i + 1,
         Chronic.parse("now").strftime('%H:%M')
     ).eager_load(:instructor, :discipline).order("end_time ASC").first
   end
@@ -162,7 +172,7 @@ class Shift < ActiveRecord::Base
   end
 
   def day_and_time
-    "#{DAYS[self.day.to_sym].capitalize} #{self.start_time.strftime('%H:%M')} hs."
+    "#{DAYS[WEEK_DAYS[self.week_day.to_s].to_sym].capitalize} #{self.start_time.strftime('%H:%M')} hs."
   end
 
   ##
@@ -198,10 +208,10 @@ class Shift < ActiveRecord::Base
 private
 
   def get_next_shift(shift_time = self.start_time.strftime('%H:%M'))
-    if Chronic.parse("#{self.day.to_s} #{shift_time}", :now => Chronic.parse("now") - 1.day) > Chronic.parse("now")
-      @fixed_shift = Chronic.parse("#{self.day.to_s} #{self.start_time.strftime('%H:%M')}", :now => Chronic.parse("now") - 1.day)
+    if Chronic.parse("#{WEEK_DAYS[self.week_day.to_s]} #{shift_time}", :now => Chronic.parse("now") - 1.day) > Chronic.parse("now")
+      @fixed_shift = Chronic.parse("#{WEEK_DAYS[self.week_day.to_s]} #{self.start_time.strftime('%H:%M')}", :now => Chronic.parse("now") - 1.day)
     else
-      @fixed_shift = Chronic.parse("#{self.day.to_s} #{self.start_time.strftime('%H:%M')}")
+      @fixed_shift = Chronic.parse("#{WEEK_DAYS[self.week_day.to_s]} #{self.start_time.strftime('%H:%M')}")
     end
     @fixed_shift
   end
@@ -211,7 +221,7 @@ private
   end
 
   def redis_key
-    "#{self.next_fixed_shift.to_s.gsub(/\s/, '_')} #{self.id}"
+    "#{self.next_fixed_shift.to_s.gsub(/\s/, '_')}_#{self.id}"
   end
 
 end

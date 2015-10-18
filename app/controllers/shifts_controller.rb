@@ -132,7 +132,8 @@ class ShiftsController < ApplicationController
     end
 
     def shift_params
-      params.require(:shift).permit(:day, :start_time, :end_time, :max_attendants, :open_inscription, :close_inscription, :instructor_id, :discipline_id)
+      params[:shift][:week_day] = Shift::WEEK_DAYS.key(params[:shift][:week_day]).to_i unless params[:shift].blank? || (1..7).include?(params[:shift][:week_day])
+      params.require(:shift).permit(:week_day, :start_time, :end_time, :max_attendants, :open_inscription, :close_inscription, :cancel_inscription, :instructor_id, :discipline_id)
     end
 
 end
