@@ -14,7 +14,7 @@
 
     <fieldset class="gray">
       <div class="clearfix">
-        <%= f.label :day %>
+        <%= f.label :week_day %>
         <div class="input">
           <%= f.select :week_day, options_for_select(Shift.days.invert, Shift::WEEK_DAYS[@shift.week_day.to_s]), {}, :style => "text-transform:capitalize" %>
         </div>
