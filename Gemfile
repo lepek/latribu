@@ -40,7 +40,7 @@ group :development, :test do
   gem 'pry-stack_explorer'
   gem 'pry-remote'
   gem 'capistrano'
-  gem 'capistrano-rails'
+  gem 'capistrano-rails', '~> 1.1.5'
   gem 'capistrano-nginx-unicorn'
   gem 'launchy'
   gem 'simplecov', :require => false

@@ -47,7 +47,7 @@ namespace :deploy do
 
   #after "deploy:published", "deploy:fix_permissions"
   after "deploy:updating", 'deploy:write_version'
-  before "deploy", "deploy:check_revision"
+  #before "deploy", "deploy:check_revision"
 end
 
 #hooks

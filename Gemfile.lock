@@ -71,7 +71,7 @@ GEM
       sshkit (~> 1.2)
     capistrano-nginx-unicorn (0.1.0)
       capistrano (~> 3.0)
-    capistrano-rails (1.1.2)
+    capistrano-rails (1.1.5)
       capistrano (~> 3.1)
       capistrano-bundler (~> 1.1)
     capybara (2.5.0)
@@ -296,7 +296,7 @@ DEPENDENCIES
   bootstrap3-datetimepicker-rails (~> 4.15.35)
   capistrano
   capistrano-nginx-unicorn
-  capistrano-rails
+  capistrano-rails (~> 1.1.5)
   capybara (~> 2.5.0)
   capybara-screenshot
   chartkick
