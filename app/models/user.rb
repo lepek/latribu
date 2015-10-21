@@ -32,7 +32,7 @@ class User < ActiveRecord::Base
 
 
   def full_name
-    "#{first_name} #{last_name}" if has_attribute?(:first_name) && has_attribute?(:last_name)
+    "#{last_name}, #{first_name}" if has_attribute?(:first_name) && has_attribute?(:last_name)
   end
 
   def name
