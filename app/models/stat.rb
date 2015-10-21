@@ -6,7 +6,7 @@ class Stat < ActiveRecord::Base
     credits.each do |credit|
       stat = Stat.find_or_initialize_by(month_year: credit.month_year) do |stat|
         stat.credits = credit.total_credit
-        stat.inscriptions = inscriptions[month.strftime('%Y%m').to_i]
+        stat.inscriptions = inscriptions[credit.month_year.strftime('%Y%m').to_i]
       end
       stat.save!
     end

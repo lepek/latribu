@@ -30,7 +30,7 @@ class Shift < ActiveRecord::Base
 
   def self.with_shift_dates(start_date = Chronic.parse("now").strftime('%F %R'))
     select(
-        "IF (
+      "IF (
         '#{start_date}' > STR_TO_DATE(CONCAT(DATE_FORMAT(DATE_ADD('#{start_date}', interval (week_day - DAYOFWEEK('#{start_date}')) day), '%Y-%m-%d'),' ', start_time), '%Y-%m-%d %H:%i'),
         CONCAT(DATE_FORMAT(DATE_ADD('#{start_date}', interval (7 + week_day - DAYOFWEEK('#{start_date}')) day), '%Y-%m-%d'),' ', start_time),
         CONCAT(DATE_FORMAT(DATE_ADD('#{start_date}', interval (week_day - DAYOFWEEK('#{start_date}')) day), '%Y-%m-%d'),' ', start_time)
