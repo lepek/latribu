@@ -1,10 +1,9 @@
-<% datatable "inscriptions-table", ["Disciplina", "Clase", "Coach", "Anotados", "Estado", "Anotado", "", ""], :class => "selectable" do -%>
+<% datatable "inscriptions-table", ["Disciplina", "Clase", "Coach", "Estado", "Anotado", "", ""], :class => "selectable" do -%>
     <% shifts.each do |shift| -%>
         <tr style="background-color: <%= shift.discipline.color %>; color: <%= shift.discipline.font_color %>;">
           <td><%= shift.discipline.name %></td>
           <td><%= l(shift.next_fixed_shift, :format => '%a, %e de %b %H:%M hs.') %></td>
           <td><%= shift.instructor.full_name %></td>
-          <td><%= shift.close? ? 0 : shift.next_fixed_shift_count %></td>
           <td><%= shift.status.capitalize %></td>
           <td><%= l(shift.user_inscription(current_user).created_at, :format => '%a, %e de %b %H:%M hs.') unless shift.user_inscription(current_user).nil? %></td>
           <td>

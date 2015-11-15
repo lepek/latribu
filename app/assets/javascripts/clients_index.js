@@ -56,12 +56,11 @@ $(document).ready(function () {
 
     $.fn.inscriptionsTable = function () {
         var tableOptions = {
-            order: [[ 7, "asc" ]],
+            order: [[ 6, "asc" ]],
             columns:[
                 $.extend({}, countColumn, {sClass: "c-center"}), // Icon
-                $.extend({}, nameColumn, {dataSort: 7}), // Shift
+                $.extend({}, nameColumn, {dataSort: 6}), // Shift
                 nameColumn, // Instructor
-                countColumn, // Attendants
                 shortNameColumn, // Status
                 nameColumn, // Shift
                 actionColumn, // Action buttons
