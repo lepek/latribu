@@ -32,7 +32,11 @@ Nahual::Application.routes.draw do
     end
   end
 
-  resources :payments, :only => [:index, :destroy]
+  resources :payments, :only => [:index, :destroy] do
+    collection do
+      get 'total_payments', to: 'payments#total_payments'
+    end
+  end
 
   resources :rookies do
     collection do

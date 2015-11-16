@@ -3,9 +3,13 @@ jQuery(document).ready(function() {
     "responsive": true,
     "processing": true,
     "serverSide": true,
+    "order": [[ 0, "desc" ]],
     "ajax": $('#payments-table').data('source'),
     "pagingType": "full_numbers",
-    "language": { sUrl: "/dataTables.spanish.txt" }
+    "language": { sUrl: "/dataTables.spanish.txt" },
+    "initComplete": function(settings, json) {
+      getTotalPayments();
+    }
   });
 
   $('#date-from-comp').datetimepicker({
@@ -28,7 +32,7 @@ jQuery(document).ready(function() {
 
   $('#payments-search-button').click(
     function () {
-      oTable.ajax.url("/payments.json?date_from=" + $('#date-from').val() + "&date_to=" + $('#date-to').val()).load();
+      oTable.ajax.url("/payments.json?date_from=" + $('#date-from').val() + "&date_to=" + $('#date-to').val()).load(getTotalPayments());
     }
   );
 
@@ -37,5 +41,38 @@ jQuery(document).ready(function() {
       $("#payments_form").submit();
     }
   );
+
+  $('#next_class').click(function() {
+    $.ajax({
+      url: "/shifts/next_class.json",
+      type: "GET",
+      dataType: "json",
+      dataType: 'json',
+      success: function(shift_id) {
+        document.location.href = '/shifts/' + shift_id;
+      },
+      error: function (xhr, ajaxOptions, thrownError) {
+        alert('No hay más clases para el día de hoy');
+      }
+    });
+  });
+
+  function getTotalPayments() {
+    $.ajax({
+      url: "/payments/total_payments.json",
+      type: "GET",
+      dataType: "json",
+      data:  {
+        date_from: $('#date-from').val(),
+        date_to: $('#date-to').val()
+      },
+      success: function(data) {
+        $('#total-payments').text(data.total);
+      },
+      error: function (xhr, ajaxOptions, thrownError) {
+        alert('Error sumando los totales para el período seleccionado');
+      }
+    });
+  }
 
 });

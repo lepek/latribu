@@ -14,9 +14,14 @@ class Payment < ActiveRecord::Base
       to = Chronic.parse(date_to, :endian_precedence => [:little, :middle])
       Payment.joins(:user).where(created_at: from..to)
     else
-      Payment.joins(:user).all
+      Payment.joins(:user)
     end
   end
+
+  def self.total_payments(date_from, date_to)
+    self.filter_by_dates(date_from, date_to).select('SUM(amount) as total_payments').first.total_payments rescue 0
+  end
+
 
 private
 

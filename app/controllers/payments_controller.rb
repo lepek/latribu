@@ -19,6 +19,11 @@ class PaymentsController < ApplicationController
     end
   end
 
+  def total_payments
+    total = Payment.total_payments(params[:date_from], params[:date_to])
+    render json: { total: ActionController::Base.helpers.number_to_currency(total) }
+  end
+
   def new
     @user = User.find(params[:user_id])
     @payment = @user.payments.build
