@@ -47,7 +47,7 @@ describe User, :type => :model do
 
     describe '#full_name' do
       it 'returns the full name' do
-        expect(user.full_name).to eq('John Doe')
+        expect(user.full_name).to eq('Doe, John')
       end
     end
 

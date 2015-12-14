@@ -57,7 +57,7 @@ class Shift < ActiveRecord::Base
     end_date = next_fixed_shift + (end_time - start_time).second
 
     closed_unattended = !selectable && booked && Chronic.parse('now') < end_date
-    description = "Coach: #{instructor.first_name}<br />Anotados: #{next_fixed_shift_count.to_s}"
+    description = "Coach: #{instructor.first_name}"
     description += '<br /> No puede liberarse' if closed_unattended
 
     {
