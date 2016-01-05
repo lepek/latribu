@@ -30,7 +30,7 @@ class ApplicationController < ActionController::Base
   private
 
   def authorize_admin_actions
-    raise CanCan::AccessDenied if ADMIN_CONTROLLERS.include?(controller_name) && !current_user.admin?
+    head :forbidden if ADMIN_CONTROLLERS.include?(controller_name) && !true_user.admin?
   end
 
   def messages

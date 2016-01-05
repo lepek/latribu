@@ -28,11 +28,21 @@
             <span class="glyphicon glyphicon-credit-card" aria-hidden="true"></span><span id="user-credit"><%= current_user.credit.to_s %></span>
           <% end %>
         </li>
-        <li>
-          <%= link_to destroy_user_session_path, :method => :delete do %>
-            <span class="glyphicon glyphicon-log-out" aria-hidden="true"></span>Cerrar Sesión
-          <% end %>
-        </li>
+
+        <% if current_user == true_user %>
+          <li>
+            <%= link_to destroy_user_session_path, :method => :delete do %>
+              <span class="glyphicon glyphicon-log-out" aria-hidden="true"></span>Cerrar Sesión
+            <% end %>
+          </li>
+        <% elsif true_user.admin? %>
+          <li>
+            <%= link_to stop_impersonating_users_path do %>
+              <span class="glyphicon glyphicon-log-out" aria-hidden="true"></span>Volver a Admin
+            <% end %>
+          </li>
+        <% end %>
+
       </ul>
     </div><!-- /.navbar-collapse -->
 </nav>
