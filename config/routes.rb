@@ -26,6 +26,8 @@ Nahual::Application.routes.draw do
     end
   end
 
+  resources :past_shifts, :only => [:index, :show]
+
   resources :shifts do
     collection do
       get 'next_class'
