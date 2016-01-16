@@ -5,7 +5,14 @@ jQuery(document).ready(function() {
     "serverSide": true,
     "ajax": $('#user-payments-table').data('source'),
     "pagingType": "full_numbers",
-    "language": { sUrl: "/dataTables.spanish.txt" }
+    "language": { sUrl: "/dataTables.spanish.txt" },
+    "rowCallback": function( row, data, index ) {
+      if (data[3] == "1") {
+        $('td', row).each(function() { $(this).attr('class', 'conditional-payment-row'); })
+      }
+      return row;
+    }
+
   });
 
   $("#payment_user_id").select2();
