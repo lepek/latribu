@@ -41,10 +41,16 @@ jQuery(document).ready(function() {
 
         $("#user-credit").html(user.credit);
 
-        var deadline = event.start.clone().subtract(event.deadline, 'hours');
+        if (event.needs_confirmation) {
+          $('#deadlineMsg').hide();
+        } else {
+          var deadline = event.start.clone().subtract(event.deadline, 'hours');
+          $('#deadline').html(deadline.format('HH:mm') + 'hs.');
+          $('#deadlineMsg').show();
+        }
+
         $('#bookTitle').html(event.title);
         $('#bookDate').html(event.start.format("LLLL") + ' hs.');
-        $('#deadline').html(deadline.format('HH:mm') + 'hs.');
         $('#bookModal').modal();
       },
       error: function (xhr, ajaxOptions, thrownError) {
@@ -67,8 +73,6 @@ jQuery(document).ready(function() {
         $("#calendar").fullCalendar("refetchEvents");
 
         $("#user-credit").html(user.credit);
-
-        var deadline = event.start.clone().subtract(event.deadline, 'hours');
         $('#cancelTitle').html(event.title);
         $('#cancelDate').html(event.start.format("LLLL") + ' hs.');
         $('#cancelModal').modal();
@@ -96,7 +100,7 @@ jQuery(document).ready(function() {
     height: 690,
     slotDuration: '00:30:00',
     hiddenDays: [ 0 ],
-    minTime: '08:00:00',
+    minTime: '07:00:00',
     maxTime: '22:00:00',
     timezone: false,
     now: today,

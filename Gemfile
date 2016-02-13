@@ -88,3 +88,5 @@ gem 'bootstrap3-datetimepicker-rails', '~> 4.15.35'
 gem 'fullcalendar-rails', '~> 2.3.1'
 
 gem 'bootbox-rails', '~> 0.5'
+
+gem 'turnout'

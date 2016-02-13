@@ -83,7 +83,7 @@ class ShiftsController < ApplicationController
           params[:shift]['end_time(4i)'],
           params[:shift]['end_time(5i)']
       ).to_s(:time) if params[:shift]['end_time(4i)'].present?
-      params.require(:shift).permit(:week_day, :start_time, :end_time, :max_attendants, :open_inscription, :close_inscription, :instructor_id, :discipline_id)
+      params.require(:shift).permit(:week_day, :start_time, :end_time, :max_attendants, :open_inscription, :close_inscription, :instructor_id, :discipline_id, :cancel_inscription)
     end
 
 end
