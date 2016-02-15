@@ -97,7 +97,7 @@ jQuery(document).ready(function() {
     defaultView: "agendaWeek",
     allDaySlot: false,
     events: '/inscriptions.json',
-    height: 690,
+    height: 730,
     slotDuration: '00:30:00',
     hiddenDays: [ 0 ],
     minTime: '07:00:00',
