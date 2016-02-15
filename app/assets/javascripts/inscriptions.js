@@ -26,6 +26,10 @@ jQuery(document).ready(function() {
     return rgb;
   }
 
+  function isTouchDevice(){
+    return true == ("ontouchstart" in window || window.DocumentTouch && document instanceof DocumentTouch);
+  }
+
   function EnrollClient(event) {
     $.ajax({
       url: "/inscriptions.json",
@@ -106,7 +110,7 @@ jQuery(document).ready(function() {
     now: today,
     eventRender: function (event, element) {
       element.attr( 'id', 'shift-' + event.id );
-      CreateTooltip(event, element);
+      if (isTouchDevice() === false) CreateTooltip(event, element);
       if (event.booked) {
         var time = $(element).find('.fc-time').html();
         var icon = '<div class="pull-right"><span class="glyphicon glyphicon-ok-sign" aria-hidden="true"></span></div>';
