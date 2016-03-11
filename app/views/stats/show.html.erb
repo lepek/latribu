@@ -1,0 +1,39 @@
+<%= javascript_include_tag "//www.google.com/jsapi", "chartkick" %>
+
+<div class="container-fluid">
+
+<div class="panel panel-default">
+  <div class="panel-heading">
+    <h4><%= l(Chronic.parse(@date), :format => '%B %Y').capitalize %></h4>
+  </div>
+  <div class="panel-body">
+    <div class="panel panel-default table-responsive">
+      <div class="panel-heading row-fluid vertical-align">
+        <div class="col-md-4">
+          <h4>Promedio de inscripciones por turno</h4>
+        </div>
+        <div class="col-md-8 text-right">
+          <form action="/stats" method="get" class="form-inline">
+            <input type="hidden" name="date" value="<%= @date %>" />
+            <div class="form-group">
+              <label for="orden" class="sr-only">Orden</label>
+              <select id="orden" name="order" class="form-control" style="width: auto;">
+                <option value="">Cambiar el orden</option>
+                <option value="desc">Descendente</option>
+                <option value="asc">Ascendente</option>
+                <option value="date">Cronológico</option>
+              </select>
+            </div>
+            <button type="submit" class="btn btn-default">Ordenar</button>
+          </form>
+        </div>
+      </div>
+      <div class="panel-body">
+        <%= bar_chart month_inscriptions_chart_stats_path(date: @date, order: @order), id: "users-chart", height: "900px",
+            library: { chartArea: { left: 150, width: '100%', height: "100%" } }  %>
+      </div>
+    </div>
+  </div>
+</div>
+</div>
+

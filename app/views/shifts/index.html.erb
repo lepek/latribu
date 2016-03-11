@@ -1,0 +1,28 @@
+<div class="panel panel-default">
+  <div class="panel-heading">
+    <h4>Clases</h4>
+  </div>
+  <div class="panel-body">
+    <div class="panel panel-default">
+      <div class="panel-body">
+        <%= link_to "Agregar una nueva Clase", new_shift_path, class: 'btn btn-primary' %>
+      </div>
+    </div>
+    <div class="table-responsive">
+      <table id="shifts-table" class="table table-striped table-bordered" cellspacing="0" width="100%" data-source="<%= shifts_path(format: :json) %>">
+          <thead>
+              <tr>
+                  <th>Dia y hora</th>
+                  <th>Cupo</th>
+                  <th>Próxima</th>
+                  <th>Anotados</th>
+                  <th>Estado</th>
+                  <th></th>
+              </tr>
+          </thead>
+          <tbody>
+          </tbody>
+      </table>
+    </div>
+  </div>
+</div>

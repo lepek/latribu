@@ -1,9 +1,15 @@
 class StatsController < ApplicationController
-  authorize_resource
 
   def index
     @order = params[:order]
     @date = params[:date]
+    render :show and return if @date.present?
+
+    Stat.generate
+    respond_to do |format|
+      format.html
+      format.json { render json: StatDatatable.new(view_context) }
+    end
   end
 
   def month_inscriptions_chart
@@ -25,7 +31,6 @@ class StatsController < ApplicationController
     elsif @order == 'desc' || @order.blank?
       @inscriptions.sort_by! { |i| i[1] }.reverse!
     end
-
 
     render json: @inscriptions
   end

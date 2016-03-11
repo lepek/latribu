@@ -1,0 +1,138 @@
+/*
+  Include this after bootstrap css to customize and override bootstrap styles
+*/
+
+.glyphicon {
+  padding-right: 5px;
+}
+
+.no-padding {
+  padding: 0;
+}
+
+.month-year-field {
+  margin-bottom: 15px;
+}
+
+@media (max-width: 768px) {
+  .nav-pills li { width:100%; }
+}
+
+.navbar-brand {
+  padding: 0;
+  margin-left: 5px !important;
+  margin-right: 10px !important;
+}
+
+.nav-pills li {
+  margin-top: 4px;
+}
+
+.user_disciplines .checkbox {
+  margin-left: 10px;
+}
+
+#user-payments-table_wrapper,
+#payments-table_wrapper,
+#credit-reset-table_wrapper {
+  margin: 10px;
+}
+
+#payment-history-panel, #credit-reset-panel {
+  margin-top: 20px;
+}
+
+.filter-buttons-div {
+  line-height: 59px; /* This match the height of the datepicker control container */
+  margin-bottom: 15px;
+  button {
+    vertical-align: bottom;
+  }
+}
+
+.vertical-align {
+  display: flex;
+  align-items: center;
+}
+
+.calendar-text  {
+  .calendar-text
+  .fc-title {
+    font-size: 14px;
+  }
+  .calendar-text
+  .fc-time {
+    font-size: 14px !important;
+  }
+  cursor: pointer;
+}
+
+@media screen and (min-width: 320px) {
+  .calendar-text
+    .fc-title {
+      font-size: 50%;
+    }
+  .calendar-text
+    .fc-time {
+      font-size: 50% !important;
+    }
+}
+
+@media screen and (min-width: 480px) {
+  .calendar-text
+  .fc-title {
+    font-size: 70%;
+  }
+  .calendar-text
+  .fc-time {
+    font-size: 70% !important;
+  }
+}
+
+@media screen and (min-width: 720px) {
+  .calendar-text
+  .fc-title {
+    font-size: 90%;
+  }
+  .calendar-text
+  .fc-time {
+    font-size: 90% !important;
+  }
+}
+
+@media screen and (min-width: 1200px) {
+  .calendar-text
+    .fc-title {
+      font-size: 14px;
+    }
+  .calendar-text
+    .fc-time {
+      font-size: 14px !important;
+    }
+}
+
+
+#loading {
+  width: 100%;
+  height: 100%;
+  top: 0px;
+  left: 0px;
+  position: fixed;
+  display: block;
+  opacity: 0.7;
+  background-color: #fff;
+  z-index: 99;
+  text-align: center;
+}
+
+#loading-image {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  z-index: 100;
+}
+
+.conditional-payment-row {
+  background-color: yellow !important;
+}
+

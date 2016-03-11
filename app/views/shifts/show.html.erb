@@ -1,6 +1,8 @@
-<div id="content-inner" xmlns="http://www.w3.org/1999/html">
-    <h1><%= @shift.day_and_time %></h1>
-
+<div class="panel panel-default">
+  <div class="panel-heading">
+    <h4><%= @shift.day_and_time %></h4>
+  </div>
+  <div class="panel-body">
     <p>
       <b>Cupo:</b>
       <%= @shift.max_attendants %>
@@ -38,7 +40,8 @@
       <%= @shift.discipline.name %>
     </p>
 
-    <%= render partial: "user_list", locals: {users: @shift.next_fixed_shift_users, rookies: @shift.next_fixed_shift_rookies} %>
-
-    <%= link_to 'Volver', root_path(:anchor => 'shifts') %>
+    <p>
+      <%= render partial: "user_list", locals: {users: @shift.next_fixed_shift_users, rookies: @shift.next_fixed_shift_rookies} %>
+    </p>
+  </div>
 </div>

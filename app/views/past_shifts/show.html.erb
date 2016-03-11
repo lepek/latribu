@@ -1,0 +1,10 @@
+<div class="panel panel-default">
+  <div class="panel-heading">
+    <h4><%= I18n.l(@shift_date, :format => '%A %H:%M hs, %e de %B del %Y').capitalize %></h4>
+  </div>
+  <div class="panel-body">
+    <p>
+      <%= render partial: "user_list", locals: {inscriptions: @inscriptions, rookies: @rookies} %>
+    </p>
+  </div>
+</div>

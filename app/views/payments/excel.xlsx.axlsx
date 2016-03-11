@@ -1,0 +1,16 @@
+wb = xlsx_package.workbook
+wb.styles do |s|
+  bold = s.add_style b: true
+  wb.add_worksheet(name: "Pagos") do |sheet|
+    sheet.add_row ['Fecha', 'Cliente', 'Monto', 'Crédito', 'Mes acreditado'], style: bold
+    @payments.each do |payment|
+      sheet.add_row [
+        I18n.l(payment.created_at, :format => '%A, %e de %B del %Y %H:%M hs.'),
+        payment.user.full_name,
+        payment.amount,
+        payment.credit,
+        I18n.l(payment.month_year, :format => '%B/%Y').capitalize
+      ]
+    end
+  end
+end

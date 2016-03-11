@@ -8,31 +8,22 @@ class Payment < ActiveRecord::Base
 
   acts_as_paranoid
 
-  attr_accessor :created_at_formatted, :month_year_formatted
-  after_initialize :add_formatted_fields
-
-  MONTHS = {
-      :january => 'enero',
-      :february => 'febrero',
-      :march => 'marzo',
-      :april => 'abril',
-      :may => 'mayo',
-      :june => 'junio',
-      :july => 'julio',
-      :august => 'agosto',
-      :september => 'septiembre',
-      :october => 'octubre',
-      :november => 'noviembre',
-      :december => 'diciembre'
-  }
-
-  def attributes
-    super.merge({'created_at_formatted' => self.created_at_formatted, 'month_year_formatted' => self.month_year_formatted})
+  def self.filter_by_dates(date_from, date_to)
+    if date_from.present? && date_to.present?
+      from = Chronic.parse(date_from, :endian_precedence => [:little, :middle])
+      to = Chronic.parse(date_to, :endian_precedence => [:little, :middle])
+      Payment.joins(:user).where(created_at: from..to)
+    else
+      Payment.joins(:user)
+    end
   end
 
-  def self.months
-    MONTHS
+  def self.total_payments(date_from, date_to)
+    self.filter_by_dates(date_from, date_to).select('SUM(amount) as total_payments').first.total_payments rescue 0
   end
+
+
+private
 
   def add_credit
     self.user.increment!(:credit, self.credit)
@@ -42,14 +33,4 @@ class Payment < ActiveRecord::Base
     self.user.decrement!(:credit, self.credit)
   end
 
-  def user_full_name
-    self.user.try(:full_name)
-  end
-
-private
-
-  def add_formatted_fields
-    self.created_at_formatted = I18n.l(self.created_at, :format => '%A, %e de %B del %Y %H:%M hs.') if self.has_attribute?(:created_at) && !self.created_at.nil?
-    self.month_year_formatted = I18n.l(self.month_year, :format => '%B/%Y').capitalize if self.has_attribute?(:month_year) && !self.month_year.nil?
-  end
 end

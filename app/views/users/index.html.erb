@@ -1,0 +1,27 @@
+<div class="panel panel-default">
+  <div class="panel-heading">
+    <h4>Clientes</h4>
+  </div>
+  <div class="panel-body">
+    <div class="panel panel-default">
+      <div class="panel-body">
+        <%= button_to "Habilitar reseto para todos", set_reset_users_path, data: { confirm: "Se tildarán a todos los usuarios para ser reseteados.\n¿Está seguro que desea continuar?" }, class: 'btn btn-danger' %>
+      </div>
+    </div>
+    <div class="table-responsive">
+      <table id="users-table" class="table table-striped table-bordered" cellspacing="0" width="100%" data-source="<%= users_path(format: :json) %>">
+          <thead>
+              <tr>
+                  <th>Nombre</th>
+                  <th>Profesión</th>
+                  <th>Teléfono</th>
+                  <th>Crédito</th>
+                  <th></th>
+              </tr>
+          </thead>
+          <tbody>
+          </tbody>
+      </table>
+    </div>
+  </div>
+</div>

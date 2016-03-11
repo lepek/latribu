@@ -1,83 +1,14 @@
-<%= form_for @shift do |f| %>
-    <% if @shift.errors.any? %>
-        <div id="error_explanation">
-          <h2><%= t 'errors.header.female', :resource => 'Clase', :count => @shift.errors.count %></h2>
-          <ul>
-            <% @shift.errors.each do |attr, msg| %>
-                <li>
-                  <%= msg %>
-                </li>
-            <% end %>
-          </ul>
-        </div>
-    <% end %>
+<%= simple_form_for(@shift) do |f| %>
+  <%= f.input :week_day, collection: t('date.day_names').zip((1..7).to_a), include_blank: false, autofocus: true %>
+  <%= f.input :start_time %>
+  <%= f.input :end_time %>
+  <%= f.input :max_attendants %>
+  <%= f.input :open_inscription, hint: 'cantidad de horas antes de la clase en que se abre la inscripción' %>
+  <%= f.input :close_inscription, hint: 'cantidad de horas antes de la clase en que se cierra la inscripción' %>
+  <%= f.input :cancel_inscription, hint: 'cantidad de horas antes de la clase en que se deshabilita la opción de liberar' %>
+  <%= f.association :instructor, label_method: :full_name, include_blank: false %>
+  <%= f.association :discipline, include_blank: false %>
 
-    <fieldset class="gray">
-      <div class="clearfix">
-        <%= f.label :week_day %>
-        <div class="input">
-          <%= f.select :week_day, options_for_select(Shift.days.invert, Shift::WEEK_DAYS[@shift.week_day.to_s]), {}, :style => "text-transform:capitalize" %>
-        </div>
-      </div>
-
-      <div class="clearfix">
-        <%= f.label :start_time %>
-        <div class="input">
-          <%= f.time_field :start_time  %>
-        </div>
-      </div>
-
-      <div class="clearfix">
-        <%= f.label :end_time %>
-        <div class="input">
-          <%= f.time_field :end_time  %>
-        </div>
-      </div>
-
-      <div class="clearfix">
-        <%= f.label :max_attendants %>
-        <div class="input">
-          <%= f.text_field :max_attendants %>
-        </div>
-      </div>
-
-      <div class="clearfix">
-        <%= f.label :open_inscription %>
-        <div class="input">
-          <%= f.text_field :open_inscription %> [horas antes de la clase]
-        </div>
-      </div>
-
-      <div class="clearfix">
-        <%= f.label :close_inscription %>
-        <div class="input">
-          <%= f.text_field :close_inscription %> [horas antes de la clase]
-        </div>
-      </div>
-
-      <div class="clearfix">
-        <%= f.label :cancel_inscription %>
-        <div class="input">
-          <%= f.text_field :cancel_inscription %> [horas antes de la clase]
-        </div>
-      </div>
-
-      <div class="clearfix">
-        <%= f.label :instructor_id %>
-        <div class="input">
-          <%= f.collection_select(:instructor_id, Instructor.order("last_name"), :id, :full_name)  %>
-        </div>
-      </div>
-
-      <div class="clearfix">
-        <%= f.label :discipline_id %>
-        <div class="input">
-          <%= f.collection_select(:discipline_id, Discipline.order("name"), :id, :name)  %>
-        </div>
-      </div>
-
-      <div class="actions">
-        <%= f.submit 'Guardar', :class => "btn primary" %>
-      </div>
-    </fieldset>
+  <%= f.submit 'Guardar', data: { disable_with: "Procesando..." }, class: "btn btn-primary" %>
+  <%= link_to "Volver", :back, class: "btn btn-default" %>
 <% end %>

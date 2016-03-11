@@ -8,10 +8,9 @@ Bundler.require(:default, Rails.env)
 
 module Nahual
   class Application < Rails::Application
-
-    config.to_prepare do
-      Devise::SessionsController.layout proc{ |controller| action_name == 'new' ? "session" : "devise" }
-    end
+    config.assets.enabled = true
+    config.assets.paths << "#{Rails.root}/app/assets/fonts"
+    config.assets.precompile += %w( .svg .eot .woff .ttf )
 
     # Settings in config/environments/* take precedence over those specified here.
     # Application configuration should go into files in config/initializers

@@ -11,14 +11,14 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150916181125) do
+ActiveRecord::Schema.define(version: 20160310234932) do
 
   create_table "disciplines", force: :cascade do |t|
     t.string   "name",       limit: 255
     t.datetime "created_at"
     t.datetime "updated_at"
     t.string   "color",      limit: 255
-    t.boolean  "default",    limit: 1
+    t.boolean  "default"
     t.string   "font_color", limit: 255
   end
 
@@ -28,11 +28,13 @@ ActiveRecord::Schema.define(version: 20150916181125) do
     t.datetime "updated_at"
     t.integer  "user_id",    limit: 4
     t.integer  "shift_id",   limit: 4
-    t.boolean  "attended",   limit: 1, default: false
+    t.boolean  "attended",             default: false
   end
 
   add_index "inscriptions", ["shift_date"], name: "index_inscriptions_on_shift_date", using: :btree
+  add_index "inscriptions", ["shift_id", "shift_date"], name: "index_inscriptions_on_shift_id_and_shift_date", using: :btree
   add_index "inscriptions", ["shift_id"], name: "index_inscriptions_on_shift_id", using: :btree
+  add_index "inscriptions", ["user_id", "shift_date"], name: "index_inscriptions_on_user_id_and_shift_date", unique: true, using: :btree
   add_index "inscriptions", ["user_id"], name: "index_inscriptions_on_user_id", using: :btree
 
   create_table "instructors", force: :cascade do |t|
@@ -48,10 +50,8 @@ ActiveRecord::Schema.define(version: 20150916181125) do
     t.datetime "created_at"
     t.datetime "updated_at"
     t.integer  "user_id",     limit: 4
-    t.string   "month",       limit: 255
     t.datetime "deleted_at"
-    t.integer  "year",        limit: 4,   default: 2014
-    t.integer  "used_credit", limit: 4,   default: 0
+    t.integer  "used_credit", limit: 4, default: 0
     t.datetime "reset_date"
     t.date     "month_year"
   end
@@ -73,10 +73,11 @@ ActiveRecord::Schema.define(version: 20150916181125) do
     t.string   "email",      limit: 255
     t.string   "notes",      limit: 255
     t.integer  "shift_id",   limit: 4
-    t.boolean  "attended",   limit: 1,   default: false
+    t.boolean  "attended",               default: false
   end
 
   add_index "rookies", ["shift_date"], name: "index_rookies_on_shift_date", using: :btree
+  add_index "rookies", ["shift_id", "shift_date"], name: "index_rookies_on_shift_id_and_shift_date", using: :btree
   add_index "rookies", ["shift_id"], name: "index_rookies_on_shift_id", using: :btree
 
   create_table "shifts", force: :cascade do |t|
@@ -98,6 +99,9 @@ ActiveRecord::Schema.define(version: 20150916181125) do
   add_index "shifts", ["instructor_id"], name: "index_shifts_on_instructor_id", using: :btree
 
   create_table "stats", force: :cascade do |t|
+    t.date     "month_year"
+    t.integer  "inscriptions", limit: 4
+    t.integer  "credits",      limit: 4
     t.datetime "created_at"
     t.datetime "updated_at"
   end
@@ -129,10 +133,10 @@ ActiveRecord::Schema.define(version: 20150916181125) do
     t.integer  "role_id",                limit: 4
     t.integer  "credit",                 limit: 4
     t.datetime "deleted_at"
-    t.boolean  "reset_credit",           limit: 1,   default: true
+    t.boolean  "reset_credit",                       default: true
     t.datetime "last_reset_date",                    default: '2014-03-05 02:00:00'
-    t.boolean  "certificate",            limit: 1,   default: false
-    t.boolean  "enable",                 limit: 1,   default: true
+    t.boolean  "certificate",                        default: false
+    t.boolean  "enable",                             default: true
     t.string   "profession",             limit: 255
   end
 

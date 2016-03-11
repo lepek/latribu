@@ -1,15 +1,8 @@
 Nahual::Application.routes.draw do
   devise_for :users
 
-  #devise_scope :user do
-  #  root 'devise/sessions#new'
-  #end
+  root :to => 'inscriptions#index'
 
-  root :to => 'admins#index'
-
-  resources :clients
-
-  resources :admins
 
   resources :disciplines do
     member do
@@ -33,21 +26,18 @@ Nahual::Application.routes.draw do
     end
   end
 
+  resources :past_shifts, :only => [:index, :show]
+
   resources :shifts do
-    member do
-      get 'inscription'
-      get 'cancel_inscription'
-      get 'indiscriminate_inscription'
+    collection do
+      get 'next_class'
     end
   end
 
-  resources :payments, :only => [:destroy] do
+  resources :payments, :only => [:index, :destroy] do
     collection do
-      get 'user_payments/:user_id', to: 'payments#user_payments', as: 'user_payments'
-      get 'search', to: 'payments#search', as: 'search_payments'
-      post 'payments/download', to: 'payments#download'
+      get 'total_payments', to: 'payments#total_payments'
     end
-
   end
 
   resources :rookies do
@@ -65,7 +55,7 @@ Nahual::Application.routes.draw do
     end
   end
 
-
+  resources :inscriptions
   post 'incriptions/:id/attended', to: 'inscriptions#attended'
 
 end

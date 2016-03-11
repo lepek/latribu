@@ -28,59 +28,48 @@ class User < ActiveRecord::Base
   ADMIN_ROLE = 'Admin'
 
   scope :clients, -> { where(:role_id => Role.find_by_name(CLIENT_ROLE).id) }
+  scope :to_reset, -> { clients.where('reset_credit = 1') }
 
-  scope :to_reset, -> { where('reset_credit = 1') }
-
-  attr_accessor :full_name
-  after_initialize :full_name
-
-  def attributes
-    super.merge({'full_name' => self.full_name})
-  end
-
-  ##
-  # @return All the inscriptions for classes in the future for this user
-  #
-  def next_inscriptions
-    @next_inscriptions ||= self.inscriptions.where('shift_date >= ?', Chronic.parse("now") )
-  end
 
   def full_name
-    self.full_name = "#{self.first_name} #{self.last_name}" if self.has_attribute?(:first_name) && self.has_attribute?(:last_name)
+    "#{last_name}, #{first_name}" if has_attribute?(:first_name) && has_attribute?(:last_name)
   end
 
-  def full_name_email
-    "#{self.first_name} #{self.last_name} (#{self.email})"
+  def name
+    "#{first_name} #{last_name} (#{email})"
   end
 
   def admin?
-    self.role.name == ADMIN_ROLE
-  end
-
-  def reset_credit?
-    self.reset_credit
+    role.name == ADMIN_ROLE
   end
 
   ##
   # @return [Boolean] If the user is a pretty new user without credits or inscriptions
   #
   def is_not_new?
-    self.admin? || self.credit > 0 || self.inscriptions.any?
+    admin? || credit > 0 || inscriptions.any?
   end
 
   def calculate_future_credit(month_year)
-    self.payments.select('credit-used_credit AS future_credit').where("reset_date IS NULL AND month_year > '#{month_year}'").map(&:future_credit).sum
+    return 0 unless credit > 0
+    future_credit = payments.select('credit - used_credit AS future_credit').where("reset_date IS NULL AND month_year > '#{month_year}'").map(&:future_credit).sum
+    # Fix because the first reset was forced directly in the user model
+    return future_credit > credit ? credit : future_credit
   end
 
-  def self.reset_credits(month_year = Chronic.parse("1 this month"))
-    User.to_reset.find_each do |user|
-      future_credit = 0
-      if user.credit > 0
-        future_credit = user.calculate_future_credit(month_year)
-        future_credit = user.credit if future_credit > user.credit # Fix because the first reset was forced directly in the user model
+  def self.reset_credits(month_year)
+    month_year = month_year.present? ? Chronic.parse(month_year.to_s) : nil
+    raise ArgumentError, 'A date to reset must be provided' if month_year.nil?
+    User.transaction do
+      User.to_reset.find_each do |user|
+        future_credit = 0
+        if user.credit > 0
+          future_credit = user.calculate_future_credit(month_year)
+          future_credit = user.credit if future_credit > user.credit # Fix because the first reset was forced directly in the user model
+        end
+        user.update(credit: future_credit)
+        user.payments.where("reset_date IS NULL AND month_year <= '#{month_year}'").update_all({:reset_date => Chronic.parse("now")})
       end
-      user.update_attributes({:credit => future_credit})
-      user.payments.where("reset_date IS NULL AND month_year <= '#{month_year}'").update_all({:reset_date => Chronic.parse("now")})
     end
   end
 
@@ -103,7 +92,7 @@ private
   end
 
   def remove_future_inscriptions
-    self.inscriptions.where("shift_date > '#{Chronic.parse("now")}'").destroy_all
+    inscriptions.where("shift_date > '#{Chronic.parse("now")}'").destroy_all
   end
 
   def set_role
@@ -115,8 +104,8 @@ private
   end
 
   def set_discipline
-    @disciplines = Discipline.where(:default => true)
-    self.disciplines = @disciplines if @disciplines && !self.admin? && self.disciplines.empty?
+    default_disciplines = Discipline.where(:default => true)
+    self.disciplines = default_disciplines if default_disciplines.present? && !admin? && disciplines.empty?
   end
 
 end

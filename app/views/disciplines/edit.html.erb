@@ -1,62 +1,8 @@
-<div id="content-inner">
-  <h1>Modificar Disciplina</h1>
-  <%= form_for @discipline do |f| %>
-      <% if @discipline.errors.any? %>
-          <div id="error_explanation">
-            <h2><%= t 'errors.header.female', :resource => 'Disciplina', :count => @discipline.errors.count %></h2>
-            <ul>
-              <% @discipline.errors.each do |attr, msg| %>
-                  <li>
-                    <%= msg %>
-                  </li>
-              <% end %>
-            </ul>
-          </div>
-      <% end %>
-
-      <fieldset class="gray">
-        <div class="clearfix">
-          <%= f.label :name %>
-          <div class="input">
-            <%= f.text_field :name %>
-          </div>
-        </div>
-
-        <div class="clearfix">
-          <%= f.label :default %>
-          <div class="input">
-            <%= f.check_box :default %>
-          </div>
-        </div>
-
-        <div class="clearfix">
-          <%= f.label :color %>
-          <div class="input">
-            <%= f.text_field :color %>
-          </div>
-        </div>
-
-        <div class="clearfix">
-          <%= f.label :font_color %>
-          <div class="input">
-            <%= f.text_field :font_color %>
-          </div>
-        </div>
-
-        <div class="actions">
-          <%= f.submit 'Guardar', :class => "btn primary" %>
-        </div>
-      </fieldset>
-  <% end %>
-  <%= link_to 'Volver', root_path(:anchor => 'disciplines') %>
+<div class="panel panel-default">
+  <div class="panel-heading">
+    <h4>Modificar Clase</h4>
+  </div>
+  <div class="panel-body">
+    <%= render 'form' %>
+  </div>
 </div>
-
-<script>
-    $(document).ready(
-            function() {
-                $('#discipline_color').minicolors();
-                $('#discipline_font_color').minicolors();
-
-            }
-    )
-</script>

@@ -1,0 +1,8 @@
+<%= simple_form_for(@discipline) do |f| %>
+  <%= f.input :name, autofocus: true  %>
+  <%= f.input :default %>
+  <%= f.input :color, as: :minicolors, input_html: {data: {minicolors: {theme: :bootstrap}}} %>
+  <%= f.input :font_color, as: :minicolors, input_html: {data: {minicolors: {theme: :bootstrap}}} %>
+  <%= f.submit 'Guardar', data: { disable_with: "Procesando..." }, class: "btn btn-primary" %>
+  <%= link_to "Volver", :back, class: "btn btn-default" %>
+<% end %>
