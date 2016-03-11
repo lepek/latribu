@@ -6,7 +6,9 @@ class Inscription < ActiveRecord::Base
   after_destroy :add_credit
   after_create :remove_credit
 
-private
+  validates_uniqueness_of :user_id, :scope => [:shift_date]
+
+  private
 
   ##
   # Refund the credit when an inscriptions is deleted

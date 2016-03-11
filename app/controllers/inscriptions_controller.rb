@@ -12,7 +12,7 @@ class InscriptionsController < ApplicationController
     if @shift.enroll_next_shift(current_user)
       render json: current_user.reload, status: :created
     else
-      render json: @shift.errors, status: :unprocessable_entity
+      render json: { error: @shift.errors.full_messages.to_sentence }, status: :unprocessable_entity
     end
   end
 
@@ -21,7 +21,7 @@ class InscriptionsController < ApplicationController
     if @shift.cancel_next_shift(current_user)
       render json: current_user.reload, status: :ok
     else
-      render json: @shift.errors, status: :unprocessable_entity
+      render json:{ error: @shift.errors.full_messages.to_sentence }, status: :unprocessable_entity
     end
   end
 

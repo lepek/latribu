@@ -58,7 +58,10 @@ jQuery(document).ready(function() {
         $('#bookModal').modal();
       },
       error: function (xhr, ajaxOptions, thrownError) {
-        bootbox.alert('Ha ocurrido un <strong>error</strong> al intentar inscribirte, por favor <strong>intentalo nuevamente</strong>.<br />Si el problema persiste comunicate con la Administración.');
+        var msg = 'Ha ocurrido un <strong>error</strong> al intentar inscribirte, por favor <strong>intentalo nuevamente</strong><br />';
+        msg += 'Si el problema persiste comunicate con la Administración.';
+        if (xhr.responseJSON.error) msg += '<br/><br/><strong>ERROR:</strong> ' + xhr.responseJSON.error;
+        bootbox.alert(msg);
       }
     });
   }
@@ -82,7 +85,10 @@ jQuery(document).ready(function() {
         $('#cancelModal').modal();
       },
       error: function (xhr, ajaxOptions, thrownError) {
-        bootbox.alert('Ha ocurrido un <strong>error</strong> al intentar liberar la clase, por favor <strong>intentalo nuevamente</strong>.<br />Si el problema persiste comunicate con la Administración.');
+        var msg = 'Ha ocurrido un <strong>error</strong> al intentar liberar la clase, por favor <strong>intentalo nuevamente</strong>.<br />';
+        msg += 'Si el problema persiste comunicate con la Administración.';
+        if (xhr.responseJSON.error) msg += '<br/><br/><strong>ERROR:</strong> ' + xhr.responseJSON.error;
+        bootbox.alert(msg);
       }
     });
   }
