@@ -20,34 +20,13 @@ set :keep_releases, 20
 
 namespace :deploy do
 
-  desc "Make sure local git is in sync with remote."
-  task :check_revision do
-    on roles(:all) do
-      `git describe --tags --abbrev=0 > version`
-      unless `git rev-parse HEAD` == `git rev-parse origin/master`
-        puts "WARNING: HEAD is not the same as origin/master"
-        puts "execute `git push` to sync changes."
-        exit
-      end
-    end
-  end
-
   task :write_version do
     on roles(:all) do
       upload! "./version", "#{release_path}/"
     end
   end
 
-  desc "Fix permission"
-  task :fix_permissions do
-    on roles(:all) do
-      `chmod 775 -R #{current_path}/log`
-    end
-  end
-
-  #after "deploy:published", "deploy:fix_permissions"
   after "deploy:updating", 'deploy:write_version'
-  #before "deploy", "deploy:check_revision"
 end
 
 #hooks
