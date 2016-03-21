@@ -107,12 +107,13 @@ jQuery(document).ready(function() {
     defaultView: "agendaWeek",
     allDaySlot: false,
     events: '/inscriptions.json',
-    height: 730,
+    contentHeight: 682,
     slotDuration: '00:30:00',
     hiddenDays: [ 0 ],
     minTime: '07:00:00',
     maxTime: '22:00:00',
     timezone: false,
+    displayEventEnd: false,
     now: today,
     eventRender: function (event, element) {
       element.attr( 'id', 'shift-' + event.id );
