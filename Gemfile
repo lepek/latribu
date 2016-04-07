@@ -83,7 +83,7 @@ gem 'devise-bootstrap-views', '~> 0.0.6'
 gem 'simple_form', '~> 3.1.1'
 
 gem 'momentjs-rails', '>= 2.9.0'
-gem 'bootstrap3-datetimepicker-rails', '~> 4.15.35'
+gem 'bootstrap3-datetimepicker-rails', '~> 4.17.37'
 
 gem 'fullcalendar-rails', '~> 2.3.1'
 

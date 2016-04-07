@@ -1,0 +1,14 @@
+<%= simple_form_for(@message) do |f| %>
+  <%= f.input :message, autofocus: true  %>
+
+  <div class="container-fluid" style="padding-left: 0;">
+    <div class='col-md-4' style="padding-left: 0;">
+      <%= f.input :start_date, as: :date_time_picker %>
+    </div>
+    <div class='col-md-4'>
+      <%= f.input :end_date, as: :date_time_picker %>
+    </div>
+  </div>
+  <%= f.submit 'Guardar', data: { disable_with: "Procesando..." }, class: "btn btn-primary" %>
+  <%= link_to "Volver", :back, class: "btn btn-default" %>
+<% end %>

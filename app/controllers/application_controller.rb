@@ -27,6 +27,21 @@ class ApplicationController < ActionController::Base
     end
   end
 
+  def check_pending_messages
+    respond_to do |format|
+      format.html { head :not_found }
+      format.json {
+        if current_user.present? && session[:saw_messages].blank? && !current_user.admin?
+          session[:saw_messages] = true
+          render json: Message.where('start_date <= ? AND end_date >= ?', Chronic.parse('now').strftime('%Y-%m-%d'), Chronic.parse('now').strftime('%Y-%m-%d')).pluck(:message)
+        else
+          render json: nil
+        end
+      }
+    end
+
+  end
+
   private
 
   def authorize_admin_actions
@@ -34,8 +49,10 @@ class ApplicationController < ActionController::Base
   end
 
   def messages
-    if current_user.present? && !current_user.admin? && current_user.credit == 0
-      flash[:warning] = "No podrás incribirte a ningún turno por no tener créditos. Comunicate con La Tribu para poder volver a entrenar."
+    if current_user.present? && !current_user.admin?
+      if current_user.credit == 0
+        flash[:warning] = "No podrás incribirte a ningún turno por no tener créditos. Comunicate con La Tribu para poder volver a entrenar."
+      end
     end
   end
 

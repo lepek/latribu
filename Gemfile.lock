@@ -59,7 +59,7 @@ GEM
       sass (>= 3.3.0)
     bootstrap-sass-extras (0.0.6)
       rails (>= 3.1.0)
-    bootstrap3-datetimepicker-rails (4.15.35)
+    bootstrap3-datetimepicker-rails (4.17.37)
       momentjs-rails (>= 2.8.1)
     builder (3.2.2)
     capistrano (3.4.0)
@@ -298,7 +298,7 @@ DEPENDENCIES
   bootbox-rails (~> 0.5)
   bootstrap-sass (~> 3.3.5)
   bootstrap-sass-extras (~> 0.0.6)
-  bootstrap3-datetimepicker-rails (~> 4.15.35)
+  bootstrap3-datetimepicker-rails (~> 4.17.37)
   capistrano
   capistrano-nginx-unicorn
   capistrano-rails (~> 1.1.5)

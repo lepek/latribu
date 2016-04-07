@@ -58,6 +58,10 @@ es:
         phone: 'Teléfono'
         email: 'E-mail'
         notes: 'Notas'
+      message:
+        message: 'Mensaje'
+        start_date: 'Comenzar a mostrar'
+        end_date: 'Dejar de mostrar'
     errors:
       models:
         user:

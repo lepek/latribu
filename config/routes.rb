@@ -58,4 +58,7 @@ Nahual::Application.routes.draw do
   resources :inscriptions
   post 'incriptions/:id/attended', to: 'inscriptions#attended'
 
+  resources :messages
+
+  get 'check_pending_messages', to: 'application#check_pending_messages'
 end

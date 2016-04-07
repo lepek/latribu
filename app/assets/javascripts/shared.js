@@ -34,4 +34,15 @@ jQuery(document).ready(function() {
     });
   });
 
+  $.ajax({
+    url: "/check_pending_messages.json",
+    type: "GET",
+    dataType: "json",
+    success: function(messages) {
+      $.each(messages, function(index, msg) {
+        bootbox.alert('<b>' + msg + '</b>');
+      });
+    }
+  });
+
 });
