@@ -17,8 +17,18 @@ FactoryGirl.define do
       end
     end
 
+    factory :user_with_five_credits do
+      after(:create) do |user, evaluator|
+        create_list(:payment, 5, :user => user)
+      end
+    end
+
     factory :admin do
       role_id 1
+    end
+
+    factory :user_with_certificate do
+      certificate true
     end
 
   end

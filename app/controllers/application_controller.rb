@@ -33,13 +33,12 @@ class ApplicationController < ActionController::Base
       format.json {
         if current_user.present? && session[:saw_messages].blank? && !current_user.admin?
           session[:saw_messages] = true
-          render json: Message.where('start_date <= ? AND end_date >= ?', Chronic.parse('now').strftime('%Y-%m-%d'), Chronic.parse('now').strftime('%Y-%m-%d')).pluck(:message)
+          render json: current_user.pending_messages
         else
-          render json: nil
+          render json: []
         end
       }
     end
-
   end
 
   private

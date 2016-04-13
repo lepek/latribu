@@ -37,7 +37,9 @@ class MessagesController < ApplicationController
   end
 
   def message_params
-    params.require(:message).permit(:message, :start_date, :end_date)
+    params[:message][:show_credit_less] = -1 unless params[:message][:show_credit_less_check].present?
+    params[:message].delete(:show_credit_less_check)
+    params.require(:message).permit(:message, :start_date, :end_date, :show_all, :show_no_certificate, :show_credit_less)
   end
 
 end

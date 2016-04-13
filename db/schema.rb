@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160323194032) do
+ActiveRecord::Schema.define(version: 20160410201046) do
 
   create_table "disciplines", force: :cascade do |t|
     t.string   "name",       limit: 255
@@ -45,11 +45,14 @@ ActiveRecord::Schema.define(version: 20160323194032) do
   end
 
   create_table "messages", force: :cascade do |t|
-    t.text     "message",    limit: 65535
+    t.text     "message",             limit: 65535
     t.date     "start_date"
     t.date     "end_date"
-    t.datetime "created_at",               null: false
-    t.datetime "updated_at",               null: false
+    t.datetime "created_at",                                        null: false
+    t.datetime "updated_at",                                        null: false
+    t.boolean  "show_all",                          default: true
+    t.boolean  "show_no_certificate",               default: false
+    t.integer  "show_credit_less",    limit: 4,     default: -1
   end
 
   create_table "payments", force: :cascade do |t|

@@ -30,6 +30,12 @@ class User < ActiveRecord::Base
   scope :clients, -> { where(:role_id => Role.find_by_name(CLIENT_ROLE).id) }
   scope :to_reset, -> { clients.where('reset_credit = 1') }
 
+  def pending_messages
+    Message.where(
+      "start_date <= ? AND end_date >= ? AND ( show_all = true OR show_credit_less >= ? #{show_no_certificate} )",
+      Chronic.parse('now').strftime('%Y-%m-%d'), Chronic.parse('now').strftime('%Y-%m-%d'), self.credit
+    ).pluck(:message)
+  end
 
   def full_name
     "#{last_name}, #{first_name}" if has_attribute?(:first_name) && has_attribute?(:last_name)
@@ -82,6 +88,10 @@ class User < ActiveRecord::Base
   end
 
 private
+
+  def show_no_certificate
+    return 'OR show_no_certificate = true' unless self.certificate?
+  end
 
   def last_month
     Chronic.parse("last month").strftime('%B %Y').downcase

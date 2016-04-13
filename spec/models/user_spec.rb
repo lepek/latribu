@@ -45,6 +45,28 @@ describe User, :type => :model do
 
   context "when user is a client" do
 
+    describe '#pending_messages' do
+      let!(:message_for_all) { FactoryGirl.create(:message_for_all) }
+      let!(:message_for_no_certificate) { FactoryGirl.create(:message_for_no_certificate) }
+      let!(:message_for_credit_less) { FactoryGirl.create(:message_for_credit_less) }
+      let!(:message_yesterday) { FactoryGirl.create(:message_yesterday) }
+      let(:user_with_five_credits) { FactoryGirl.create(:user_with_five_credits) }
+      let(:user_with_certificate) { FactoryGirl.create(:user_with_certificate) }
+
+      it 'returns messages for all and for no certificate' do
+        expect(user_with_five_credits.pending_messages).to match_array([message_for_all.message, message_for_no_certificate.message])
+      end
+
+      it 'returns messages for all, for no certificate and for less credit' do
+        expect(user.pending_messages).to match_array([message_for_all.message, message_for_no_certificate.message, message_for_credit_less.message])
+      end
+
+      it 'returns messages for all and for less credit' do
+        expect(user_with_certificate.pending_messages).to match_array([message_for_all.message, message_for_credit_less.message])
+      end
+
+    end
+
     describe '#full_name' do
       it 'returns the full name' do
         expect(user.full_name).to eq('Doe, John')

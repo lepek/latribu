@@ -35,6 +35,7 @@ Capybara::Screenshot.prune_strategy = :keep_last_run
 # directory. Alternatively, in the individual `*_spec.rb` files, manually
 # require only the support files necessary.
 #
+
 Dir[Rails.root.join('spec/support/**/*.rb')].each { |f| require f }
 
 # Checks for pending migrations before tests are run.
@@ -61,6 +62,16 @@ RSpec.configure do |config|
   config.include Devise::TestHelpers, :type => :controller
 
   config.before(:suite) do
-    Rails.application.load_seed # loading seeds
+    begin
+      # Load seeds and test factories
+      Rails.application.load_seed # loading seeds
+      FactoryGirl.lint
+    ensure
+      # Remove FactoryGirl.lint garbage truncating all tables and load seeds again
+      DatabaseCleaner.clean_with(:truncation)
+      Rails.application.load_seed # loading seeds
+    end
   end
+
+
 end

@@ -9,6 +9,19 @@
       <%= f.input :end_date, as: :date_time_picker %>
     </div>
   </div>
+  <div>
+    <span style="font-weight: bold;">Mostrar a:</span>
+    <%= f.input :show_all %>
+    <%= f.input :show_no_certificate %>
+    <div class="checkbox">
+      <label>
+        <input type="checkbox" value="1" name="message[show_credit_less_check]" id="show-credit-less-check" <%= "checked" if @message.show_credit_less.to_i > -1 %> >
+        Clientes con crédito menor o igual que
+      </label>
+      <input type="text" name="message[show_credit_less]" id="show-credit-less" value="<%= @message.show_credit_less if @message.show_credit_less.to_i > -1 %>" style="width:40px;" />
+    </div>
+  </div>
+
   <%= f.submit 'Guardar', data: { disable_with: "Procesando..." }, class: "btn btn-primary" %>
   <%= link_to "Volver", :back, class: "btn btn-default" %>
 <% end %>

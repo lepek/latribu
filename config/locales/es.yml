@@ -62,6 +62,8 @@ es:
         message: 'Mensaje'
         start_date: 'Comenzar a mostrar'
         end_date: 'Dejar de mostrar'
+        show_all: 'Mostrar a todos'
+        show_no_certificate: 'Mostrar a los que no tienen certificado médico'
     errors:
       models:
         user:

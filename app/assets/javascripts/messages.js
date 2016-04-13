@@ -20,4 +20,14 @@ jQuery(document).ready(function() {
     format: 'DD/MM/YYYY'
   });
 
+  $('#show-credit-less').focus(function() {
+    $('#show-credit-less-check').prop('checked', true);
+  });
+
+  $('#show-credit-less-check').change(function() {
+    if ($('#show-credit-less-check').prop('checked') == false) {
+      $('#show-credit-less').val('');
+    }
+  });
+
 });
