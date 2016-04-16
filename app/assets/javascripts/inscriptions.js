@@ -8,6 +8,10 @@ jQuery(document).ready(function() {
     today.startOf('day')
   }
 
+  $('#change-view').change(function() {
+    $('#calendar').fullCalendar( 'changeView', $('#change-view').val() );
+  });
+
   function ColorLuminance(hex, lum) {
     // validate hex string
     hex = String(hex).replace(/[^0-9a-f]/gi, '');
