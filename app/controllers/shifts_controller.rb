@@ -36,7 +36,7 @@ class ShiftsController < ApplicationController
   end
 
   def show
-    @shift = Shift.with_discipline_and_instructor.with_shift_dates.where(id: params[:id]).first
+    @shift = Shift.with_discipline_and_instructor.with_shift_dates(DateTime.parse(Chronic.parse("now").strftime('%F %R')).beginning_of_hour).where(id: params[:id]).first
   end
 
   def edit

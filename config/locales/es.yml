@@ -52,6 +52,7 @@ es:
         created_at: 'Fecha'
         month: 'Mes'
         user_id: 'Cliente'
+        user: 'Cliente'
         year: 'Año'
       rooky:
         full_name: 'Nombre'
