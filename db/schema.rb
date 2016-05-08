@@ -11,7 +11,20 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160410201046) do
+ActiveRecord::Schema.define(version: 20160414234316) do
+
+  create_table "credits", force: :cascade do |t|
+    t.integer  "credit",      limit: 4,                 null: false
+    t.integer  "used_credit", limit: 4, default: 0
+    t.date     "start_date",                            null: false
+    t.date     "end_date",                              null: false
+    t.integer  "user_id",     limit: 4,                 null: false
+    t.boolean  "expired",               default: false
+    t.datetime "created_at",                            null: false
+    t.datetime "updated_at",                            null: false
+  end
+
+  add_index "credits", ["user_id"], name: "index_credits_on_user_id", using: :btree
 
   create_table "disciplines", force: :cascade do |t|
     t.string   "name",       limit: 255

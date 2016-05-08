@@ -3,7 +3,7 @@
   <%= f.association :user %>
 
   <div class="form-inline month-year-field">
-    <label for="payment-month" class="control-label col-md-12 no-padding">Fecha de pago</label>
+    <label for="payment-month" class="control-label col-md-12 no-padding">Período</label>
     <%= f.input :month, collection: t('date.month_names').compact.each_with_index.collect { |m, i| [ m.capitalize, Date::MONTHNAMES[i+1].downcase ] }, selected:  Date::MONTHNAMES[Time.now.month].downcase, label: false  %>
     <%= f.input :year, collection: Time.now.year..Time.now.year + 2, selected: Time.now.year, label: false %>
   </div>
