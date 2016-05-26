@@ -12,7 +12,6 @@ class PacksController < ApplicationController
   end
 
   def create
-    binding.pry
     @pack = Pack.new(pack_params)
     if @pack.save
       redirect_to packs_path, success: "Nuevo Pack de clases creado."
