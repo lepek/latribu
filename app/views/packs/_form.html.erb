@@ -1,0 +1,12 @@
+<%= simple_form_for(@pack) do |f| %>
+  <%= f.input :name, autofocus: true  %>
+  <%= f.association :shifts,
+                    collection: Shift.order('week_day ASC, start_time ASC'),
+                    as: :check_boxes,
+                    label_method: :day_and_time,
+                    item_wrapper_class: 'shifts-list' %>
+  <div class="containerdivNewLine" />
+  <%= f.input :enabled %>
+  <%= f.submit 'Guardar', data: { disable_with: "Procesando..." }, class: "btn btn-primary" %>
+  <%= link_to "Volver", :back, class: "btn btn-default" %>
+<% end %>
