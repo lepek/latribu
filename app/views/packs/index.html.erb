@@ -1,0 +1,25 @@
+<div class="panel panel-default">
+  <div class="panel-heading">
+    <h4>Packs de Clases</h4>
+  </div>
+  <div class="panel-body">
+    <div class="panel panel-default">
+      <div class="panel-body">
+        <%= link_to "Agregar un nuevo Pack", new_pack_path, class: 'btn btn-primary' %>
+      </div>
+    </div>
+    <div class="table-responsive">
+      <table id="packs-table" class="table table-striped table-bordered" cellspacing="0" width="100%" data-source="<%= packs_path(format: :json) %>">
+        <thead>
+        <tr>
+          <th>Pack</th>
+          <th>Activado</th>
+          <th></th>
+        </tr>
+        </thead>
+        <tbody>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>

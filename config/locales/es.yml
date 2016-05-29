@@ -65,6 +65,10 @@ es:
         end_date: 'Dejar de mostrar'
         show_all: 'Mostrar a todos'
         show_no_certificate: 'Mostrar a los que no tienen certificado médico'
+      pack:
+        name: 'Nombre'
+        enabled: 'Activado'
+        shifts: 'Clases'
     errors:
       models:
         user:

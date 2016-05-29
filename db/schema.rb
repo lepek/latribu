@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160414234316) do
+ActiveRecord::Schema.define(version: 20160508232049) do
 
   create_table "credits", force: :cascade do |t|
     t.integer  "credit",      limit: 4,                 null: false
@@ -66,6 +66,19 @@ ActiveRecord::Schema.define(version: 20160414234316) do
     t.boolean  "show_all",                          default: true
     t.boolean  "show_no_certificate",               default: false
     t.integer  "show_credit_less",    limit: 4,     default: -1
+  end
+
+  create_table "pack_shifts", force: :cascade do |t|
+    t.integer "shift_id", limit: 4
+    t.integer "pack_id",  limit: 4
+  end
+
+  add_index "pack_shifts", ["pack_id"], name: "index_pack_shifts_on_pack_id", using: :btree
+  add_index "pack_shifts", ["shift_id"], name: "index_pack_shifts_on_shift_id", using: :btree
+
+  create_table "packs", force: :cascade do |t|
+    t.string  "name",    limit: 255
+    t.boolean "enabled",             default: true
   end
 
   create_table "payments", force: :cascade do |t|

@@ -136,3 +136,16 @@
   background-color: yellow !important;
 }
 
+.shifts-list {
+  float: left;
+  display: block;
+  width: 300px;
+  margin-top: 5px !important;
+}
+
+.containerdivNewLine { clear: both; float: left; display: block; position: relative; }
+
+.pack_shifts .control-label {
+  clear: both;
+  display: block;
+}
