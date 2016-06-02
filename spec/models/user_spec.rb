@@ -91,6 +91,67 @@ describe User, :type => :model do
       end
     end
 
+    describe '#credit' do
+      it 'adds new credit' do
+        FactoryGirl.create(:payment, user: user, credit: 10)
+        expect(user.credit).to eq(10)
+      end
+
+      it 'does not add new credit if date_to is in the future' do
+        FactoryGirl.create(:payment, user: user, credit: 10)
+        expect(user.credit).to eq(10)
+        FactoryGirl.create(:payment,
+                           user: user,
+                           credit_start_date: Chronic.parse('tomorrow'),
+                           credit_end_date: Chronic.parse('next week'),
+                           credit: 5
+        )
+        expect(user.credit).to eq(10)
+      end
+
+      it 'does not add new credit if date_from is in the past' do
+        FactoryGirl.create(:payment, user: user, credit: 10)
+        expect(user.credit).to eq(10)
+        FactoryGirl.create(:payment,
+                           user: user,
+                           credit_start_date: Chronic.parse('last week'),
+                           credit_end_date: Chronic.parse('yesterday'),
+                           credit: 5
+        )
+        expect(user.credit).to eq(10)
+      end
+
+      it 'adds an already added credit when the time comes' do
+        FactoryGirl.create(:payment, user: user, credit: 10)
+        expect(user.credit).to eq(10)
+        FactoryGirl.create(:payment,
+                           user: user,
+                           credit_start_date: Chronic.parse('tomorrow'),
+                           credit_end_date: Chronic.parse('next week'),
+                           credit: 5
+        )
+        Timecop.freeze(Chronic.parse('tomorrow')) do
+          user.update_credits!
+          expect(user.credit).to eq(15)
+        end
+      end
+
+      it 'returns 0 credits if there is no valid credits for the date' do
+        Timecop.freeze(shift.next_fixed_shift - 1.hour) do
+
+          FactoryGirl.create(:payment, user: user, credit: 1)
+          FactoryGirl.create(:payment,
+                             user: user,
+                             credit_start_date: Chronic.parse('tomorrow'),
+                             credit_end_date: Chronic.parse('next week'),
+                             credit: 5
+          )
+          shift.enroll_next_shift(user)
+          expect(user.reload.credit).to eq(0)
+        end
+      end
+    end
+
     describe '#calculate_future_credit' do
       it 'returns 0 future credits' do
         Timecop.freeze(Time.zone.local(2015, 10, 3, 12, 0, 0)) do

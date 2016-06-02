@@ -3,6 +3,7 @@ jQuery(document).ready(function() {
     "responsive": true,
     "processing": true,
     "serverSide": true,
+    "order": [[ 0, "desc" ]],
     "ajax": $('#user-payments-table').data('source'),
     "pagingType": "full_numbers",
     "language": { sUrl: "/dataTables.spanish.txt" },
@@ -12,7 +13,25 @@ jQuery(document).ready(function() {
       }
       return row;
     }
+  });
 
+  $( "#new_payment" ).submit(function( event ) {
+    $('#date-from').val( $('#date-from-credit').data("DateTimePicker").date().format() );
+    $('#date-to').val( $('#date-to-credit').data("DateTimePicker").date().format() );
+  });
+
+  $('#date-from-credit').datetimepicker({
+    locale: 'es',
+    format: 'dddd, D [de] MMMM [del] YYYY',
+    defaultDate: 'now',
+    ignoreReadonly: true
+  });
+
+  $('#date-to-credit').datetimepicker({
+    locale: 'es',
+    format: 'dddd, D [de] MMMM [del] YYYY',
+    defaultDate: moment(new Date()).add(31, "days"),
+    ignoreReadonly: true
   });
 
   $("#payment_user_id").select2();

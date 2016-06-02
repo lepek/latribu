@@ -1,7 +1,7 @@
 class Payment < ActiveRecord::Base
   belongs_to :user
 
-  after_create :add_credit
+  after_create :update_credit
   after_destroy :remove_credit
 
   validates_presence_of :month_year, :amount, :credit, :user
@@ -25,12 +25,8 @@ class Payment < ActiveRecord::Base
 
 private
 
-  def add_credit
-    self.user.increment!(:credit, self.credit)
-  end
-
-  def remove_credit
-    self.user.decrement!(:credit, self.credit)
+  def update_credit
+    self.user.update_credits!
   end
 
 end

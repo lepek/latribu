@@ -104,6 +104,7 @@ class Shift < ActiveRecord::Base
   end
 
   def enroll_next_shift(user)
+    user.update_credits!
     if available_for_enroll?(user.reload)
       self.inscriptions << Inscription.create({:user_id => user.id, :shift_date => next_fixed_shift})
       $redis.cache(:key => redis_key, :recalculate => true) { next_fixed_shift_count_db }
@@ -136,7 +137,7 @@ class Shift < ActiveRecord::Base
         return true
       end
     else
-      self.errors[:base] << "No es posible anotarse a la clase, ya está anotado, está cerrada o completa"
+      self.errors[:base] << "No es posible anotarse a la clase. Salga del sistema y vuelva a ingresar para compruebar que tenga créditos suficientes y que la clase no se encuentre cerrada o completa"
     end
     return false
   end

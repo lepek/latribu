@@ -87,6 +87,18 @@ class User < ActiveRecord::Base
     enable? ? super : "Tu cuenta de usuario fue suspendida temporalmente. Contactate con la administración."
   end
 
+  def update_credits!
+    self.payments.where(
+        "reset_date IS NULL AND
+        credit_end_date != '0000-00-00' AND
+        credit_end_date < '#{Chronic.parse("now").strftime('%Y-%m-%d')}'"
+    ).update_all(reset_date: Chronic.parse("now"))
+    self.credit = payments.select('credit - used_credit AS future_credit')
+                      .where("reset_date IS NULL AND credit_start_date <= '#{Chronic.parse("now").strftime('%Y-%m-%d')}'")
+                      .map(&:future_credit).sum
+    self.save!
+  end
+
 private
 
   def show_no_certificate

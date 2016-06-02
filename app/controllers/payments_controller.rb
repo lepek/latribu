@@ -31,12 +31,13 @@ class PaymentsController < ApplicationController
 
   def create
     params = payment_params
+    @user = User.find(params[:user_id])
     month = params.delete(:month)
     year = params.delete(:year)
     params = params.merge( {:month_year => Chronic.parse("1 #{month} #{year}")} )
     @payment = Payment.new(params)
     if @payment.save
-      redirect_to root_url, notice: 'Nuevo Pago creado.'
+      redirect_to new_user_payment_url(@user), notice: 'Nuevo Pago creado.'
     else
       render action: "new"
     end
@@ -58,7 +59,7 @@ class PaymentsController < ApplicationController
   private
 
   def payment_params
-    params.require(:payment).permit(:user_id, :amount, :credit, :month, :year)
+    params.require(:payment).permit(:user_id, :amount, :credit, :month, :year, :credit_start_date, :credit_end_date)
   end
 
 end

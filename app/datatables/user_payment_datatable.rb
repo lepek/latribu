@@ -2,12 +2,12 @@ class UserPaymentDatatable < AjaxDatatablesRails::Base
 
   def sortable_columns
     # Declare strings in this format: ModelName.column_name
-    @sortable_columns ||= ['Payment.created_at', 'Payment.month_year', 'Payment.amount', 'Payment.credit']
+    @sortable_columns ||= ['Payment.created_at', 'Payment.credit_end_date', 'Payment.amount', 'Payment.credit', 'Payment.used_credit']
   end
 
   def searchable_columns
     # Declare strings in this format: ModelName.column_name
-    @searchable_columns ||= ['Payment.created_at', 'Payment.month_year', 'Payment.amount', 'Payment.credit']
+    @searchable_columns ||= ['Payment.created_at', 'Payment.credit_end_date', 'Payment.amount', 'Payment.credit', 'Payment.used_credit']
   end
 
   private
@@ -16,9 +16,10 @@ class UserPaymentDatatable < AjaxDatatablesRails::Base
     records.map do |record|
       [
         I18n.l(record.created_at, :format => '%A, %e de %B del %Y %H:%M hs.'),
-        I18n.l(record.month_year, :format => '%B/%Y').capitalize,
+        I18n.l(record.credit_end_date, :format => '%A, %e de %B del %Y'),
         record.amount,
-        record.credit
+        record.credit,
+        record.used_credit
       ]
     end
   end

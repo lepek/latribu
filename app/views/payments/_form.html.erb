@@ -2,14 +2,47 @@
 
   <%= f.association :user %>
 
-  <div class="form-inline month-year-field">
-    <label for="payment-month" class="control-label col-md-12 no-padding">Período</label>
-    <%= f.input :month, collection: t('date.month_names').compact.each_with_index.collect { |m, i| [ m.capitalize, Date::MONTHNAMES[i+1].downcase ] }, selected:  Date::MONTHNAMES[Time.now.month].downcase, label: false  %>
-    <%= f.input :year, collection: Time.now.year..Time.now.year + 2, selected: Time.now.year, label: false %>
+  <div class="form-inline">
+    <label class="control-label col-md-12 no-padding" style="margin-bottom: 10px;">
+      Período de validez de los créditos
+    </label>
+
+    <div class='col-md-6' style="margin-bottom: 20px;">
+      <div class="form-group">
+        <label for="date-from">Desde</label>
+        <div class='input-group date' id='date-from-credit' style="width: 350px;">
+          <input type='text' class="form-control" readonly="readonly" name="payment[credit_start_date]" id="date-from" />
+          <span class="input-group-addon">
+              <span class="glyphicon glyphicon-calendar"></span>
+          </span>
+        </div>
+      </div>
+    </div>
+
+    <div class='col-md-6' style="margin-bottom: 20px;">
+      <div class="form-group">
+        <label for="date-to">Hasta</label>
+        <div class='input-group date' id='date-to-credit' style="width: 350px;">
+          <input type='text' class="form-control" readonly="readonly" name="payment[credit_end_date]" id="date-to" />
+          <span class="input-group-addon">
+              <span class="glyphicon glyphicon-calendar"></span>
+          </span>
+        </div>
+      </div>
+    </div>
+
+    <div class='col-md-12' style="margin-bottom: 20px;">
+      <label for="payment-month">Mes</label>
+      <%= f.input :month, collection: t('date.month_names').compact.each_with_index.collect { |m, i| [ m.capitalize, Date::MONTHNAMES[i+1].downcase ] }, selected:  Date::MONTHNAMES[Time.now.month].downcase, label: false  %>
+      <%= f.input :year, collection: Time.now.year..Time.now.year + 2, selected: Time.now.year, label: false %>
+    </div>
+
   </div>
 
-  <%= f.input :amount %>
-  <%= f.input :credit %>
+  <%= f.input :current_credit, label: "Crédito actual", input_html: { value: "#{@user.credit}", style: "width: 100px;", disabled: true } %>
+  <%= f.input :amount, input_html: { style: "width: 100px;" } %>
+  <%= f.input :credit, input_html: { style: "width: 100px;" } %>
+
   <%= f.submit 'Guardar', data: { disable_with: "Procesando..." }, class: "btn btn-primary" %>
   <%= link_to "Volver", :back, class: "btn btn-default" %>
 <% end %>
@@ -24,6 +57,7 @@
           <th>Mes acreditado</th>
           <th>Monto</th>
           <th>Crédito</th>
+          <th>Crédito usado</th>
         </tr>
         </thead>
         <tbody>

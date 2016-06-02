@@ -15,7 +15,7 @@ class Inscription < ActiveRecord::Base
   #
   def add_credit
     get_oldest_payment_with_credit_to_return.decrement!(:used_credit)
-    self.user.increment!(:credit)
+    self.user.update_credits!
   end
 
   ##
@@ -23,7 +23,7 @@ class Inscription < ActiveRecord::Base
   #
   def remove_credit
     get_oldest_payment_with_credit_to_use.increment!(:used_credit)
-    self.user.decrement!(:credit)
+    self.user.update_credits!
   end
 
   ##
