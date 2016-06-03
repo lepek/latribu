@@ -150,6 +150,21 @@ describe User, :type => :model do
           expect(user.reload.credit).to eq(0)
         end
       end
+
+      it 'returns 0 when credits expire' do
+        FactoryGirl.create(:payment,
+                           user: user,
+                           credit_start_date: Chronic.parse('yesterday'),
+                           credit_end_date: Chronic.parse('tomorrow'),
+                           credit: 5
+        )
+        expect(user.credit).to eq(5)
+        Timecop.freeze(Chronic.parse('next week')) do
+          user.update_credits!
+          expect(user.credit).to eq(0)
+        end
+      end
+
     end
 
     describe '#calculate_future_credit' do

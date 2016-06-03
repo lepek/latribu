@@ -20,14 +20,21 @@
       <ul class="nav nav-pills navbar-right">
         <li>
           <%= link_to edit_user_registration_path do %>
-            <span class="glyphicon glyphicon-user" aria-hidden="true"></span><%= current_user.full_name %>
+            <span class="glyphicon glyphicon-user" aria-hidden="true"></span><span data-toggle="tooltip" data-placement="bottom" title="Cambiar mis datos, contraseña, etc."><%= current_user.full_name %></span>
           <% end %>
         </li>
         <li>
           <%= link_to edit_user_registration_path do %>
-            <span class="glyphicon glyphicon-credit-card" aria-hidden="true"></span><span id="user-credit"><%= current_user.credit.to_s %></span>
+            <span class="glyphicon glyphicon-credit-card" aria-hidden="true"></span><span id="user-credit" data-toggle="tooltip" data-placement="bottom" title="Créditos disponibles"><%= current_user.credit.to_s %></span>
           <% end %>
         </li>
+        <% if current_user.credit > 0 %>
+          <li>
+            <%= link_to '#' do %>
+              <span class="glyphicon glyphicon-time" aria-hidden="true"></span><span id="user-credit-end" data-toggle="tooltip" data-placement="bottom" title="Fecha de vencimiento de los créditos"><%= I18n.l(current_user.last_credit_end_date, format: '%a, %e %b, %Y') %></span>
+            <% end %>
+          </li>
+        <% end %>
 
         <% if current_user == true_user %>
           <li>

@@ -99,6 +99,11 @@ class User < ActiveRecord::Base
     self.save!
   end
 
+  def last_credit_end_date
+    return nil unless self.credit > 0
+    self.payments.where.not(reset_date: nil).where('credit > 0').order(credit_end_date: :desc).limit(1).pluck(:credit_end_date).try(:first)
+  end
+
 private
 
   def show_no_certificate
