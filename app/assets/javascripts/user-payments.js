@@ -41,6 +41,7 @@ jQuery(document).ready(function() {
     var user_id = $('#payment_user_id').val();
     if (user_id) {
       oTable.ajax.url("/payments?user_id=" + user_id + ".json").load();
+      $('#payment_current_credit').val('')
     }
   } );
 });
