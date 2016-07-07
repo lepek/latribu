@@ -206,7 +206,7 @@ private
   #
   def available_for_enroll?(user)
     available_for_enroll = exceptions?(user)
-    available_for_enroll || ( status == STATUS[:open] && user_inscription(user).nil? && user.credit > 0 && user.disciplines.include?(discipline) && !another_today_inscription?(user) )
+    available_for_enroll || ( status == STATUS[:open] && user_inscription(user).nil? && user.credit > 0 && user.disciplines.include?(discipline) )
   end
 
   def available_for_cancel?(user)
