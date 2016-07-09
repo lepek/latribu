@@ -68,13 +68,13 @@ Nahual::Application.configure do
   config.action_mailer.delivery_method = :smtp
   config.action_mailer.perform_deliveries = true
   config.action_mailer.smtp_settings = {
-      :address => "smtp.mandrillapp.com",
+      :address => "smtp.sendgrid.net",
       :port => 587,
       :domain => "latriburosario.com",
       :authentication => "plain",
       :enable_starttls_auto => true,
-      :user_name => "mbianculli@gmail.com",
-      :password => "pVezA_26dNUKkZDeqzktEA",
+      :user_name => "latriburosario",
+      :password => ENV["LATRIBUROSARIO_SMTP_PASSWORD"],
       :openssl_verify_mode  => 'none'
   }
 
