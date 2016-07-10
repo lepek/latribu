@@ -90,3 +90,5 @@ gem 'fullcalendar-rails', '~> 2.3.1'
 gem 'bootbox-rails', '~> 0.5'
 
 gem 'turnout'
+
+gem "figaro", '~> 1.1.1'

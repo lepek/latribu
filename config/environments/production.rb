@@ -74,7 +74,7 @@ Nahual::Application.configure do
       :authentication => "plain",
       :enable_starttls_auto => true,
       :user_name => "latriburosario",
-      :password => ENV["LATRIBUROSARIO_SMTP_PASSWORD"],
+      :password => Figaro.env.latriburosario_smtp_password,
       :openssl_verify_mode  => 'none'
   }
 

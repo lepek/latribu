@@ -11,7 +11,7 @@ set :repo_url,  "https://github.com/lepek/latribu.git"
 set :scm, :git
 set :branch, 'master'
 set :pty, true
-set :linked_files, %w{config/database.yml}
+set :linked_files, %w{config/database.yml, config/application.yml}
 
 # default_run_options[:pty] = true
 #ssh_options[:forward_agent] = true
