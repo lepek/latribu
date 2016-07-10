@@ -92,3 +92,5 @@ gem 'bootbox-rails', '~> 0.5'
 gem 'turnout'
 
 gem "figaro", '~> 1.1.1'
+
+gem 'whenever', '~> 0.9.7'

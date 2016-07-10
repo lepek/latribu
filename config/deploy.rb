@@ -1,5 +1,7 @@
 lock '3.4.0'
 
+require "whenever/capistrano"
+
 set :application, "latriburosario"
 
 set :user, 'deployer'
