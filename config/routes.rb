@@ -26,6 +26,8 @@ Nahual::Application.routes.draw do
     end
   end
 
+  resources :payments, only: [:edit, :update]
+
   resources :past_shifts, :only => [:index, :show]
 
   resources :shifts do

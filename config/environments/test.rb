@@ -35,4 +35,8 @@ Nahual::Application.configure do
   config.active_support.deprecation = :stderr
 
   config.allow_concurrency = false
+
+  config.active_record.raise_in_transactional_callbacks = true
 end
+
+

@@ -19,6 +19,32 @@ class PaymentsController < ApplicationController
     end
   end
 
+  def edit
+    @payment = Payment.find(params[:id])
+    @user = @payment.user
+  end
+
+  def update
+    @payment = Payment.find(params[:id])
+    @user = @payment.user
+    params = payment_params
+    month = params.delete(:month)
+    year = params.delete(:year)
+    if @payment.update_attributes({
+        month_year: Chronic.parse("1 #{month} #{year}"),
+        credit_start_date: params[:credit_start_date],
+        credit_end_date: params[:credit_end_date],
+        amount:  params[:amount],
+        credit: params[:credit],
+      })
+      redirect_to new_user_payment_path(@payment.user_id), notice: "El Pago de #{@payment.user.full_name} fue modificado correctamente."
+    else
+      flash[:error] = @payment.errors.to_a.join("<br />")
+      render action: "edit"
+    end
+
+  end
+
   def total_payments
     total = Payment.total_payments(params[:date_from], params[:date_to])
     render json: { total: ActionController::Base.helpers.number_to_currency(total) }
@@ -39,6 +65,7 @@ class PaymentsController < ApplicationController
     if @payment.save
       redirect_to new_user_payment_url(@user), notice: 'Nuevo Pago creado.'
     else
+      flash[:error] = @payment.errors.to_a.join("<br />")
       render action: "new"
     end
   end
@@ -47,13 +74,12 @@ class PaymentsController < ApplicationController
   # DELETE /payments/1.json
   def destroy
     @payment = Payment.find(params[:id])
-
     if @payment.destroy
       flash[:success] = "El Pago de #{@payment.user.full_name} fue eliminado correctamente."
     else
       flash[:error] = @payment.errors.to_a.join("<br />")
     end
-    redirect_to root_path(:anchor => 'payment')
+    redirect_to new_user_payment_path(@payment.user_id)
   end
 
   private

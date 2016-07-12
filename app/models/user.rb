@@ -41,6 +41,10 @@ class User < ActiveRecord::Base
     "#{last_name}, #{first_name}" if has_attribute?(:first_name) && has_attribute?(:last_name)
   end
 
+  def to_s
+    full_name || super
+  end
+
   def name
     "#{first_name} #{last_name} (#{email})"
   end

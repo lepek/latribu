@@ -48,6 +48,7 @@ group :development, :test do
   gem 'capybara-screenshot'
   gem 'poltergeist', '~> 1.7.0'
   gem 'sinon-rails', '~> 1.15.0'
+  gem 'test_after_commit' # Remove for Rails 5
 end
 
 # jQuery based replacement for select boxes

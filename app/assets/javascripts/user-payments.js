@@ -4,6 +4,12 @@ jQuery(document).ready(function() {
     "processing": true,
     "serverSide": true,
     "order": [[ 0, "desc" ]],
+    "columnDefs": [
+      {
+        "targets": [-1],
+        "orderable": false
+      }
+    ],
     "ajax": $('#user-payments-table').data('source'),
     "pagingType": "full_numbers",
     "language": { sUrl: "/dataTables.spanish.txt" },
@@ -15,7 +21,7 @@ jQuery(document).ready(function() {
     }
   });
 
-  $( "#new_payment" ).submit(function( event ) {
+  $( "#new_payment, .edit_payment" ).submit(function( event ) {
     $('#date-from').val( $('#date-from-credit').data("DateTimePicker").date().format() );
     $('#date-to').val( $('#date-to-credit').data("DateTimePicker").date().format() );
   });
@@ -33,6 +39,18 @@ jQuery(document).ready(function() {
     defaultDate: moment(new Date()).add(31, "days"),
     ignoreReadonly: true
   });
+
+  var date_to = $('#date-to-credit input').attr('value');
+  var date_from = $('#date-from-credit input').attr('value');
+  if (date_to) {
+    var date_to_credit =  $('#date-to-credit').data('DateTimePicker');
+    date_to_credit.date(moment(date_to));
+  }
+  if (date_from) {
+    var date_from_credit =  $('#date-from-credit').data('DateTimePicker');
+    date_from_credit.date(moment(date_from));
+  }
+
 
   $("#payment_user_id").select2();
 

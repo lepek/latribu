@@ -1,6 +1,4 @@
-<%= simple_form_for [@user, @payment] do |f| %>
-
-  <%= f.association :user %>
+<%= simple_form_for [@payment] do |f| %>
 
   <div class="form-inline">
     <label class="control-label col-md-12 no-padding" style="margin-bottom: 10px;">
@@ -11,7 +9,7 @@
       <div class="form-group">
         <label for="date-from">Desde</label>
         <div class='input-group date' id='date-from-credit' style="width: 350px;">
-          <input type='text' class="form-control" readonly="readonly" name="payment[credit_start_date]" id="date-from" />
+          <input type='text' class="form-control" readonly="readonly" name="payment[credit_start_date]" id="date-from" value="<%= @payment.credit_start_date %>" />
           <span class="input-group-addon">
               <span class="glyphicon glyphicon-calendar"></span>
           </span>
@@ -23,7 +21,7 @@
       <div class="form-group">
         <label for="date-to">Hasta</label>
         <div class='input-group date' id='date-to-credit' style="width: 350px;">
-          <input type='text' class="form-control" readonly="readonly" name="payment[credit_end_date]" id="date-to" />
+          <input type='text' class="form-control" readonly="readonly" name="payment[credit_end_date]" id="date-to" value="<%= @payment.credit_end_date %>" />
           <span class="input-group-addon">
               <span class="glyphicon glyphicon-calendar"></span>
           </span>
@@ -41,28 +39,10 @@
 
   <%= f.input :current_credit, label: "Crédito actual", input_html: { value: "#{@user.credit}", style: "width: 100px;", disabled: true } %>
   <%= f.input :amount, input_html: { style: "width: 100px;" } %>
-  <%= f.input :credit, input_html: { style: "width: 100px;" } %>
+  <%= f.input :credit, input_html: { style: "width: 100px;" }, hint: 'No puede ser menor al crédito ya usado' %>
+  <%= f.input :used_credit, label: "Crédito usado", input_html: { value: "#{@payment.used_credit}", style: "width: 100px;", disabled: true } %>
+
 
   <%= f.submit 'Guardar', data: { disable_with: "Procesando..." }, class: "btn btn-primary" %>
-  <%= link_to "Volver", :back, class: "btn btn-default" %>
+  <%= link_to "Volver", new_user_payment_url(@user), class: "btn btn-default" %>
 <% end %>
-
-<div id="payment-history-panel" class="panel panel-default">
-  <div class="panel-heading">Historial de Pagos</div>
-  <div class="table-responsive">
-    <table id="user-payments-table" class="table table-striped" cellspacing="0" width="100%" data-source="/payments?user_id=<%= @user.id %>.json">
-        <thead>
-        <tr>
-          <th>Fecha de pago</th>
-          <th>Vencimiento de créditos</th>
-          <th>Monto</th>
-          <th>Crédito</th>
-          <th>Crédito usado</th>
-          <th></th>
-        </tr>
-        </thead>
-        <tbody>
-        </tbody>
-      </table>
-  </div>
-</div>
