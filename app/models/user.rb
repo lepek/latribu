@@ -5,14 +5,13 @@ class User < ActiveRecord::Base
   devise :database_authenticatable, :registerable,
          :recoverable, :trackable, :validatable
 
-  #include DeviseTokenAuth::Concerns::User
-
   belongs_to :role
   has_many :payments
   has_many :inscriptions
   has_many :shifts, through: :inscriptions
   has_many :user_disciplines
   has_many :disciplines, through: :user_disciplines
+  belongs_to :pack
 
   validates_presence_of :first_name
   validates_presence_of :last_name

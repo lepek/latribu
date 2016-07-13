@@ -36,6 +36,7 @@ es:
         enable: 'Cuenta habilitada'
         profession: 'Profesión'
         role_id: 'Rol'
+        pack: 'Pack activo'
       shift:
         week_day: 'Día'
         start_time: 'Hora de comienzo'

@@ -1,6 +1,16 @@
+
+
+
+
 <%= simple_form_for [@user, @payment] do |f| %>
 
   <%= f.association :user %>
+
+  <div class="form-inline" style="margin-bottom: 20px;">
+    <label for="active-pack">Pack activo</label>
+    <input type='text' class="form-control" readonly="readonly"  id="active-pack" value="<%= @user.pack.try(:name) || 'Ninguno' %>" />
+    <input type="button" value="Cambiar" class="btn btn-primary" id="change-pack" />
+  </div>
 
   <div class="form-inline">
     <label class="control-label col-md-12 no-padding" style="margin-bottom: 10px;">
@@ -64,5 +74,39 @@
         <tbody>
         </tbody>
       </table>
+  </div>
+</div>
+
+<div id="packModal" class="modal fade">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header" id="error" style="display: none; color: red;">
+        Hubo un error al tratar de guardar el pack, por favor vuelva intentar.
+      </div>
+
+      <div class="panel panel-default">
+        <div class="panel-heading">
+          <h4>Pack de clases activo para <%= @user.full_name %></h4>
+        </div>
+        <div class="panel-body">
+            <div class="form-inline">
+              <div class="form-group select optional">
+                <%=
+                  select_tag(
+                        'pack_id',
+                        options_from_collection_for_select(Pack.all, "id", "name", @user.pack.try(:id)),
+                        include_blank: "Ninguno",
+                        id: 'select-pack-modal',
+                        class: 'select optional form-control',
+                        style: "width: 300px;"
+                    )
+                %>
+              </div>
+              <%= link_to 'Guardar', '#', class: 'btn btn-primary', id: 'save-pack-modal' %>
+              <%= link_to 'Cancelar', '#', class: 'btn btn-default', id: 'cancel-pack-modal' %>
+            </div>
+        </div>
+      </div>
+    </div>
   </div>
 </div>

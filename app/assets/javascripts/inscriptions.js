@@ -43,7 +43,6 @@ jQuery(document).ready(function() {
         id: event.id,
         start_time: event.start.format("YYYY-MM-DD HH:mm:ss")
       },
-      dataType: 'json',
       success: function(user) {
         $("#calendar").fullCalendar("refetchEvents");
 
@@ -79,7 +78,6 @@ jQuery(document).ready(function() {
         id: event.id,
         start_time: event.start.format("YYYY-MM-DD HH:mm:ss")
       },
-      dataType: 'json',
       success: function(user) {
         $("#calendar").fullCalendar("refetchEvents");
 

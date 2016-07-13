@@ -23,12 +23,24 @@ class UsersController < ApplicationController
 
   def update
     @user = User.find(params[:id])
-    params = user_params
-    params.delete('password') && params.delete('password_confirmation') if params[:password].blank?
-    if @user.update_attributes(params)
-      redirect_to users_path, success: "Usuario <b>#{@user.full_name}</b> actualizado."
-    else
-      render action: "edit"
+    respond_to do |format|
+      format.html {
+        params = user_params
+        params.delete('password') && params.delete('password_confirmation') if params[:password].blank?
+        if @user.update_attributes(params)
+          redirect_to users_path, success: "Usuario <b>#{@user.full_name}</b> actualizado."
+        else
+          render action: "edit"
+        end
+      }
+      format.json {
+        if @user.update(pack_id: params[:pack_id])
+          pack_name = @user.pack.try(:name) || 'Ninguno'
+          render json: pack_name.to_json, status: :ok
+        else
+          render json: { error: @user.errors.full_messages.to_sentence }, status: :unprocessable_entity
+        end
+      }
     end
   end
 
@@ -81,7 +93,7 @@ class UsersController < ApplicationController
 private
 
   def user_params
-    params.require(:user).permit(:id, :first_name, :last_name, :phone, :email, :password, :password_confirmation, :enable, :reset_credit, :certificate, :profession, :discipline_ids => [])
+    params.require(:user).permit(:id, :first_name, :last_name, :phone, :email, :password, :password_confirmation, :enable, :reset_credit, :certificate, :profession, :pack_id, :discipline_ids => [])
   end
 
 end

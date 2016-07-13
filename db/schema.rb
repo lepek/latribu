@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160530024637) do
+ActiveRecord::Schema.define(version: 20160712052257) do
 
   create_table "credits", force: :cascade do |t|
     t.integer  "credit",      limit: 4,                 null: false
@@ -177,9 +177,11 @@ ActiveRecord::Schema.define(version: 20160530024637) do
     t.boolean  "certificate",                        default: false
     t.boolean  "enable",                             default: true
     t.string   "profession",             limit: 255
+    t.integer  "pack_id",                limit: 4
   end
 
   add_index "users", ["email"], name: "index_users_on_email", unique: true, using: :btree
+  add_index "users", ["pack_id"], name: "index_users_on_pack_id", using: :btree
   add_index "users", ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true, using: :btree
   add_index "users", ["role_id"], name: "index_users_on_role_id", using: :btree
 

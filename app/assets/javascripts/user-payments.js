@@ -62,4 +62,41 @@ jQuery(document).ready(function() {
       $('#payment_current_credit').val('')
     }
   } );
+
+  $('#change-pack').click( function () {
+    $('#error').hide();
+    $('#packModal').modal();
+  });
+
+  $('#cancel-pack-modal').click( function () {
+    $('#packModal').modal('hide');
+  });
+
+  $('#save-pack-modal').click( function () {
+    if ($(this).attr('disabled') != 'disabled') {
+      $(this).text("Procesando...");
+      $(this).attr('disabled', true);
+      var user_id = $('#payment_user_id').val();
+      $.ajax({
+        url: "/users/" + user_id + ".json",
+        type: "PUT",
+        dataType: "json",
+        data: {
+          pack_id: $('#select-pack-modal').val(),
+        },
+        success: function (pack_name) {
+          $('#packModal').modal('hide');
+          $('#save-pack-modal').attr('disabled', false);
+          $('#save-pack-modal').text("Guardar");
+          $('#active-pack').attr('value', pack_name);
+        },
+        error: function (xhr, ajaxOptions, thrownError) {
+          $('#error').show();
+          $('#save-pack-modal').text("Guardar");
+          $('#save-pack-modal').attr('disabled', false);
+        }
+      });
+    }
+  });
+
 });
