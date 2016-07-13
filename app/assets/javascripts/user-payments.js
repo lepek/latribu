@@ -51,18 +51,6 @@ jQuery(document).ready(function() {
     date_from_credit.date(moment(date_from));
   }
 
-
-  $("#payment_user_id").select2();
-
-  $('#payment_user_id').change( function () {
-    var oTable = $('#user-payments-table').DataTable();
-    var user_id = $('#payment_user_id').val();
-    if (user_id) {
-      oTable.ajax.url("/payments?user_id=" + user_id + ".json").load();
-      $('#payment_current_credit').val('')
-    }
-  } );
-
   $('#change-pack').click( function () {
     $('#error').hide();
     $('#packModal').modal();

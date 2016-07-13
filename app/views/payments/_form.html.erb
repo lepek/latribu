@@ -1,13 +1,9 @@
-
-
-
-
 <%= simple_form_for [@user, @payment] do |f| %>
 
-  <%= f.association :user %>
+  <%= f.hidden_field :user_id, :value => @user.id, id: :payment_user_id %>
 
   <div class="form-inline" style="margin-bottom: 20px;">
-    <label for="active-pack">Pack activo</label>
+    <label for="active-pack">Pack de clases activo</label>
     <input type='text' class="form-control" readonly="readonly"  id="active-pack" value="<%= @user.pack.try(:name) || 'Ninguno' %>" />
     <input type="button" value="Cambiar" class="btn btn-primary" id="change-pack" />
   </div>
@@ -54,7 +50,7 @@
   <%= f.input :credit, input_html: { style: "width: 100px;" } %>
 
   <%= f.submit 'Guardar', data: { disable_with: "Procesando..." }, class: "btn btn-primary" %>
-  <%= link_to "Volver", :back, class: "btn btn-default" %>
+  <%= link_to "Volver", users_url, class: "btn btn-default" %>
 <% end %>
 
 <div id="payment-history-panel" class="panel panel-default">
