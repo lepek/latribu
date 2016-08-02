@@ -10,7 +10,7 @@ class Payment < ActiveRecord::Base
   validates_numericality_of :credit, greater_than_or_equal_to: ->(p) { p.used_credit.to_i }
   validate :valid_date_range_required
 
-  acts_as_paranoid
+  audited
 
   def self.filter_by_dates(date_from, date_to)
     if date_from.present? && date_to.present?

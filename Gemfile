@@ -95,3 +95,5 @@ gem 'turnout'
 gem "figaro", '~> 1.1.1'
 
 gem 'whenever', '~> 0.9.7'
+
+gem "audited-activerecord", "~> 4.0"
