@@ -33,11 +33,15 @@ jQuery(document).ready(function() {
     ignoreReadonly: true
   });
 
+  var close_date = moment("2017-06-30", "YYYY-MM-DD");
+  var default_date_to_credit = moment(new Date()).add(31, "days");
+
   $('#date-to-credit').datetimepicker({
     locale: 'es',
     format: 'dddd, D [de] MMMM [del] YYYY',
-    defaultDate: moment(new Date()).add(31, "days"),
-    ignoreReadonly: true
+    defaultDate: moment.min(close_date, default_date_to_credit),
+    ignoreReadonly: true,
+    maxDate: close_date
   });
 
   var date_to = $('#date-to-credit input').attr('value');

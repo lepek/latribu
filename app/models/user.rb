@@ -69,6 +69,7 @@ class User < ActiveRecord::Base
   def self.reset_credits(month_year)
     month_year = month_year.present? ? Chronic.parse(month_year.to_s) : nil
     raise ArgumentError, 'A date to reset must be provided' if month_year.nil?
+    month_year = month_year.strftime('%Y-%m-%d %H:%M')
     User.transaction do
       User.to_reset.find_each do |user|
         future_credit = 0
